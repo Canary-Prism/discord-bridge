@@ -50,7 +50,7 @@ public interface DiscordApi extends DiscordBridgeApi {
     /// Gets a server by its ID
     ///
     /// @param id the ID of the server
-    /// @return the server with the ID, or [#empty()] if there isn't a match
+    /// @return the server with the ID, or [Optional#empty()] if there isn't a match
     default @NotNull Optional<? extends Server> getServerById(long id) {
         return this.getServers()
                 .stream()
