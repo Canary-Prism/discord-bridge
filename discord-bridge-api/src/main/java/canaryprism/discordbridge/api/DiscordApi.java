@@ -47,7 +47,7 @@ public interface DiscordApi extends DiscordBridgeApi {
     /// @return unmodifiable set of servers the bot is in
     @NotNull Set<? extends Server> getServers();
     
-    /// Gets a server by its id
+    /// Gets a server by its ID
     ///
     /// @param id the ID of the server
     /// @return the server with the ID, or [#empty()] if there isn't a match
