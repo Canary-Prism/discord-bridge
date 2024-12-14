@@ -31,6 +31,7 @@ public sealed interface PartialSupport permits ChannelType, SlashCommandOptionTy
     ///
     /// @param bridge the bridge to query from
     /// @return whether this value is supported
+    @SuppressWarnings("SuspiciousMethodCalls")
     default boolean isSupported(DiscordBridge bridge) {
         return bridge.getSupportedValues(this.getClass())
                 .contains(this);
