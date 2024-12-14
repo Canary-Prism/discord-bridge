@@ -25,7 +25,7 @@ public class UnsupportedValueException extends IllegalArgumentException {
     /// Creates a new UnsupportedValueException with the specified value
     ///
     /// @param value the unsupported value
-    public UnsupportedValueException(PartialSupport value) {
+    public UnsupportedValueException(@NotNull PartialSupport value) {
         super(String.format("Value %s.%s Unsupported by this implementation",
                 value.getClass().getSimpleName(), value));
     }
