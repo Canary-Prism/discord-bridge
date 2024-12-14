@@ -18,7 +18,7 @@ package canaryprism.discordbridge.api.interaction;
 
 import canaryprism.discordbridge.api.entities.DiscordEntity;
 import canaryprism.discordbridge.api.entities.LocalizedDescribable;
-import canaryprism.discordbridge.api.entities.LocalizedNamable;
+import canaryprism.discordbridge.api.entities.LocalizedNameable;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 
 import java.util.Optional;
@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 /// Represents a Discord Application Command
 ///
 /// Application Commands can be Slash Commands or Context Menu Commands
-public interface Command extends DiscordEntity, LocalizedNamable, LocalizedDescribable {
+public interface Command extends DiscordEntity, LocalizedNameable, LocalizedDescribable {
     
     /// Gets the ID of the application (bot) this command belongs to
     ///

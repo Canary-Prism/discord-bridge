@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /// Represents an object that has localized names
-public interface LocalizedNamable extends Nameable {
+public interface LocalizedNameable extends Nameable {
     /// Gets the name localisations of this object
     ///
     /// @return the name localisations of this object

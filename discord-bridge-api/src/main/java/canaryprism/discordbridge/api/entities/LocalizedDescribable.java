@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /// Represents an object that has localized descriptions
-public interface LocalizedDescribable {
+public interface LocalizedDescribable extends Describable {
     /// Gets the description localisations of this command
     ///
     /// @return the description localisations of this command
