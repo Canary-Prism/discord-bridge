@@ -22,10 +22,11 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 /// this implementation
 public class UnsupportedValueException extends IllegalArgumentException {
     
-    /// Creates a new UnsupportedValueException with the specified message
+    /// Creates a new UnsupportedValueException with the specified value
     ///
-    /// @param message the message
-    public UnsupportedValueException(String message) {
-        super(message);
+    /// @param value the unsupported value
+    public UnsupportedValueException(PartialSupport value) {
+        super(String.format("Value %s.%s Unsupported by this implementation",
+                value.getClass().getSimpleName(), value));
     }
 }
