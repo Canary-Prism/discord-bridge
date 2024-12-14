@@ -86,7 +86,6 @@ public interface DiscordBridge {
     /// @param type the runtime class of the type
     /// @param value the value to convert
     /// @return the counterpart in the type
-    /// @throws UnsupportedValueException if the value is [PartialSupport] and this implementation doesn't support it
     /// @throws ClassCastException if the value is not convertible to the type
     <T extends DiscordBridgeEnum> @NotNull T convertInternalObject(@NotNull Class<T> type, @NotNull Object value);
     
