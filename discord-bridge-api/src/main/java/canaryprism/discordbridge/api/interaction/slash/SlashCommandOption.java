@@ -20,6 +20,7 @@ import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.entities.LocalizedDescribable;
 import canaryprism.discordbridge.api.entities.LocalizedNamable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,9 @@ import java.util.Set;
 
 /// Represents a Slash Command Option
 public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribable {
+    
+    long MAX_NUMBER = 1L << 53;
+    long MIN_NUMBER = -MAX_NUMBER;
     
     /// Gets the type of this option
     ///
@@ -75,7 +79,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a value no less than this amount
     ///
     /// @return minimum of integer bounds
-    @NotNull Optional<Long> getIntegerBoundsMin();
+    @NotNull Optional<@Range(from = MIN_NUMBER, to = MAX_NUMBER) Long> getIntegerBoundsMin();
     
     /// Gets the maximum of the integer bounds of this option
     /// (Integer in the sense of [SlashCommandOptionType#INTEGER], not [Integer])
@@ -84,7 +88,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a value no more than this amount
     ///
     /// @return maximum of integer bounds
-    @NotNull Optional<Long> getIntegerBoundsMax();
+    @NotNull Optional<@Range(from = MIN_NUMBER, to = MAX_NUMBER) Long> getIntegerBoundsMax();
     
     /// Gets the minimum of the decimal number bounds of this option
     ///
@@ -92,7 +96,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a value no less than this amount
     ///
     /// @return minimum of number bounds
-    @NotNull Optional<Double> getNumberBoundsMin();
+    @NotNull Optional<@Range(from = MIN_NUMBER, to = MAX_NUMBER) Double> getNumberBoundsMin();
     
     /// Gets the maximum of the decimal number bounds of this option
     ///
@@ -100,7 +104,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a value no more than this amount
     ///
     /// @return maximum of number bounds
-    @NotNull Optional<Double> getNumberBoundsMax();
+    @NotNull Optional<@Range(from = MIN_NUMBER, to = MAX_NUMBER) Double> getNumberBoundsMax();
     
     /// Gets the minimum of the string length bounds of this option
     ///
@@ -108,7 +112,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a String with at least this many characters
     ///
     /// @return minimum of string length bounds
-    @NotNull Optional<Long> getStringLengthBoundsMin();
+    @NotNull Optional<@Range(from = 0, to = Long.MAX_VALUE) Long> getStringLengthBoundsMin();
     
     /// Gets the maximum of the string length bounds of this option
     ///
@@ -116,5 +120,5 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a String with at most this many characters
     ///
     /// @return maximum of string length bounds
-    @NotNull Optional<Long> getStringLengthBoundsMax();
+    @NotNull Optional<@Range(from = 0, to = Long.MAX_VALUE) Long> getStringLengthBoundsMax();
 }
