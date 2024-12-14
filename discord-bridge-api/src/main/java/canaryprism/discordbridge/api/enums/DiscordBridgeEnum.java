@@ -14,18 +14,15 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.exceptions;
+package canaryprism.discordbridge.api.enums;
 
-import canaryprism.discordbridge.api.enums.PartialSupport;
+import canaryprism.discordbridge.api.channel.ChannelType;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
+import canaryprism.discordbridge.api.message.MessageFlag;
+import canaryprism.discordbridge.api.server.permission.PermissionType;
 
-/// Exception to indicate that the value of the [PartialSupport] enum is not supported by
-/// this implementation
-public class UnsupportedValueException extends IllegalArgumentException {
-    
-    /// Creates a new UnsupportedValueException with the specified message
-    ///
-    /// @param message the message
-    public UnsupportedValueException(String message) {
-        super(message);
-    }
+/// Marker interface for enums belonging to the discord-bridge api
+public sealed interface DiscordBridgeEnum permits
+        ChannelType, SlashCommandOptionType, MessageFlag, PermissionType,
+        PartialSupport, TypeValue {
 }

@@ -16,6 +16,9 @@
 
 package canaryprism.discordbridge.api;
 
+import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
+import canaryprism.discordbridge.api.enums.PartialSupport;
+import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import org.jetbrains.annotations.NotNull;
@@ -71,6 +74,20 @@ public interface DiscordBridge {
     /// @throws UnsupportedValueException if the value is [PartialSupport] and this implementation doesn't support it
     @NotNull Type getInternalTypeRepresentation(TypeValue<?> value);
     
+    /// Gets the implementation's representation of this [DiscordBridgeEnum] value
+    ///
+    /// @param value the value to convert
+    /// @return the internal counterpart of the value
+    @NotNull Object getImplementationValue(DiscordBridgeEnum value);
+    
+    /// Converts an internal value to its enum representation in discord-bridge
+    ///
+    /// @param <T> the type to convert to
+    /// @param type the runtime class of the type
+    /// @param value the value to convert
+    /// @return the counterpart in the type
+    /// @throws UnsupportedValueException if the value is [PartialSupport] and this implementation doesn't support it
+    <T extends DiscordBridgeEnum> @NotNull T convertInternalObject(Class<T> type, Object value);
     
     
     private static @NotNull ServiceLoader<DiscordBridge> getServiceLoader() {

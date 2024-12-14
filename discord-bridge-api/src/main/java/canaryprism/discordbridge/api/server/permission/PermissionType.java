@@ -16,7 +16,8 @@
 
 package canaryprism.discordbridge.api.server.permission;
 
-import canaryprism.discordbridge.api.PartialSupport;
+import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
+import canaryprism.discordbridge.api.enums.PartialSupport;
 
 /// Enum of Discord permissions
 ///
@@ -24,7 +25,7 @@ import canaryprism.discordbridge.api.PartialSupport;
 ///
 /// the [canaryprism.discordbridge.api.DiscordBridge#getSupportedValues(Class)] method should be used to obtain
 /// supported permission types instead of [#values()]
-public enum PermissionType implements PartialSupport {
+public enum PermissionType implements PartialSupport, DiscordBridgeEnum {
     
     // General Server Permissions
     

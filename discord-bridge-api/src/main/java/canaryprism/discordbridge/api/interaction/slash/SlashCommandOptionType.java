@@ -16,8 +16,9 @@
 
 package canaryprism.discordbridge.api.interaction.slash;
 
-import canaryprism.discordbridge.api.PartialSupport;
-import canaryprism.discordbridge.api.TypeValue;
+import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
+import canaryprism.discordbridge.api.enums.PartialSupport;
+import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.channel.Channel;
 import canaryprism.discordbridge.api.entities.Mentionable;
 import canaryprism.discordbridge.api.entities.user.User;
@@ -26,7 +27,7 @@ import canaryprism.discordbridge.api.server.permission.Role;
 import org.jetbrains.annotations.NotNull;
 
 /// Represents a type for [SlashCommandOption]
-public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>> {
+public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>>, DiscordBridgeEnum {
     
     /// Unknown type which can be caused by various reasons including a new unsupported option type
     ///

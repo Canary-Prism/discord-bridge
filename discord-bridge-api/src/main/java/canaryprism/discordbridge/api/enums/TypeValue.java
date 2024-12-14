@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api;
+package canaryprism.discordbridge.api.enums;
 
+import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import org.jetbrains.annotations.NotNull;
@@ -27,11 +28,11 @@ import java.lang.reflect.Type;
 ///
 /// [#getInternalTypeRepresentation(canaryprism.discordbridge.api.DiscordBridge)]
 ///
-/// [DiscordBridge#getInternalTypeRepresentation(canaryprism.discordbridge.api.TypeValue)] is used
+/// [DiscordBridge#getInternalTypeRepresentation(TypeValue)] is used
 /// to obtain the internal type used to represent a given instance of `TypeValue`
 ///
 /// @param <T> the Type this TypeValue gives (not applicable for the internal type)
-public sealed interface TypeValue<T extends Type> permits ChannelType, SlashCommandOptionType {
+public sealed interface TypeValue<T extends Type> extends DiscordBridgeEnum permits ChannelType, SlashCommandOptionType {
     
     /// Gets the type representation of this value
     ///

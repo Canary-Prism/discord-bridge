@@ -16,12 +16,13 @@
 
 package canaryprism.discordbridge.api.channel;
 
-import canaryprism.discordbridge.api.PartialSupport;
-import canaryprism.discordbridge.api.TypeValue;
+import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
+import canaryprism.discordbridge.api.enums.PartialSupport;
+import canaryprism.discordbridge.api.enums.TypeValue;
 import org.jetbrains.annotations.NotNull;
 
 /// Represents a type of Discord Channel
-public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Channel>> {
+public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Channel>>, DiscordBridgeEnum {
     
     /// Unknown Channel
     UNKNOWN,

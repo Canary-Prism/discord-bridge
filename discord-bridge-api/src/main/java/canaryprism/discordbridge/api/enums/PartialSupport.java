@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api;
+package canaryprism.discordbridge.api.enums;
 
+import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
@@ -26,7 +27,7 @@ import canaryprism.discordbridge.api.server.permission.PermissionType;
 ///
 /// as such you shouldn't assume all values of the given enum are allowed and instead should call
 /// [DiscordBridge#getSupportedValues(java.lang.Class)] to obtain a set of supported values for the implementation
-public sealed interface PartialSupport permits ChannelType, SlashCommandOptionType, PermissionType {
+public sealed interface PartialSupport extends DiscordBridgeEnum permits ChannelType, SlashCommandOptionType, PermissionType {
     /// Gets whether a specific value is supported by the provided [DiscordBridge] or not
     ///
     /// @param bridge the bridge to query from
