@@ -30,7 +30,7 @@ public interface FollowupResponder extends ResponseBuilder<FollowupResponder> {
     /// This doesn't reset the state of this FollowupResponder
     ///
     /// @return a future for the send request
-    @NotNull CompletableFuture<Void> send();
+    @NotNull CompletableFuture<?> send();
     
     /// Updates the given message with the current state of the FollowupResponder
     ///
@@ -38,5 +38,5 @@ public interface FollowupResponder extends ResponseBuilder<FollowupResponder> {
     ///
     /// @param message_id the message ID of the followup message to update. the message MUST have originated from this respoonder
     /// @return a future for the update request
-    @NotNull CompletableFuture<Void> update(long message_id);
+    @NotNull CompletableFuture<?> update(long message_id);
 }

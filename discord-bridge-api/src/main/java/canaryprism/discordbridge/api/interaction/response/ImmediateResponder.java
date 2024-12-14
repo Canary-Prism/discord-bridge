@@ -24,5 +24,5 @@ public interface ImmediateResponder extends ResponseBuilder<ImmediateResponder> 
     /// Sends the response
     ///
     /// @return a future for the respond request
-    CompletableFuture<Void> respond();
+    CompletableFuture<?> respond();
 }

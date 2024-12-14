@@ -28,5 +28,5 @@ public interface ResponseUpdater extends ResponseBuilder<ResponseUpdater> {
     /// This doesn't reset the state of this ResponseUpdater
     ///
     /// @return a future for the update request
-    @NotNull CompletableFuture<Void> update();
+    @NotNull CompletableFuture<?> update();
 }
