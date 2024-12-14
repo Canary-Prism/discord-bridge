@@ -71,7 +71,7 @@ public interface Interaction extends DiscordBridgeApi {
     ///
     /// @param ephemeral whether the thinking response should be sent with the `MessageFlag.EPHEMERAL` flag
     /// @return a future for the request and ResponseUpdater
-    @NotNull CompletableFuture<@NotNull ResponseUpdater> respondLater(boolean ephemeral);
+    @NotNull CompletableFuture<? extends @NotNull ResponseUpdater> respondLater(boolean ephemeral);
     
     /// Defers a response and obtains a [ResponseUpdater] to let you actually send a response
     ///
@@ -82,7 +82,7 @@ public interface Interaction extends DiscordBridgeApi {
     ///
     /// @return a future for the request and ResponseUpdater
     /// @implNote by default this method just delegates to [#respondLater(boolean)] with `false` passed
-    default @NotNull CompletableFuture<@NotNull ResponseUpdater> respondLater() {
+    default @NotNull CompletableFuture<? extends @NotNull ResponseUpdater> respondLater() {
         return respondLater(false);
     }
     

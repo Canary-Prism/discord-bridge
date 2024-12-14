@@ -33,5 +33,5 @@ public interface SlashCommand extends Command, Mentionable {
     /// Gets the options of this slash command
     ///
     /// @return a list of options for this slash command
-    @NotNull List<@NotNull SlashCommandOption> getOptions();
+    @NotNull List<? extends @NotNull SlashCommandOption> getOptions();
 }

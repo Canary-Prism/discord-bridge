@@ -28,13 +28,13 @@ public interface SlashCommandInteractionOptionProvider {
     /// Gets the list of [SlashCommandInteractionOption]s
     ///
     /// @return list of options
-    @NotNull List<@NotNull SlashCommandInteractionOption> getOptions();
+    @NotNull List<? extends @NotNull SlashCommandInteractionOption> getOptions();
     
     /// Gets a [SlashCommandInteractionOption] by name
     ///
     /// @param name the option name
     /// @return the option
-    default @NotNull Optional<SlashCommandInteractionOption> getOptionByName(@Nullable String name) {
+    default @NotNull Optional<? extends SlashCommandInteractionOption> getOptionByName(@Nullable String name) {
         return getOptions()
                 .stream()
                 .filter((e) -> e.getName().equals(name))
@@ -47,7 +47,7 @@ public interface SlashCommandInteractionOptionProvider {
     /// **its** options are also retrieved and appended to the list
     ///
     /// @return list of options
-    default @NotNull List<@NotNull SlashCommandInteractionOption> getArguments() {
+    default @NotNull List<? extends @NotNull SlashCommandInteractionOption> getArguments() {
         return getOptions()
                 .stream()
                 .flatMap(SlashCommandInteractionOption::spreadOptions)
@@ -61,7 +61,7 @@ public interface SlashCommandInteractionOptionProvider {
     ///
     /// @param name the option name
     /// @return the option
-    default @NotNull Optional<@NotNull SlashCommandInteractionOption> getArgumentByName(@Nullable String name) {
+    default @NotNull Optional<? extends SlashCommandInteractionOption> getArgumentByName(@Nullable String name) {
         return getArguments()
                 .stream()
                 .filter((e) -> e.getName().equals(name))

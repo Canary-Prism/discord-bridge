@@ -51,14 +51,14 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// if this is not empty the user can only input values from these choices
     ///
     /// @return the choices of this option
-    @NotNull List<@NotNull SlashCommandOptionChoice> getChoices();
+    @NotNull List<? extends @NotNull SlashCommandOptionChoice> getChoices();
     
     /// Gets the options of this option
     ///
     /// This will only not be empty if this option is of type [SlashCommandOptionType#SUBCOMMAND] or [SlashCommandOptionType#SUBCOMMAND_GROUP]
     ///
     /// @return a list of options for this option
-    @NotNull List<@NotNull SlashCommandOption> getOptions();
+    @NotNull List<? extends @NotNull SlashCommandOption> getOptions();
     
     /// Gets the channel type bounds of this option
     ///
@@ -66,7 +66,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// can only input channels of these types
     ///
     /// @return set of channel types for the channel type bounds
-    @NotNull Set<@NotNull ChannelType> getChannelTypeBounds();
+    @NotNull Set<? extends @NotNull ChannelType> getChannelTypeBounds();
     
     /// Gets the minimum of the integer bounds of this option
     /// (Integer in the sense of [SlashCommandOptionType#INTEGER], not [Integer])
