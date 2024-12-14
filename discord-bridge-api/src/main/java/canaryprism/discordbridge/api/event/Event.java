@@ -16,7 +16,9 @@
 
 package canaryprism.discordbridge.api.event;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
+
 /// Base Event
-public interface Event {
+public interface Event extends DiscordBridgeApi {
 
 }

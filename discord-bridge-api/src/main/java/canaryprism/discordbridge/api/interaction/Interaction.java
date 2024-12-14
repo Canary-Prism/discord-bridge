@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.channel.TextChannel;
 import canaryprism.discordbridge.api.entities.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
@@ -30,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 /// The base Interaction interface
 ///
 /// Represents an instance of any Interaction
-public interface Interaction {
+public interface Interaction extends DiscordBridgeApi {
     
     /// Gets the ID of the application (bot) this command belongs to
     ///
