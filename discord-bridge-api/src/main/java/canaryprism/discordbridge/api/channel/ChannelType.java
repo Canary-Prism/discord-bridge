@@ -63,7 +63,15 @@ public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Cha
     SERVER_FORUM,
     
     /// Server Media Channel
-    SERVER_MEDIA;
+    SERVER_MEDIA,
+    
+    /// Server Shop Channel
+    SERVER_SHOP,
+    
+    /// Server Directory Channel
+    SERVER_DIRECTORY,
+    
+    ;
     
     
     /// Unknown Channel
