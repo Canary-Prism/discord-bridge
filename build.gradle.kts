@@ -1,7 +1,8 @@
-
 plugins {
     `java-library`
 }
+
+description = "A Unified api for Discord api wrappers"
 
 allprojects {
     group = "io.github.canary-prism"

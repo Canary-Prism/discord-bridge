@@ -1,4 +1,6 @@
 plugins {
-    java
     `java-library`
 }
+
+
+description = "The api of discord-bridge"
