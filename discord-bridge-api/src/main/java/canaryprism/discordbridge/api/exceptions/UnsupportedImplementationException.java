@@ -19,6 +19,9 @@ package canaryprism.discordbridge.api.exceptions;
 /// Exception to indicate that a suitable implementation of [canaryprism.discordbridge.api.DiscordBridge] couldn't be found
 public class UnsupportedImplementationException extends IllegalArgumentException {
     
+    /// Creates a new UnsupportedImplementationException with the specified message
+    ///
+    /// @param message the message
     public UnsupportedImplementationException(String message) {
         super(message);
     }

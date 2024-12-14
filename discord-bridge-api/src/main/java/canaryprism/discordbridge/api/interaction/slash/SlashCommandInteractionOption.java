@@ -61,6 +61,8 @@ public interface SlashCommandInteractionOption extends Nameable, SlashCommandInt
     ///
     /// Empty if [#getValue()] is empty or the type cast cannot be made
     ///
+    /// @param <T> the type to get as
+    /// @param type the runtime class
     /// @return the value
     /// @see #getValue()
     default <T> @NotNull Optional<T> getValue(Class<T> type) {
@@ -76,6 +78,13 @@ public interface SlashCommandInteractionOption extends Nameable, SlashCommandInt
     ///
     /// Empty if [#getValue()] is empty or the cast cannot be made
     ///
+    /// This method only checks that the value held is **assignable** to the type representation, and therefore can also
+    /// succeed even if the option type doesn't exactly match
+    ///
+    /// For example, attempting to get the value of a [SlashCommandOptionType#USER] option as a [SlashCommandOptionType#MENTIONABLE]
+    /// will succeed since [canaryprism.discordbridge.api.entities.user.User] can be cast to [canaryprism.discordbridge.api.entities.Mentionable]
+    ///
+    /// @param option_type the `SlashCommandOptionType` to get the value as
     /// @return the value
     /// @see #getValue(Class)
     /// @see #getValue()

@@ -21,6 +21,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/// Represents an Option Choice for [SlashCommandOption]s
+///
+/// Options with Option Choices lock the user into choosing one of the provided Choices
 public interface SlashCommandOptionChoice extends LocalizedNamable {
     
     /// Gets the [SlashCommandOptionType#STRING] value of this option choice

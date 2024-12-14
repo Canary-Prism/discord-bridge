@@ -23,7 +23,9 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /// Builder for a Response for an Interaction
-public interface ResponseBuilder<T> {
+///
+/// @param <T> Self type
+public interface ResponseBuilder<T extends ResponseBuilder<T>> {
     
     /// Set the String contents of this response builder
     ///

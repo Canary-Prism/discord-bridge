@@ -29,6 +29,8 @@ import java.lang.reflect.Type;
 ///
 /// [DiscordBridge#getInternalTypeRepresentation(canaryprism.discordbridge.api.TypeValue)] is used
 /// to obtain the internal type used to represent a given instance of `TypeValue`
+///
+/// @param <T> the Type this TypeValue gives (not applicable for the internal type)
 public sealed interface TypeValue<T extends Type> permits ChannelType, SlashCommandOptionType {
     
     /// Gets the type representation of this value

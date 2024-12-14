@@ -22,19 +22,46 @@ import org.jetbrains.annotations.NotNull;
 
 /// Represents a type of Discord Channel
 public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Channel>> {
+    /// Private Channels (DMs)
     PRIVATE,
-    GROUP, // unused as bots can't join group chats
+    
+    /// Group Channel (Group Chats)
+    ///
+    /// Unused as bots can't join group chats
+    GROUP,
+    
+    /// Server Text Channel
     SERVER_TEXT,
+    
+    /// Server Voice Channel
     SERVER_VOICE,
+    
+    /// Channel Category (Server only)
     SERVER_CATEGORY,
+    
+    /// Server Announcement Channel
     SERVER_NEWS,
+    
+    /// Server Stage Channel
     SERVER_STAGE,
+    
+    /// Server Announcement Channel Thread
     SERVER_THREAD_NEWS,
+    
+    /// Server Public Channel Thread
     SERVER_THREAD_PUBLIC,
+    
+    /// Server Private Channel Thread
     SERVER_THREAD_PRIVATE,
+    
+    /// Server Forum Channel
     SERVER_FORUM,
+    
+    /// Server Media Channel
     SERVER_MEDIA,
     
+    
+    /// Unknown Channel
     UNKNOWN;
     
     /// Subtypes not implemented yet

@@ -18,6 +18,16 @@ package canaryprism.discordbridge.api.message;
 
 /// Flags for messages (incomplete)
 public enum MessageFlag {
+    
+    /// Ephemeral Messages are only allowed on interaction responses
+    /// and make it so that the message is only sent to the user who caused the interaction
+    ///
+    /// The message will also not be kept in Discord's servers and the message will be lost forever if
+    /// the user's client forgets the message, for example if the user dismisses the message or
+    /// refreshes the client
     EPHEMERAL,
+    
+    /// Silent Messages will not send any notifications to any users under any circumstances
+    /// regardless of the amount of pings on the message or any user's notification settings
     SILENT
 }

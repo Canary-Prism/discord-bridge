@@ -17,6 +17,14 @@ allprojects {
         javadocTool = javaToolchains.javadocToolFor {
             languageVersion = JavaLanguageVersion.of(23)
         }
+
+        options {
+        }
+        (options as StandardJavadocDocletOptions).tags(
+            "apiNote:a:API Note:",
+            "implSpec:a:Implementation Requirements:",
+            "implNote:a:Implementation Note:"
+        )
     }
 }
 

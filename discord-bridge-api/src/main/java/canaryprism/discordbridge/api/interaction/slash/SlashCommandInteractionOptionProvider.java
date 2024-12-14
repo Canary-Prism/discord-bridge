@@ -32,6 +32,7 @@ public interface SlashCommandInteractionOptionProvider {
     
     /// Gets a [SlashCommandInteractionOption] by name
     ///
+    /// @param name the option name
     /// @return the option
     default @NotNull Optional<SlashCommandInteractionOption> getOptionByName(@Nullable String name) {
         return getOptions()

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/// Represents a Slash Command Option
 public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribable {
     
     /// Gets the type of this option
