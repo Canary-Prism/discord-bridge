@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction.response;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.message.MessageFlag;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ import java.util.Set;
 /// Builder for a Response for an Interaction
 ///
 /// @param <T> Self type
-public interface ResponseBuilder<T extends ResponseBuilder<T>> {
+public interface ResponseBuilder<T extends ResponseBuilder<T>> extends DiscordBridgeApi {
     
     /// Set the String contents of this response builder
     ///
