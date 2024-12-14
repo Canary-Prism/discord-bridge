@@ -20,9 +20,28 @@ import canaryprism.discordbridge.api.entities.Nameable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /// Represents a Slash Command Interaction Option
 public interface SlashCommandInteractionOption extends Nameable, SlashCommandInteractionOptionProvider {
+    
+    /// Spreads out this option's options
+    ///
+    /// if this option is of type `SUBCOMMAND` or `SUBCOMMAND_GROUP`, it'll get its options while recursively spreading them too
+    ///
+    /// if not this will return an empty Stream
+    ///
+    /// This method is mainly for use from [SlashCommandInteractionOptionProvider#getArguments()]
+    ///
+    /// @return Stream of spread options
+    default Stream<SlashCommandInteractionOption> spreadOptions() {
+        return Stream.concat(
+                Stream.of(this),
+                getOptions()
+                        .stream()
+                        .flatMap(SlashCommandInteractionOption::spreadOptions)
+        );
+    }
     
     /// Gets whether this option is currently focused for autocompleting
     ///

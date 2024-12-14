@@ -39,4 +39,32 @@ public interface SlashCommandInteractionOptionProvider {
                 .filter((e) -> e.getName().equals(name))
                 .findAny();
     }
+    
+    /// Gets an argument list of [SlashCommandInteractionOption]s
+    ///
+    /// This differs from [#getOptions()] in that if an option is a `SUBCOMMAND` or `SUBCOMMAND_GROUP`,
+    /// **its** options are also retrieved and appended to the list
+    ///
+    /// @return list of options
+    default @NotNull List<@NotNull SlashCommandInteractionOption> getArguments() {
+        return getOptions()
+                .stream()
+                .flatMap(SlashCommandInteractionOption::spreadOptions)
+                .toList();
+    }
+    
+    /// Gets an argument [SlashCommandInteractionOption] by name
+    ///
+    /// This differs from [#getOptionByName(java.lang.String)] in that if an option is a `SUBCOMMAND` or `SUBCOMMAND_GROUP`,
+    /// it's also searched recursively for an option of the provided name
+    ///
+    /// @param name the option name
+    /// @return the option
+    default @NotNull Optional<@NotNull SlashCommandInteractionOption> getArgumentByName(@Nullable String name) {
+        return getArguments()
+                .stream()
+                .filter((e) -> e.getName().equals(name))
+                .findAny();
+    }
+
 }
