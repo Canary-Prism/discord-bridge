@@ -25,17 +25,21 @@ import java.lang.reflect.Type;
 /// A TypeValue is an enum whose values correspond to types, like each value of [ChannelType] might correspond to
 /// a specific type that is used to hold an instance of such a channel type
 ///
+/// [#getInternalTypeRepresentation(canaryprism.discordbridge.api.DiscordBridge)]
+///
 /// [DiscordBridge#getInternalTypeRepresentation(canaryprism.discordbridge.api.TypeValue)] is used
 /// to obtain the internal type used to represent a given instance of `TypeValue`
-///
-/// in the future maybe this api itself will get types for these values then this will be expanded to also be able to
-/// get the *non*-internal type representation
-public sealed interface TypeValue permits ChannelType, SlashCommandOptionType {
+public sealed interface TypeValue<T extends Type> permits ChannelType, SlashCommandOptionType {
+    
+    /// Gets the type representation of this value
+    ///
+    /// @return the type that best represents this value
+    @NotNull T getTypeRepresentation();
     
     /// Gets the internal type that can be used to best represent this enum value
     ///
     /// @param bridge the bridge to query from
-    /// @return the type that best represents the given value
+    /// @return the internal type that best represents the given value
     /// @see DiscordBridge#getInternalTypeRepresentation(TypeValue)
     default @NotNull Type getInternalTypeRepresentation(DiscordBridge bridge) {
         return bridge.getInternalTypeRepresentation(this);

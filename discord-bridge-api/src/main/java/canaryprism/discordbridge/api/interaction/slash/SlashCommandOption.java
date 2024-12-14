@@ -54,7 +54,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     
     /// Gets the options of this option
     ///
-    /// This will only not be empty if this option is of type [SlashCommandOptionType#SUB_COMMAND] or [SlashCommandOptionType#SUB_COMMAND_GROUP]
+    /// This will only not be empty if this option is of type [SlashCommandOptionType#SUBCOMMAND] or [SlashCommandOptionType#SUBCOMMAND_GROUP]
     ///
     /// @return a list of options for this option
     @NotNull List<@NotNull SlashCommandOption> getOptions();

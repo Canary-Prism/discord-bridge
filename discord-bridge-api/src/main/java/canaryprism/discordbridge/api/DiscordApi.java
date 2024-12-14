@@ -18,6 +18,8 @@ package canaryprism.discordbridge.api;
 
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
+import canaryprism.discordbridge.api.listener.ApiAttachableListener;
+import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,5 +58,24 @@ public interface DiscordApi extends DiscordBridgeApi {
                 .stream()
                 .filter((e) -> e.getId() == id)
                 .findAny();
+    }
+    
+    /// Adds a listener to this DiscordApi
+    ///
+    /// @param type the runtime class of the listener
+    /// @param listener the listener to add
+    /// @param <T> the type of the listener
+    <T extends ApiAttachableListener> void addListener(@NotNull Class<T> type, @NotNull T listener);
+    
+    /// Removes a listener from this DiscordApi
+    ///
+    /// @param listener the listener to remove
+    void removeListener(@NotNull ApiAttachableListener listener);
+    
+    /// Adds a [SlashCommandInvokeListener] to this DiscordApi
+    ///
+    /// @param listener the listener to add
+    default void addSlashCommandInvokeListener(@NotNull SlashCommandInvokeListener listener) {
+        addListener(SlashCommandInvokeListener.class, listener);
     }
 }

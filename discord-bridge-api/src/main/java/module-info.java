@@ -20,13 +20,18 @@
 module canaryprism.discordbridge.api {
     requires org.jetbrains.annotations;
     exports canaryprism.discordbridge.api;
-    exports canaryprism.discordbridge.api.misc;
     exports canaryprism.discordbridge.api.interaction;
+    exports canaryprism.discordbridge.api.interaction.response;
+    exports canaryprism.discordbridge.api.interaction.slash;
     exports canaryprism.discordbridge.api.server;
     exports canaryprism.discordbridge.api.exceptions;
-    exports canaryprism.discordbridge.api.interaction.slash;
     exports canaryprism.discordbridge.api.entities;
+    exports canaryprism.discordbridge.api.entities.user;
     exports canaryprism.discordbridge.api.channel;
+    exports canaryprism.discordbridge.api.listener;
+    exports canaryprism.discordbridge.api.listener.interaction;
+    exports canaryprism.discordbridge.api.server.permission;
+    exports canaryprism.discordbridge.api.message;
     
     uses canaryprism.discordbridge.api.DiscordBridge;
 }

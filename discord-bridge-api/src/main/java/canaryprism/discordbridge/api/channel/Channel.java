@@ -16,32 +16,21 @@
 
 package canaryprism.discordbridge.api.channel;
 
-import canaryprism.discordbridge.api.PartialSupport;
-import canaryprism.discordbridge.api.TypeValue;
+import canaryprism.discordbridge.api.entities.DiscordEntity;
+import canaryprism.discordbridge.api.entities.Mentionable;
+import canaryprism.discordbridge.api.entities.Nameable;
 import org.jetbrains.annotations.NotNull;
 
-/// Represents a type of Discord Channel
-public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Channel>> {
-    PRIVATE,
-    GROUP, // unused as bots can't join group chats
-    SERVER_TEXT,
-    SERVER_VOICE,
-    SERVER_CATEGORY,
-    SERVER_NEWS,
-    SERVER_STAGE,
-    SERVER_THREAD_NEWS,
-    SERVER_THREAD_PUBLIC,
-    SERVER_THREAD_PRIVATE,
-    SERVER_FORUM,
-    SERVER_MEDIA,
+/// Represents a base Discord Channel
+public interface Channel extends DiscordEntity, Nameable, Mentionable {
     
-    UNKNOWN;
-    
-    /// Subtypes not implemented yet
-    ///
-    /// @return Channel.class
     @Override
-    public @NotNull Class<Channel> getTypeRepresentation() {
-        return Channel.class;
+    default @NotNull String getMentionTag() {
+        return String.format("<#%s>", getIdAsString());
     }
+    
+    /// Gets the [ChannelType] of this Channel
+    ///
+    /// @return the type of this channel
+    ChannelType getType();
 }

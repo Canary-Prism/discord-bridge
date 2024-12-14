@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.misc;
+package canaryprism.discordbridge.api.server.permission;
 
 import canaryprism.discordbridge.api.PartialSupport;
 

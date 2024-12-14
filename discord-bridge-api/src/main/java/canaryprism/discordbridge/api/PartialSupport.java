@@ -18,7 +18,7 @@ package canaryprism.discordbridge.api;
 
 import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
-import canaryprism.discordbridge.api.misc.PermissionType;
+import canaryprism.discordbridge.api.server.permission.PermissionType;
 
 /// Marks an enum as allowing *Partial Support*
 ///

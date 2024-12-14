@@ -18,20 +18,37 @@ package canaryprism.discordbridge.api.interaction.slash;
 
 import canaryprism.discordbridge.api.PartialSupport;
 import canaryprism.discordbridge.api.TypeValue;
+import canaryprism.discordbridge.api.channel.Channel;
+import canaryprism.discordbridge.api.entities.Mentionable;
+import canaryprism.discordbridge.api.entities.user.User;
+import canaryprism.discordbridge.api.message.Attachment;
+import canaryprism.discordbridge.api.server.permission.Role;
+import org.jetbrains.annotations.NotNull;
 
 /// Represents a type for [SlashCommandOption]
-public enum SlashCommandOptionType implements PartialSupport, TypeValue {
-    SUB_COMMAND,
-    SUB_COMMAND_GROUP,
-    STRING,
-    INTEGER,
-    NUMBER,
-    BOOLEAN,
-    USER,
-    CHANNEL,
-    ROLE,
-    MENTIONABLE,
-    ATTACHMENT,
-    UNKNOWN,
+public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>> {
+    SUBCOMMAND(Void.class),
+    SUBCOMMAND_GROUP(Void.class),
+    STRING(String.class),
+    INTEGER(Long.class),
+    NUMBER(Double.class),
+    BOOLEAN(Boolean.class),
+    USER(User.class),
+    CHANNEL(Channel.class),
+    ROLE(Role.class),
+    MENTIONABLE(Mentionable.class),
+    ATTACHMENT(Attachment.class),
+    UNKNOWN(Object.class),
     ;
+    
+    public final Class<?> type;
+    
+    SlashCommandOptionType(Class<?> type) {
+        this.type = type;
+    }
+    
+    @Override
+    public @NotNull Class<?> getTypeRepresentation() {
+        return type;
+    }
 }
