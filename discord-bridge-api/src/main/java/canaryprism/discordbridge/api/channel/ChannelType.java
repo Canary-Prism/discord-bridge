@@ -74,8 +74,6 @@ public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Cha
     ;
     
     
-    /// Unknown Channel
-    UNKNOWN;
     
     /// Subtypes not implemented yet
     ///
