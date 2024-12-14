@@ -18,7 +18,7 @@
  * Module for discord-bridge-api
  */
 module canaryprism.discordbridge.api {
-    requires org.jetbrains.annotations;
+    requires static org.jetbrains.annotations;
     exports canaryprism.discordbridge.api;
     exports canaryprism.discordbridge.api.interaction;
     exports canaryprism.discordbridge.api.interaction.response;
