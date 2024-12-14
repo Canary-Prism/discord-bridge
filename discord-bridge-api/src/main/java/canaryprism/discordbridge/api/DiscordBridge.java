@@ -64,7 +64,7 @@ public interface DiscordBridge {
     ///
     /// @param value the value to get the type representation of
     /// @return the type that best represents the given value
-    @NotNull Type getInternalTypeRepresentation(TypeValue value);
+    @NotNull Type getInternalTypeRepresentation(TypeValue<?> value);
     
     
     
