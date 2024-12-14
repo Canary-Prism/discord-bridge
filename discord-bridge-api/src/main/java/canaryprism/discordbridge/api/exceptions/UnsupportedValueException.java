@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.exceptions;
 
 import canaryprism.discordbridge.api.enums.PartialSupport;
+import org.jetbrains.annotations.NotNull;
 
 /// Exception to indicate that the value of the [PartialSupport] enum is not supported by
 /// this implementation
