@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api.server;
 import canaryprism.discordbridge.api.entities.DiscordEntity;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -29,7 +30,7 @@ public interface Server extends DiscordEntity {
     /// Requests an unmodifiable set of registered slash commands for this server
     ///
     /// @return all registered server slash commands
-    CompletableFuture<? extends Set<? extends SlashCommand>> getServerSlashCommands();
+    @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> getServerSlashCommands();
     
     /// Bulk updates the commands for this server
     ///
@@ -38,5 +39,5 @@ public interface Server extends DiscordEntity {
     ///
     /// @param commands the set of commands to register
     /// @return a future for the update request
-    CompletableFuture<? extends Set<? extends Command>> bulkUpdateServerCommands(Set<? extends Command> commands);
+    @NotNull CompletableFuture<? extends Set<? extends Command>> bulkUpdateServerCommands(Set<? extends Command> commands);
 }
