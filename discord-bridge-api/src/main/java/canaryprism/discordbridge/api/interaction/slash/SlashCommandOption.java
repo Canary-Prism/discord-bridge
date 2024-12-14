@@ -108,7 +108,7 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a String with at least this many characters
     ///
     /// @return minimum of string length bounds
-    @NotNull Optional<String> getStringLengthBoundsMin();
+    @NotNull Optional<Long> getStringLengthBoundsMin();
     
     /// Gets the maximum of the string length bounds of this option
     ///
@@ -116,5 +116,5 @@ public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribab
     /// and requires the user to input a String with at most this many characters
     ///
     /// @return maximum of string length bounds
-    @NotNull Optional<String> getStringLengthBoundsMax();
+    @NotNull Optional<Long> getStringLengthBoundsMax();
 }
