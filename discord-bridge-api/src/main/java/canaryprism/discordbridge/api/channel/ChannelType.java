@@ -22,6 +22,10 @@ import org.jetbrains.annotations.NotNull;
 
 /// Represents a type of Discord Channel
 public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Channel>> {
+    
+    /// Unknown Channel
+    UNKNOWN,
+    
     /// Private Channels (DMs)
     PRIVATE,
     
@@ -58,7 +62,7 @@ public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Cha
     SERVER_FORUM,
     
     /// Server Media Channel
-    SERVER_MEDIA,
+    SERVER_MEDIA;
     
     
     /// Unknown Channel

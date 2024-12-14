@@ -28,6 +28,11 @@ import org.jetbrains.annotations.NotNull;
 /// Represents a type for [SlashCommandOption]
 public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>> {
     
+    /// Unknown type which can be caused by various reasons including a new unsupported option type
+    ///
+    /// [Object] is used to hold this and implementations can either return an arbitrary [canaryprism.discordbridge.api.DiscordBridgeApi] holding the internal value or the internal implementation itself
+    UNKNOWN(Object.class),
+    
     /// Subcommands don't have a value but instead have their own [SlashCommandInteractionOption]s
     SUBCOMMAND(Void.class),
     
@@ -68,11 +73,6 @@ public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>
     
     /// [Attachment] type
     ATTACHMENT(Attachment.class),
-    
-    /// Unknown type which can be caused by various reasons including a new unsupported option type
-    ///
-    /// [Object] is used to hold this and implementations can either return an arbitrary [canaryprism.discordbridge.api.DiscordBridgeApi] holding the internal value or the internal implementation itself
-    UNKNOWN(Object.class),
     ;
     
     /// Type representation of this value

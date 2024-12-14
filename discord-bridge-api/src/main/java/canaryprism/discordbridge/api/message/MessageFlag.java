@@ -19,6 +19,9 @@ package canaryprism.discordbridge.api.message;
 /// Flags for messages (incomplete)
 public enum MessageFlag {
     
+    /// Unknown Flag
+    UKNOWN,
+    
     /// Ephemeral Messages are only allowed on interaction responses
     /// and make it so that the message is only sent to the user who caused the interaction
     ///
