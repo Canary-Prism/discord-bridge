@@ -103,10 +103,10 @@ public interface Interaction extends DiscordBridgeApi {
     /// Gets the server this interaction originated from
     ///
     /// @return the server
-    @NotNull Optional<Server> getServer();
+    @NotNull Optional<? extends Server> getServer();
     
     /// Gets the channel this interaction originated from
     ///
     /// @return the channel
-    @NotNull Optional<TextChannel> getChannel();
+    @NotNull Optional<? extends TextChannel> getChannel();
 }
