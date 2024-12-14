@@ -17,7 +17,26 @@
 package canaryprism.discordbridge.api.interaction.slash;
 
 import canaryprism.discordbridge.api.interaction.Interaction;
+import org.jetbrains.annotations.NotNull;
 
-public interface SlashCommandInteraction extends Interaction {
+import java.util.List;
+import java.util.stream.Stream;
 
+/// Represents a SlashCommand interaction
+public interface SlashCommandInteraction extends Interaction, SlashCommandInteractionOptionProvider {
+    
+    /// Gets the full command name of this interaction
+    ///
+    /// Starts with this command's name, then if an option is `SUBCOMMAND` or `SUBCOMMAND_GROUP` its name is also added to the list
+    ///
+    /// @return the full command name of this interaction
+    default @NotNull List<@NotNull String> getFullCommandName() {
+        return Stream.concat(
+                Stream.of(this.getCommandName()),
+                this.getArguments()
+                        .stream()
+                        .filter((e) -> e.getValue().isEmpty())
+                        .map(SlashCommandInteractionOption::getName)
+        ).toList();
+    }
 }

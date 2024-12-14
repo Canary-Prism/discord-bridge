@@ -37,6 +37,22 @@ public interface Interaction {
     /// @return the ID of the application this command belongs to
     long getApplicationId();
     
+    /// Gets the ID of this application command
+    ///
+    /// @return the ID of the command
+    long getCommandId();
+    
+    /// Gets the name of this application command
+    ///
+    /// @return the name of the command
+    @NotNull String getCommandName();
+    
+    /// Gets the ID of the server this command was registered on,
+    /// if this command is a server command
+    ///
+    /// @return the ID of the server this command was registered on
+    @NotNull Optional<Long> getServerCommandServerId();
+    
     /// Creates an [ImmediateResponder] to respond immediately to this interaction
     ///
     /// Note that Discord requires bots send any form of response to an interaction within 3 seconds,
