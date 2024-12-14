@@ -38,5 +38,5 @@ public interface Server extends DiscordEntity {
     ///
     /// @param commands the set of commands to register
     /// @return a future for the update request
-    CompletableFuture<? extends Set<? extends SlashCommand>> bulkUpdateServerCommands(Set<? extends Command> commands);
+    CompletableFuture<? extends Set<? extends Command>> bulkUpdateServerCommands(Set<? extends Command> commands);
 }
