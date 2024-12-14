@@ -30,6 +30,8 @@ module canaryprism.discordbridge.api {
     exports canaryprism.discordbridge.api.channel;
     exports canaryprism.discordbridge.api.listener;
     exports canaryprism.discordbridge.api.listener.interaction;
+    exports canaryprism.discordbridge.api.event;
+    exports canaryprism.discordbridge.api.event.interaction;
     exports canaryprism.discordbridge.api.server.permission;
     exports canaryprism.discordbridge.api.message;
     

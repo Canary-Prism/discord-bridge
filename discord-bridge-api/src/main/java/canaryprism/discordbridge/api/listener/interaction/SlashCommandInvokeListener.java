@@ -16,8 +16,13 @@
 
 package canaryprism.discordbridge.api.listener.interaction;
 
+import canaryprism.discordbridge.api.event.interaction.SlashCommandInvokeEvent;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 
 public non-sealed interface SlashCommandInvokeListener extends ApiAttachableListener {
-    void onSlashCommandInvoke();
+    
+    /// Called on Slash Command invoke
+    ///
+    /// @param event the event
+    void onSlashCommandInvoke(SlashCommandInvokeEvent event);
 }
