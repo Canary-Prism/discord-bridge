@@ -17,8 +17,13 @@
 package canaryprism.discordbridge.api.server.permission;
 
 import canaryprism.discordbridge.api.entities.Mentionable;
+import org.jetbrains.annotations.NotNull;
 
 /// Represents a Server Role
 public interface Role extends Mentionable {
-
+    
+    @Override
+    default @NotNull String getMentionTag() {
+        return String.format("<@&%s>", getIdAsString());
+    }
 }
