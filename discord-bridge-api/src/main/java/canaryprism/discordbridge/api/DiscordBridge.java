@@ -72,13 +72,13 @@ public interface DiscordBridge {
     /// @param value the value to get the type representation of
     /// @return the type that best represents the given value
     /// @throws UnsupportedValueException if the value is [PartialSupport] and this implementation doesn't support it
-    @NotNull Type getInternalTypeRepresentation(TypeValue<?> value);
+    @NotNull Type getInternalTypeRepresentation(@NotNull TypeValue<?> value);
     
     /// Gets the implementation's representation of this [DiscordBridgeEnum] value
     ///
     /// @param value the value to convert
     /// @return the internal counterpart of the value
-    @NotNull Object getImplementationValue(DiscordBridgeEnum value);
+    @NotNull Object getImplementationValue(@NotNull DiscordBridgeEnum value);
     
     /// Converts an internal value to its enum representation in discord-bridge
     ///
@@ -87,7 +87,7 @@ public interface DiscordBridge {
     /// @param value the value to convert
     /// @return the counterpart in the type
     /// @throws UnsupportedValueException if the value is [PartialSupport] and this implementation doesn't support it
-    <T extends DiscordBridgeEnum> @NotNull T convertInternalObject(Class<T> type, Object value);
+    <T extends DiscordBridgeEnum> @NotNull T convertInternalObject(@NotNull Class<T> type, @NotNull Object value);
     
     
     private static @NotNull ServiceLoader<DiscordBridge> getServiceLoader() {
