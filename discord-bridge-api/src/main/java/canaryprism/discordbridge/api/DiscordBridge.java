@@ -89,6 +89,13 @@ public interface DiscordBridge {
     /// @throws ClassCastException if the value is not convertible to the type
     <T extends DiscordBridgeEnum> @NotNull T convertInternalObject(@NotNull Class<T> type, @NotNull Object value);
     
+    /// Gets the String representation of this DiscordBridge
+    ///
+    /// Implementations should override this method to provide a more human readable name of the implementation
+    ///
+    /// @return the String representation of this DiscordBridge
+    @NotNull String toString();
+    
     
     private static @NotNull ServiceLoader<DiscordBridge> getServiceLoader() {
         class Holder {
