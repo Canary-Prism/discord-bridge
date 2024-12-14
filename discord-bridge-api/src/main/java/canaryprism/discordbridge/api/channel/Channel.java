@@ -18,11 +18,10 @@ package canaryprism.discordbridge.api.channel;
 
 import canaryprism.discordbridge.api.entities.DiscordEntity;
 import canaryprism.discordbridge.api.entities.Mentionable;
-import canaryprism.discordbridge.api.entities.Nameable;
 import org.jetbrains.annotations.NotNull;
 
 /// Represents a base Discord Channel
-public interface Channel extends DiscordEntity, Nameable, Mentionable {
+public interface Channel extends DiscordEntity, Mentionable {
     
     @Override
     default @NotNull String getMentionTag() {
