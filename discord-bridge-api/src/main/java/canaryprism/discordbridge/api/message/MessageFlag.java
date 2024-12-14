@@ -22,7 +22,7 @@ import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
 public enum MessageFlag implements DiscordBridgeEnum {
     
     /// Unknown Flag
-    UKNOWN,
+    UNKNOWN,
     
     /// Ephemeral Messages are only allowed on interaction responses
     /// and make it so that the message is only sent to the user who caused the interaction
