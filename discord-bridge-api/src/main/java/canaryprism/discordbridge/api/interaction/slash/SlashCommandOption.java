@@ -29,8 +29,18 @@ import java.util.Set;
 /// Represents a Slash Command Option
 public interface SlashCommandOption extends LocalizedNamable, LocalizedDescribable {
     
+    /// Maximum allowed number of Discord `NUMBER` and `INTEGER`
+    ///
+    /// @see SlashCommandOptionType#INTEGER
+    /// @see SlashCommandOptionType#NUMBER
     long MAX_NUMBER = 1L << 53;
+    
+    /// Minimum allowed number of Discord `NUMBER` and `INTEGER`
+    ///
+    /// @see SlashCommandOptionType#INTEGER
+    /// @see SlashCommandOptionType#NUMBER
     long MIN_NUMBER = -MAX_NUMBER;
+    
     
     /// Gets the type of this option
     ///
