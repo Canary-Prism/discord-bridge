@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api;
 
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
+import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
@@ -62,8 +63,12 @@ public interface DiscordBridge {
     
     /// Gets the internal type that can be used to best represent the given enum value
     ///
+    /// If the enum implements [PartialSupport] and this implementation doesn't support it it should throw
+    /// [UnsupportedValueException]
+    ///
     /// @param value the value to get the type representation of
     /// @return the type that best represents the given value
+    /// @throws UnsupportedValueException if the value is [PartialSupport] and this implementation doesn't support it
     @NotNull Type getInternalTypeRepresentation(TypeValue<?> value);
     
     
