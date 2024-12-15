@@ -23,7 +23,9 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.javacord.interaction.slash.SlashCommandImpl;
 import canaryprism.discordbridge.javacord.listener.interaction.SlashCommandCreateListenerDelegate;
+import canaryprism.discordbridge.javacord.server.ServerImpl;
 import org.javacord.api.listener.GloballyAttachableListener;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,22 +34,29 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.DiscordApi api) implements DiscordApi {
     
     @Override
     public @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> getGlobalSlashCommands() {
-        return null;
+        return api.getGlobalSlashCommands()
+                .thenApply((set) -> set.stream()
+                        .map((e) -> new SlashCommandImpl(bridge, e))
+                        .collect(Collectors.toUnmodifiableSet()));
     }
     
     @Override
     public @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> bulkUpdateGlobalCommands(Set<? extends Command> commands) {
-        return null;
+        throw new UnsupportedOperationException();
     }
     
     @Override
     public @NotNull Set<? extends Server> getServers() {
-        return Set.of();
+        return api.getServers()
+                .stream()
+                .map((e) -> new ServerImpl(bridge, e))
+                .collect(Collectors.toUnmodifiableSet());
     }
     
     private static final Map<ApiAttachableListener, GloballyAttachableListener> listener_delegate_map = new HashMap<>();
