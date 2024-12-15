@@ -13,7 +13,7 @@ allprojects {
     apply(plugin = "signing")
 
     group = "io.github.canary-prism"
-    version = "0.0.1"
+    version = "0.0.2"
 
     repositories {
         mavenCentral()
@@ -21,12 +21,45 @@ allprojects {
 
     publishing {
         repositories {
-            mavenCentral()
+            maven {
+                name = "Sonatype"
+                url = uri("https://repo1.maven.org/maven2")
+
+                credentials {
+                    username = findProperty("maven.username") as String?
+                    password = findProperty("maven.password") as String?
+                }
+            }
         }
 
         publications {
             create<MavenPublication>(name) {
                 from(components["java"])
+
+                pom {
+                    url = "https://github.com/Canary-Prism/discord-bridge"
+
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "Canary-Prism"
+                            name = "Canary Prism"
+                            email = "canaryprsn@gmail.com"
+                        }
+                    }
+
+                    scm {
+                        url = "https://github.com/Canary-Prism/slavacord"
+                        connection = "scm:git:git://github.com/Canary-Prism/slavacord.git"
+                        developerConnection = "scm:git:ssh://git@github.com:Canary-Prism/slavacord.git"
+                    }
+                }
             }
         }
     }
