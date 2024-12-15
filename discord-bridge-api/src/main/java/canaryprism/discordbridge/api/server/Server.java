@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.server;
 
 import canaryprism.discordbridge.api.entities.DiscordEntity;
+import canaryprism.discordbridge.api.entities.Nameable;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /// Represents a Discord Server (formerly Guild, not to be confused with the current Guilds)
-public interface Server extends DiscordEntity {
+public interface Server extends DiscordEntity, Nameable {
     
     /// Requests an unmodifiable set of registered slash commands for this server
     ///

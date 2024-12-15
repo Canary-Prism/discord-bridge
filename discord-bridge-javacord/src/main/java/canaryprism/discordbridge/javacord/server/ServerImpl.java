@@ -62,4 +62,9 @@ public record ServerImpl(DiscordBridge bridge, org.javacord.api.entity.server.Se
     public @NotNull DiscordBridge getBridge() {
         return bridge;
     }
+    
+    @Override
+    public @NotNull String getName() {
+        return server.getName();
+    }
 }
