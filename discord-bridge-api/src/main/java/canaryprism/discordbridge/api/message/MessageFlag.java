@@ -17,9 +17,10 @@
 package canaryprism.discordbridge.api.message;
 
 import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
+import canaryprism.discordbridge.api.enums.PartialSupport;
 
 /// Flags for messages (incomplete)
-public enum MessageFlag implements DiscordBridgeEnum {
+public enum MessageFlag implements DiscordBridgeEnum, PartialSupport {
     
     /// Unknown Flag
     UNKNOWN,

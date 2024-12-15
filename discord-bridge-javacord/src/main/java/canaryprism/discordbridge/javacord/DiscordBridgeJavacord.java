@@ -65,6 +65,9 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
             static final Set<?> slash_command_option_type = getSupported(canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType.class);
             
             static final Set<?> channel_type = getSupported(canaryprism.discordbridge.api.channel.ChannelType.class);
+            
+            static final Set<?> message_flag_type = getSupported(canaryprism.discordbridge.api.message.MessageFlag.class);
+            
             static final Set<?> permission_type = getSupported(canaryprism.discordbridge.api.server.permission.PermissionType.class);
         }
         
@@ -73,6 +76,9 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         
         if (type == canaryprism.discordbridge.api.channel.ChannelType.class)
             return (Set<? extends T>) SupportedValues.channel_type;
+        
+        if (type == canaryprism.discordbridge.api.message.MessageFlag.class)
+            return (Set<? extends T>) SupportedValues.message_flag_type;
         
         if (type == canaryprism.discordbridge.api.server.permission.PermissionType.class)
             return (Set<? extends T>) SupportedValues.permission_type;
