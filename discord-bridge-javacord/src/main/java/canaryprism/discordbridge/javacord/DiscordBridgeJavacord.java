@@ -184,6 +184,8 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
             };
         else if (value instanceof canaryprism.discordbridge.api.server.permission.PermissionType type)
             return switch (type) {
+                case UNKNOWN -> throw new UnsupportedValueException(type);
+            
                 case VIEW_CHANNEL -> PermissionType.VIEW_CHANNEL;
                 case MANAGE_CHANNEL -> PermissionType.MANAGE_CHANNELS;
                 case MANAGE_ROLES -> PermissionType.MANAGE_ROLES;
@@ -240,6 +242,8 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
                 case MANAGE_EVENTS -> throw new UnsupportedValueException(type);
                 
                 case ADMINISTRATOR -> PermissionType.ADMINISTRATOR;
+                
+                case VIEW_MONETIZATION_ANALYTICS -> throw new UnsupportedValueException(type);
             };
         
         throw new IllegalArgumentException(String.format("Unreachable; Unknown Value %s", value));

@@ -18,6 +18,7 @@ package canaryprism.discordbridge.api.server.permission;
 
 import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
 import canaryprism.discordbridge.api.enums.PartialSupport;
+import org.jetbrains.annotations.NotNull;
 
 /// Enum of Discord permissions
 ///
@@ -26,6 +27,9 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 /// the [canaryprism.discordbridge.api.DiscordBridge#getSupportedValues(Class)] method should be used to obtain
 /// supported permission types instead of [#values()]
 public enum PermissionType implements PartialSupport, DiscordBridgeEnum {
+    
+    /// An Unknown Permission type
+    UNKNOWN(""),
     
     // General Server Permissions
     
@@ -155,12 +159,15 @@ public enum PermissionType implements PartialSupport, DiscordBridgeEnum {
     /// You should take care to specifically check for the existence of Administrator permissions when determining
     /// whether a user can perform a given action
     ADMINISTRATOR("Administrator"),
+    
+    /// View Creator Analytics
+    VIEW_MONETIZATION_ANALYTICS("View Creator Analytics"),
     ;
     
     /// The readable name of this permission
-    public final String name;
+    public final @NotNull String name;
     
-    PermissionType(String name) {
+    PermissionType(@NotNull String name) {
         this.name = name;
     }
 }
