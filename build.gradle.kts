@@ -1,7 +1,8 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     `java-library`
-    `maven-publish`
-    signing
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 description = "A Unified api for Discord api wrappers"
@@ -9,71 +10,54 @@ description = "A Unified api for Discord api wrappers"
 allprojects {
 
     apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
+    plugins.apply("com.vanniktech.maven.publish")
 
     group = "io.github.canary-prism"
     version = "0.0.2"
+
+    mavenPublishing {
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+        signAllPublications()
+
+        pom {
+
+            name = project.name
+            description = project.description
+
+            url = "https://github.com/Canary-Prism/discord-bridge"
+
+            licenses {
+                license {
+                    name = "The Apache License, Version 2.0"
+                    url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                }
+            }
+
+            developers {
+                developer {
+                    id = "Canary-Prism"
+                    name = "Canary Prism"
+                    email = "canaryprsn@gmail.com"
+                }
+            }
+
+            scm {
+                url = "https://github.com/Canary-Prism/slavacord"
+                connection = "scm:git:git://github.com/Canary-Prism/slavacord.git"
+                developerConnection = "scm:git:ssh://git@github.com:Canary-Prism/slavacord.git"
+            }
+        }
+    }
 
     repositories {
         mavenCentral()
     }
 
-    publishing {
-        repositories {
-            maven {
-                name = "Sonatype"
-                url = uri("https://repo1.maven.org/maven2")
-
-                credentials {
-                    username = findProperty("maven.username") as String?
-                    password = findProperty("maven.password") as String?
-                }
-            }
-        }
-
-        publications {
-            create<MavenPublication>(name) {
-                from(components["java"])
-
-                pom {
-                    url = "https://github.com/Canary-Prism/discord-bridge"
-
-                    licenses {
-                        license {
-                            name = "The Apache License, Version 2.0"
-                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = "Canary-Prism"
-                            name = "Canary Prism"
-                            email = "canaryprsn@gmail.com"
-                        }
-                    }
-
-                    scm {
-                        url = "https://github.com/Canary-Prism/slavacord"
-                        connection = "scm:git:git://github.com/Canary-Prism/slavacord.git"
-                        developerConnection = "scm:git:ssh://git@github.com:Canary-Prism/slavacord.git"
-                    }
-                }
-            }
-        }
-    }
-
     java {
         modularity.inferModulePath = true
-        withSourcesJar()
-        withJavadocJar()
     }
 
-    signing {
-        useGpgCmd()
-        sign(publishing.publications[name])
-    }
 
     tasks.javadoc {
         javadocTool = javaToolchains.javadocToolFor {
