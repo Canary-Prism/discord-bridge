@@ -33,6 +33,8 @@ allprojects {
 
     java {
         modularity.inferModulePath = true
+        withSourcesJar()
+        withJavadocJar()
     }
 
     signing {
