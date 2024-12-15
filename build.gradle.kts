@@ -1,18 +1,44 @@
 plugins {
     `java-library`
+    `maven-publish`
+    signing
 }
 
 description = "A Unified api for Discord api wrappers"
 
 allprojects {
+
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+    apply(plugin = "signing")
+
     group = "io.github.canary-prism"
-    version = "1.0-SNAPSHOT"
+    version = "0.0.1"
 
     repositories {
         mavenCentral()
     }
 
-    apply(plugin = "java-library")
+    publishing {
+        repositories {
+            mavenCentral()
+        }
+
+        publications {
+            create<MavenPublication>(name) {
+                from(components["java"])
+            }
+        }
+    }
+
+    java {
+        modularity.inferModulePath = true
+    }
+
+    signing {
+        useGpgCmd()
+        sign(publishing.publications[name])
+    }
 
     tasks.javadoc {
         javadocTool = javaToolchains.javadocToolFor {
