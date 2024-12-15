@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction.slash;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.entities.LocalizedNameable;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ import java.util.Optional;
 /// Represents an Option Choice for [SlashCommandOption]s
 ///
 /// Options with Option Choices lock the user into choosing one of the provided Choices
-public interface SlashCommandOptionChoice extends LocalizedNameable {
+public interface SlashCommandOptionChoice extends DiscordBridgeApi, LocalizedNameable {
     
     /// Gets the [SlashCommandOptionType#STRING] value of this option choice
     ///

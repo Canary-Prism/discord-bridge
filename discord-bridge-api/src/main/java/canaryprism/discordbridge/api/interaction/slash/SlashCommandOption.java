@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction.slash;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.entities.LocalizedDescribable;
 import canaryprism.discordbridge.api.entities.LocalizedNameable;
@@ -27,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /// Represents a Slash Command Option
-public interface SlashCommandOption extends LocalizedNameable, LocalizedDescribable {
+public interface SlashCommandOption extends DiscordBridgeApi, LocalizedNameable, LocalizedDescribable {
     
     /// Maximum allowed number of Discord `NUMBER` and `INTEGER`
     ///

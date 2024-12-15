@@ -73,4 +73,14 @@ public record SlashCommandInteractionOptionImpl(DiscordBridge bridge, org.javaco
                 .map((e) -> new SlashCommandInteractionOptionImpl(bridge, e))
                 .toList();
     }
+    
+    @Override
+    public @NotNull Object getImplementation() {
+        return option;
+    }
+    
+    @Override
+    public @NotNull DiscordBridge getBridge() {
+        return bridge;
+    }
 }

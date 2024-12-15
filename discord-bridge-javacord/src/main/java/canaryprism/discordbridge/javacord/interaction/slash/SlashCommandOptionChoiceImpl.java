@@ -60,4 +60,14 @@ public record SlashCommandOptionChoiceImpl(DiscordBridge bridge, org.javacord.ap
     public @NotNull String getName() {
         return choice.getName();
     }
+    
+    @Override
+    public @NotNull Object getImplementation() {
+        return choice;
+    }
+    
+    @Override
+    public @NotNull DiscordBridge getBridge() {
+        return bridge;
+    }
 }

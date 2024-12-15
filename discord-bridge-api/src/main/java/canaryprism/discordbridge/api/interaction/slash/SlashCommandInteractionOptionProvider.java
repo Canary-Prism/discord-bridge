@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction.slash;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 /// An object that holds [SlashCommandInteractionOption]s
-public interface SlashCommandInteractionOptionProvider {
+public interface SlashCommandInteractionOptionProvider extends DiscordBridgeApi {
     
     /// Gets the list of [SlashCommandInteractionOption]s
     ///

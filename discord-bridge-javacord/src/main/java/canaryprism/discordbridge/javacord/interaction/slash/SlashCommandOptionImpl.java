@@ -132,4 +132,14 @@ public record SlashCommandOptionImpl(DiscordBridge bridge, org.javacord.api.inte
                 ))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+    
+    @Override
+    public @NotNull Object getImplementation() {
+        return option;
+    }
+    
+    @Override
+    public @NotNull DiscordBridge getBridge() {
+        return bridge;
+    }
 }
