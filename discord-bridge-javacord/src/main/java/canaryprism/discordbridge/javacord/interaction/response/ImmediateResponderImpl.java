@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture;
 public record ImmediateResponderImpl(DiscordBridge bridge, InteractionImmediateResponseBuilder responder) implements ResponseBuilderImpl<ImmediateResponder>, ImmediateResponder {
     
     @Override
-    public CompletableFuture<?> respond() {
+    public @NotNull CompletableFuture<?> respond() {
         return responder.respond();
     }
     

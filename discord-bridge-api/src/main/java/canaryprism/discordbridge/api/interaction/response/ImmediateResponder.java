@@ -16,6 +16,8 @@
 
 package canaryprism.discordbridge.api.interaction.response;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.CompletableFuture;
 
 /// An Immediate Responder to respond to [canaryprism.discordbridge.api.interaction.Interaction]s
@@ -24,5 +26,5 @@ public interface ImmediateResponder extends ResponseBuilder<ImmediateResponder> 
     /// Sends the response
     ///
     /// @return a future for the respond request
-    CompletableFuture<?> respond();
+    @NotNull CompletableFuture<?> respond();
 }
