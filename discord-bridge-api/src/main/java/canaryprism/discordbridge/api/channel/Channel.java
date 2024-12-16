@@ -31,5 +31,5 @@ public interface Channel extends DiscordEntity, Mentionable {
     /// Gets the [ChannelType] of this Channel
     ///
     /// @return the type of this channel
-    ChannelType getType();
+    @NotNull ChannelType getType();
 }

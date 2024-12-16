@@ -33,7 +33,7 @@ public class ChannelImpl implements Channel {
     }
     
     @Override
-    public ChannelType getType() {
+    public @NotNull ChannelType getType() {
         return bridge.convertInternalObject(ChannelType.class, channel.getType());
     }
     
