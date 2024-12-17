@@ -17,9 +17,12 @@
 package canaryprism.discordbridge.jda.server;
 
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.CommandData;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
 import net.dv8tion.jda.api.entities.Guild;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +31,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record ServerImpl(DiscordBridge bridge, Guild server) implements Server {
+public record ServerImpl(DiscordBridgeJDA bridge, Guild server) implements Server {
     
     @Override
     public @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> getServerSlashCommands() {
@@ -42,8 +45,17 @@ public record ServerImpl(DiscordBridge bridge, Guild server) implements Server {
     }
     
     @Override
-    public @NotNull CompletableFuture<? extends Set<? extends Command>> bulkUpdateServerCommands(Set<? extends Command> commands) {
-        throw new UnsupportedOperationException();
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull Command>> bulkUpdateServerCommands(@NotNull Set<? extends @NotNull CommandData> commands) {
+        return server.updateCommands()
+                .addCommands(commands.stream()
+                        .map(SlashCommandData.class::cast)
+                        .map(bridge::convertData)
+                        .collect(Collectors.toSet()))
+                .submit()
+                .thenApply((list) ->
+                        list.stream()
+                                .map((e) -> new SlashCommandImpl(bridge, e))
+                                .collect(Collectors.toUnmodifiableSet()));
     }
     
     @Override

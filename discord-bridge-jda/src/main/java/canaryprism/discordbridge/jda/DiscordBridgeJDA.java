@@ -18,6 +18,9 @@ package canaryprism.discordbridge.jda;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionData;
 import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
 import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
@@ -34,12 +37,18 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /// The JDA implementation of [DiscordBridge]
@@ -330,5 +339,141 @@ public final class DiscordBridgeJDA implements DiscordBridge {
     @Override
     public @NotNull String toString() {
         return "DiscordBridge JDA Implementation";
+    }
+    
+    public static Locale convertLocale(@NotNull DiscordLocale locale) {
+        return Locale.forLanguageTag(locale.getLocale());
+    }
+    
+    public static DiscordLocale convertLocale(@NotNull Locale locale) {
+        return DiscordLocale.from(locale);
+    }
+    
+    public @NotNull net.dv8tion.jda.api.interactions.commands.build.SlashCommandData convertData(@NotNull SlashCommandData data) {
+        var builder = Commands.slash(data.getName(), data.getDescription())
+                .setNameLocalizations(data.getNameLocalizations()
+                        .entrySet()
+                        .stream()
+                        .map((e) -> Map.entry(
+                                convertLocale(e.getKey()), e.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                .setDescriptionLocalizations(data.getDescriptionLocalizations()
+                        .entrySet()
+                        .stream()
+                        .map((e) -> Map.entry(
+                                convertLocale(e.getKey()), e.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                .addOptions(data.getOptions()
+                        .stream()
+                        .map(this::convertData)
+                        .map(OptionData.class::cast)
+                        .toList())
+                .setGuildOnly(!data.isEnabledInDMs())
+                .setNSFW(data.isNSFW());
+        
+        if (data.isDefaultDisabled())
+            builder.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+        
+        data.getRequiredPermissions()
+                .map((e) -> e.stream()
+                        .map(this::getImplementationValue)
+                        .map(Permission.class::cast)
+                        .collect(Collectors.toSet()))
+                .ifPresent((e) -> builder.setDefaultPermissions(DefaultMemberPermissions.enabledFor(e)));
+        
+        return builder;
+    }
+    
+    public Object convertData(@NotNull SlashCommandOptionData data) {
+        return switch (data.getType()) {
+            case SUBCOMMAND_GROUP -> new SubcommandGroupData(data.getName(), data.getDescription())
+                    .setNameLocalizations(data.getNameLocalizations()
+                            .entrySet()
+                            .stream()
+                            .map((e) -> Map.entry(
+                                    convertLocale(e.getKey()), e.getValue()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                    .setDescriptionLocalizations(data.getDescriptionLocalizations()
+                            .entrySet()
+                            .stream()
+                            .map((e) -> Map.entry(
+                                    convertLocale(e.getKey()), e.getValue()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                    .addSubcommands(data.getOptions()
+                            .stream()
+                            .map(this::convertData)
+                            .map(SubcommandData.class::cast)
+                            .toList());
+            
+            case SUBCOMMAND -> new SubcommandData(data.getName(), data.getDescription())
+                    .setNameLocalizations(data.getNameLocalizations()
+                            .entrySet()
+                            .stream()
+                            .map((e) -> Map.entry(
+                                    convertLocale(e.getKey()), e.getValue()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                    .setDescriptionLocalizations(data.getDescriptionLocalizations()
+                            .entrySet()
+                            .stream()
+                            .map((e) -> Map.entry(
+                                    convertLocale(e.getKey()), e.getValue()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                    .addOptions(data.getOptions()
+                            .stream()
+                            .map(this::convertData)
+                            .map(OptionData.class::cast)
+                            .toList());
+            
+            default -> {
+                var builder = new OptionData(((OptionType) getImplementationValue(data.getType())), data.getName(), data.getDescription())
+                        .setNameLocalizations(data.getNameLocalizations()
+                                .entrySet()
+                                .stream()
+                                .map((e) -> Map.entry(
+                                        convertLocale(e.getKey()), e.getValue()))
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                        .setDescriptionLocalizations(data.getDescriptionLocalizations()
+                                .entrySet()
+                                .stream()
+                                .map((e) -> Map.entry(
+                                        convertLocale(e.getKey()), e.getValue()))
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                        .addChoices(data.getChoices()
+                                .stream()
+                                .map(this::convertData)
+                                .toList())
+                        .setRequired(data.isRequired())
+                        .setAutoComplete(data.isAutocompletable())
+                        .setChannelTypes(data.getChannelTypeBounds()
+                                .stream()
+                                .map(this::getImplementationValue)
+                                .map(ChannelType.class::cast)
+                                .collect(Collectors.toUnmodifiableSet()));
+                
+                data.getIntegerBoundsMin().ifPresent(builder::setMinValue);
+                data.getIntegerBoundsMax().ifPresent(builder::setMaxValue);
+                data.getNumberBoundsMin().ifPresent(builder::setMinValue);
+                data.getNumberBoundsMax().ifPresent(builder::setMaxValue);
+                data.getStringLengthBoundsMin().map(Long::intValue).ifPresent(builder::setMinLength);
+                data.getStringLengthBoundsMax().map(Long::intValue).ifPresent(builder::setMaxLength);
+                
+                yield builder;
+            }
+        };
+    }
+    
+    public Command.Choice convertData(@NotNull SlashCommandOptionChoiceData data) {
+        return (switch (data.getType()) {
+            case INTEGER -> new Command.Choice(data.getName(), ((Long) data.getValue()));
+            case NUMBER -> new Command.Choice(data.getName(), ((Double) data.getValue()));
+            case STRING -> new Command.Choice(data.getName(), ((String) data.getValue()));
+            default -> throw new UnsupportedOperationException(
+                    String.format("%s doesn't support option choices for type %s", this, data.getType()));
+        }).setNameLocalizations(data.getNameLocalizations()
+                .entrySet()
+                .stream()
+                .map((e) -> Map.entry(
+                        convertLocale(e.getKey()), e.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 }

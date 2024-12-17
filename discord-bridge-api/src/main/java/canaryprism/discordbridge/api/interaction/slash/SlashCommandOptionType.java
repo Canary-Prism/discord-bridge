@@ -32,59 +32,70 @@ public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>
     /// Unknown type which can be caused by various reasons including a new unsupported option type
     ///
     /// [Object] is used to hold this and implementations can either return an arbitrary [canaryprism.discordbridge.api.DiscordBridgeApi] holding the internal value or the internal implementation itself
-    UNKNOWN(Object.class),
+    UNKNOWN(Object.class, false),
     
     /// Subcommands don't have a value but instead have their own [SlashCommandInteractionOption]s
-    SUBCOMMAND(Void.class),
+    SUBCOMMAND(Void.class, false),
     
     /// Subcommand Groups don't have a value but instead have exactly one [SlashCommandInteractionOption]
     /// of the [#SUBCOMMAND] type
-    SUBCOMMAND_GROUP(Void.class),
+    SUBCOMMAND_GROUP(Void.class, false),
     
     /// String values may contain mention tags
-    STRING(String.class),
+    STRING(String.class, false),
     
     /// Discord's `INTEGER` is a signed integer between `-2^53` and `2^53`
     /// (aka as much as a float 64 is able to achieve with integer precision)
     ///
     /// so the value is represented as a [Long]
-    INTEGER(Long.class),
+    INTEGER(Long.class, false),
     
     /// Discord's `NUMBER` means a double between `-2^53` and `2^53`
     /// (aka a double within integer precision)
-    NUMBER(Double.class),
+    NUMBER(Double.class, false),
     
     /// Just a [Boolean] value
-    BOOLEAN(Boolean.class),
+    BOOLEAN(Boolean.class, false),
     
     /// [User] type
-    USER(User.class),
+    USER(User.class, false),
     
     /// [Channel] type
-    CHANNEL(Channel.class),
+    CHANNEL(Channel.class, false),
     
     /// [Role] type
-    ROLE(Role.class),
+    ROLE(Role.class, false),
     
     /// Even though it's called `MENTIONABLE` it's actually just a union of [User] and [Role],
     /// so values will be of either of those types
     ///
     /// However, [Mentionable] is still the best type to hold both, so it is used here
-    MENTIONABLE(Mentionable.class),
+    MENTIONABLE(Mentionable.class, false),
     
     /// [Attachment] type
-    ATTACHMENT(Attachment.class),
+    ATTACHMENT(Attachment.class, false),
     ;
     
     /// Type representation of this value
     public final Class<?> type;
     
-    SlashCommandOptionType(Class<?> type) {
+    /// Whether this value can be in an option choice or autocompletable
+    public final boolean can_be_choices;
+    
+    SlashCommandOptionType(Class<?> type, boolean can_be_choices) {
         this.type = type;
+        this.can_be_choices = can_be_choices;
     }
     
     @Override
     public @NotNull Class<?> getTypeRepresentation() {
         return type;
+    }
+    
+    /// Gets whether this value can be in an option choice or autocompletable or not
+    ///
+    /// @return whether this value can be in an option choice or autocompletable
+    public boolean canBeChoices() {
+        return can_be_choices;
     }
 }

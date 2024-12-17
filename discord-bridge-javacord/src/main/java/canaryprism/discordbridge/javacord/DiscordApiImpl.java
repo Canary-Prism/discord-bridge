@@ -18,6 +18,7 @@ package canaryprism.discordbridge.javacord;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.DiscordApi api) implements DiscordApi {
     
     @Override
-    public @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> getGlobalSlashCommands() {
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands() {
         return api.getGlobalSlashCommands()
                 .thenApply((set) -> set.stream()
                         .map((e) -> new SlashCommandImpl(bridge, e))
@@ -47,8 +48,17 @@ public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.Disc
     }
     
     @Override
-    public @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> bulkUpdateGlobalCommands(Set<? extends Command> commands) {
-        throw new UnsupportedOperationException();
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands) {
+        return api.bulkOverwriteGlobalApplicationCommands(
+                        commands.stream()
+                                .map(SlashCommandData.class::cast)
+                                .map(bridge::convertData)
+                                .collect(Collectors.toUnmodifiableSet()))
+                .thenApply((set) ->
+                        set.stream()
+                                .map(org.javacord.api.interaction.SlashCommand.class::cast)
+                                .map((e) -> new SlashCommandImpl(bridge, e))
+                                .collect(Collectors.toUnmodifiableSet()));
     }
     
     @Override

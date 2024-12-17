@@ -42,6 +42,8 @@ public interface SlashCommandOption extends DiscordBridgeApi, LocalizedNameable,
     /// @see SlashCommandOptionType#NUMBER
     long MIN_NUMBER = -MAX_NUMBER;
     
+    /// Maximum allowed String length of Discord `STRING`
+    long MAX_STRING_LENGTH = 6000;
     
     /// Gets the type of this option
     ///

@@ -18,6 +18,9 @@ package canaryprism.discordbridge.javacord;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionData;
 import canaryprism.discordbridge.api.enums.DiscordBridgeEnum;
 import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
@@ -30,12 +33,12 @@ import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.user.User;
-import org.javacord.api.interaction.DiscordLocale;
-import org.javacord.api.interaction.SlashCommandOptionType;
+import org.javacord.api.interaction.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -86,7 +89,7 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         return Set.of();
     }
     
-    private static <T extends PartialSupport> Set<T> getSupported(Class<T> type) {
+    private static <T extends PartialSupport> @NotNull Set<T> getSupported(@NotNull Class<T> type) {
         return Arrays.stream(type.getEnumConstants())
                 .filter((e) -> {
                     try {
@@ -351,11 +354,103 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         return "DiscordBridge Javacord Implementation";
     }
     
-    public static Locale convertLocale(DiscordLocale locale) {
+    public static Locale convertLocale(@NotNull DiscordLocale locale) {
         return Locale.forLanguageTag(locale.getLocaleCode());
     }
     
-    public static DiscordLocale convertLocale(Locale locale) {
+    public static DiscordLocale convertLocale(@NotNull Locale locale) {
         return DiscordLocale.fromLocaleCode(locale.toLanguageTag());
+    }
+    
+    public @NotNull SlashCommandBuilder convertData(@NotNull SlashCommandData data) {
+        var builder = new SlashCommandBuilder()
+                .setName(data.getName())
+                .setDescription(data.getDescription())
+                .setOptions(data.getOptions()
+                        .stream()
+                        .map(this::convertData)
+                        .toList())
+                .setEnabledInDms(data.isEnabledInDMs())
+                .setNsfw(data.isNSFW());
+        
+        if (data.isDefaultDisabled())
+            builder.setDefaultDisabled();
+        
+        data.getRequiredPermissions()
+                .map((e) -> e.stream()
+                        .map(this::getImplementationValue)
+                        .map(PermissionType.class::cast)
+                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(PermissionType.class))))
+                .ifPresent(builder::setDefaultEnabledForPermissions);
+        
+        for (var e : data.getNameLocalizations().entrySet()) {
+            if (convertLocale(e.getKey()) != DiscordLocale.UNKNOWN)
+                builder.addNameLocalization(convertLocale(e.getKey()), e.getValue());
+        }
+        for (var e : data.getDescriptionLocalizations().entrySet()) {
+            if (convertLocale(e.getKey()) != DiscordLocale.UNKNOWN)
+                builder.addDescriptionLocalization(convertLocale(e.getKey()), e.getValue());
+        }
+        
+        return builder;
+    }
+    
+    public SlashCommandOption convertData(@NotNull SlashCommandOptionData data) {
+        var builder = new SlashCommandOptionBuilder()
+                .setName(data.getName())
+                .setDescription(data.getDescription())
+                .setType(((SlashCommandOptionType) getImplementationValue(data.getType())))
+                .setOptions(data.getOptions()
+                        .stream()
+                        .map(this::convertData)
+                        .toList())
+                .setChoices(data.getChoices()
+                        .stream()
+                        .map(this::convertData)
+                        .toList())
+                .setRequired(data.isRequired())
+                .setAutocompletable(data.isAutocompletable())
+                .setChannelTypes(data.getChannelTypeBounds()
+                        .stream()
+                        .map(this::getImplementationValue)
+                        .map(ChannelType.class::cast)
+                        .collect(Collectors.toUnmodifiableSet()));
+        
+        data.getIntegerBoundsMin().ifPresent(builder::setLongMinValue);
+        data.getIntegerBoundsMax().ifPresent(builder::setLongMaxValue);
+        data.getNumberBoundsMin().ifPresent(builder::setDecimalMinValue);
+        data.getNumberBoundsMax().ifPresent(builder::setDecimalMaxValue);
+        data.getStringLengthBoundsMin().ifPresent(builder::setMinLength);
+        data.getStringLengthBoundsMax().ifPresent(builder::setMaxLength);
+        
+        for (var e : data.getNameLocalizations().entrySet()) {
+            if (convertLocale(e.getKey()) != DiscordLocale.UNKNOWN)
+                builder.addNameLocalization(convertLocale(e.getKey()), e.getValue());
+        }
+        for (var e : data.getDescriptionLocalizations().entrySet()) {
+            if (convertLocale(e.getKey()) != DiscordLocale.UNKNOWN)
+                builder.addDescriptionLocalization(convertLocale(e.getKey()), e.getValue());
+        }
+        
+        return builder.build();
+    }
+    
+    public SlashCommandOptionChoice convertData(@NotNull SlashCommandOptionChoiceData data) {
+        var builder = new SlashCommandOptionChoiceBuilder()
+                .setName(data.getName());
+        
+        switch (data.getType()) {
+            case INTEGER -> builder.setValue(((Long) data.getValue()));
+            case STRING -> builder.setValue(((String) data.getValue()));
+            default -> throw new UnsupportedOperationException(
+                    String.format("%s doesn't support option choices for type %s", this, data.getType()));
+        }
+        
+        for (var e : data.getNameLocalizations().entrySet()) {
+            if (convertLocale(e.getKey()) != DiscordLocale.UNKNOWN)
+                builder.addNameLocalization(convertLocale(e.getKey()), e.getValue());
+        }
+        
+        return builder.build();
     }
 }

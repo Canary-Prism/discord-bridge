@@ -33,7 +33,7 @@ public interface DiscordApi extends DiscordBridgeApi {
     /// Requests an unmodifiable set of registered global slash commands for this bot
     ///
     /// @return all registered global slash commands
-    @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> getGlobalSlashCommands();
+    @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands();
     
     /// Bulk updates the global commands for this bot
     ///
@@ -42,7 +42,7 @@ public interface DiscordApi extends DiscordBridgeApi {
     ///
     /// @param commands the set of global commands to register
     /// @return a future for the update request
-    @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> bulkUpdateGlobalCommands(Set<? extends Command> commands);
+    @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands);
     
     /// Gets all the servers the bot is in and has cached
     ///

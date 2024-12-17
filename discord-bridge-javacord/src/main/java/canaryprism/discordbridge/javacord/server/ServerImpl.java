@@ -17,9 +17,12 @@
 package canaryprism.discordbridge.javacord.server;
 
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.CommandData;
+import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import canaryprism.discordbridge.javacord.interaction.slash.SlashCommandImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,10 +30,10 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record ServerImpl(DiscordBridge bridge, org.javacord.api.entity.server.Server server) implements Server {
+public record ServerImpl(DiscordBridgeJavacord bridge, org.javacord.api.entity.server.Server server) implements Server {
     
     @Override
-    public @NotNull CompletableFuture<? extends Set<? extends SlashCommand>> getServerSlashCommands() {
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getServerSlashCommands() {
         return server.getSlashCommands()
                 .thenApply((set) -> set.stream()
                         .map((e) -> new SlashCommandImpl(bridge, e))
@@ -39,8 +42,17 @@ public record ServerImpl(DiscordBridge bridge, org.javacord.api.entity.server.Se
     }
     
     @Override
-    public @NotNull CompletableFuture<? extends Set<? extends Command>> bulkUpdateServerCommands(Set<? extends Command> commands) {
-        throw new UnsupportedOperationException(); //FIXME: must change this to be builders
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull Command>> bulkUpdateServerCommands(@NotNull Set<? extends @NotNull CommandData> commands) {
+        return server.getApi().bulkOverwriteServerApplicationCommands(server,
+                commands.stream()
+                        .map(SlashCommandData.class::cast)
+                        .map(bridge::convertData)
+                        .collect(Collectors.toUnmodifiableSet()))
+                .thenApply((set) ->
+                        set.stream()
+                                .map(org.javacord.api.interaction.SlashCommand.class::cast)
+                                .map((e) -> new SlashCommandImpl(bridge, e))
+                                .collect(Collectors.toUnmodifiableSet()));
     }
     
     @Override
