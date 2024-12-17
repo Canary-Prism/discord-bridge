@@ -183,7 +183,10 @@ public final class SlashCommandOptionData {
     /// @see #setName(String)
     /// @see SlashCommandData#setName(String)
     public @NotNull SlashCommandOptionData setNameLocalizations(@NotNull Map<Locale, @NotNull String> name_localizations) {
-        this.name_localizations = name_localizations;
+        name_localizations = Map.copyOf(name_localizations);
+        name_localizations.forEach((locale, name) ->
+                SlashCommandData.checkName(name, String.format("name for locale %s", locale)));
+        this.name_localizations = name_localizations
         return this;
     }
     
