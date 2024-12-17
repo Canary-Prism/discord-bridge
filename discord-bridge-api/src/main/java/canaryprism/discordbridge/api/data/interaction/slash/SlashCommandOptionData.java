@@ -209,6 +209,9 @@ public final class SlashCommandOptionData {
     /// @see #setDescription(String)
     /// @see SlashCommandData#setDescription(String)
     public @NotNull SlashCommandOptionData setDescriptionLocalizations(@NotNull Map<Locale, @NotNull String> description_localizations) {
+        description_localizations = Map.copyOf(description_localizations);
+        description_localizations.forEach((locale, description) ->
+                SlashCommandData.checkStringLength(name, MAX_DESCRIPTION_LENGTH, String.format("description for locale %s", locale)));
         this.description_localizations = description_localizations;
         return this;
     }
