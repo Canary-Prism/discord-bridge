@@ -189,8 +189,8 @@ public final class SlashCommandData implements CommandData {
     /// @see #setDescription(String)
     public @NotNull SlashCommandData setDescriptionLocalizations(@NotNull Map<Locale, @NotNull String> description_localizations) {
         description_localizations = Map.copyOf(description_localizations);
-        description_localizations.forEach((locale, name) ->
-                checkStringLength(name, MAX_DESCRIPTION_LENGTH, String.format("description for locale %s", locale)));
+        description_localizations.forEach((locale, description) ->
+                checkStringLength(description, MAX_DESCRIPTION_LENGTH, String.format("description for locale %s", locale)));
         this.description_localizations = description_localizations;
         return this;
     }
