@@ -21,6 +21,7 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -150,7 +151,7 @@ public final class SlashCommandData implements CommandData {
     /// Gets the name localizations of this slash command data
     ///
     /// @return the name localizations
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations() {
         return name_localizations;
     }
     
@@ -174,7 +175,7 @@ public final class SlashCommandData implements CommandData {
     /// Gets the description localizations of this slash command data
     ///
     /// @return the description localizations
-    public @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getDescriptionLocalizations() {
         return description_localizations;
     }
     
@@ -198,7 +199,7 @@ public final class SlashCommandData implements CommandData {
     /// Gets the list of option data of this slash command data
     ///
     /// @return the list of option data
-    public synchronized @NotNull List<@NotNull SlashCommandOptionData> getOptions() {
+    public synchronized @NotNull @Unmodifiable List<@NotNull SlashCommandOptionData> getOptions() {
         return options;
     }
     
@@ -336,7 +337,8 @@ public final class SlashCommandData implements CommandData {
     ///
     /// @return EnumSet of required PermissionTypes
     public @NotNull Optional<EnumSet<PermissionType>> getRequiredPermissions() {
-        return Optional.ofNullable(required_permissions);
+        return Optional.ofNullable(required_permissions)
+                .map(EnumSet::copyOf);
     }
     
     /// Sets the required [PermissionType]s of this slash command data

@@ -22,6 +22,7 @@ import canaryprism.discordbridge.api.entities.Nameable;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -32,7 +33,7 @@ public interface Server extends DiscordEntity, Nameable {
     /// Requests an unmodifiable set of registered slash commands for this server
     ///
     /// @return all registered server slash commands
-    @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getServerSlashCommands();
+    @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> getServerSlashCommands();
     
     /// Bulk updates the commands for this server
     ///
@@ -41,5 +42,5 @@ public interface Server extends DiscordEntity, Nameable {
     ///
     /// @param commands the set of commands to register
     /// @return a future for the update request
-    @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull Command>> bulkUpdateServerCommands(Set<? extends @NotNull CommandData> commands);
+    @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull Command>> bulkUpdateServerCommands(Set<? extends @NotNull CommandData> commands);
 }

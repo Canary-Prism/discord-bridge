@@ -22,6 +22,7 @@ import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Optional;
 import java.util.Set;
@@ -33,7 +34,7 @@ public interface DiscordApi extends DiscordBridgeApi {
     /// Requests an unmodifiable set of registered global slash commands for this bot
     ///
     /// @return all registered global slash commands
-    @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands();
+    @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands();
     
     /// Bulk updates the global commands for this bot
     ///
@@ -42,12 +43,12 @@ public interface DiscordApi extends DiscordBridgeApi {
     ///
     /// @param commands the set of global commands to register
     /// @return a future for the update request
-    @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands);
+    @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands);
     
     /// Gets all the servers the bot is in and has cached
     ///
     /// @return unmodifiable set of servers the bot is in
-    @NotNull Set<? extends Server> getServers();
+    @NotNull @Unmodifiable Set<? extends Server> getServers();
     
     /// Gets a server by its ID
     ///

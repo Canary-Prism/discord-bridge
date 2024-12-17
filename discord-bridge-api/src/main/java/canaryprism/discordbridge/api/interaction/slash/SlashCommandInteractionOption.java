@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.interaction.slash;
 
 import canaryprism.discordbridge.api.entities.Nameable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -34,7 +35,7 @@ public interface SlashCommandInteractionOption extends Nameable, SlashCommandInt
     /// This method is mainly for use from [SlashCommandInteractionOptionProvider#getArguments()]
     ///
     /// @return Stream of spread options
-    default Stream<SlashCommandInteractionOption> spreadOptions() {
+    default @ApiStatus.NonExtendable Stream<SlashCommandInteractionOption> spreadOptions() {
         return Stream.concat(
                 Stream.of(this),
                 getOptions()

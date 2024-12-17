@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.entities;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Locale;
 import java.util.Map;
@@ -26,5 +27,5 @@ public interface LocalizedDescribable extends Describable {
     /// Gets the description localisations of this command
     ///
     /// @return the description localisations of this command
-    @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations();
+    @NotNull @Unmodifiable Map<Locale, @NotNull String> getDescriptionLocalizations();
 }

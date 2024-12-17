@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.entities;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Locale;
 import java.util.Map;
@@ -26,5 +27,5 @@ public interface LocalizedNameable extends Nameable {
     /// Gets the name localisations of this object
     ///
     /// @return the name localisations of this object
-    @NotNull Map<Locale, @NotNull String> getNameLocalizations();
+    @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations();
 }

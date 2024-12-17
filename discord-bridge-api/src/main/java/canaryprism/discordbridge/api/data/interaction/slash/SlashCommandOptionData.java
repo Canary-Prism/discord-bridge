@@ -22,9 +22,11 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
+import static canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData.MAX_DESCRIPTION_LENGTH;
 import static canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData.MAX_OPTION_COUNT;
 import static canaryprism.discordbridge.api.interaction.slash.SlashCommandOption.*;
 
@@ -166,7 +168,7 @@ public final class SlashCommandOptionData {
     /// Gets the name localizations of this option data
     ///
     /// @return the name localizations
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations() {
         return name_localizations;
     }
     
@@ -193,7 +195,7 @@ public final class SlashCommandOptionData {
     /// Gets the description localizations of this slash command data
     ///
     /// @return the description localizations
-    public @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getDescriptionLocalizations() {
         return description_localizations;
     }
     
@@ -396,7 +398,7 @@ public final class SlashCommandOptionData {
     /// Gets the choices of this option data
     ///
     /// @return the choices
-    public @NotNull List<@NotNull SlashCommandOptionChoiceData> getChoices() {
+    public @NotNull @Unmodifiable List<@NotNull SlashCommandOptionChoiceData> getChoices() {
         return choices;
     }
     
@@ -452,7 +454,7 @@ public final class SlashCommandOptionData {
     /// Gets the options of this option data
     ///
     /// @return the options
-    public @NotNull List<@NotNull SlashCommandOptionData> getOptions() {
+    public @NotNull @Unmodifiable List<@NotNull SlashCommandOptionData> getOptions() {
         return options;
     }
     
@@ -574,7 +576,7 @@ public final class SlashCommandOptionData {
     ///
     /// @return the channel type bounds
     public @NotNull EnumSet<ChannelType> getChannelTypeBounds() {
-        return channel_type_bounds;
+        return EnumSet.copyOf(channel_type_bounds);
     }
     
     /// Sets the [ChannelType] bounds of this option data

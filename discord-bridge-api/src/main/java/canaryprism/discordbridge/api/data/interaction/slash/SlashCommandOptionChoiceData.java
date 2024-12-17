@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api.data.interaction.slash;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
@@ -152,7 +153,7 @@ public final class SlashCommandOptionChoiceData {
     /// Gets the name localizations of this option choice data
     ///
     /// @return the name localizations
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations() {
         return name_localizations;
     }
     
@@ -166,7 +167,7 @@ public final class SlashCommandOptionChoiceData {
     /// @throws NullPointerException if the map or any of the values in the map is null
     /// @see #setName(String)
     public SlashCommandOptionChoiceData setNameLocalizations(@NotNull Map<Locale, @NotNull String> name_localizations) {
-        this.name_localizations = name_localizations;
+        this.name_localizations = Map.copyOf(name_localizations);
         return this;
     }
     

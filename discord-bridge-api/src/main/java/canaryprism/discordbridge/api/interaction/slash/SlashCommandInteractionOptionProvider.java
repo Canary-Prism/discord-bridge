@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api.interaction.slash;
 import canaryprism.discordbridge.api.DiscordBridgeApi;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public interface SlashCommandInteractionOptionProvider extends DiscordBridgeApi 
     /// Gets the list of [SlashCommandInteractionOption]s
     ///
     /// @return list of options
-    @NotNull List<? extends @NotNull SlashCommandInteractionOption> getOptions();
+    @NotNull @Unmodifiable List<? extends @NotNull SlashCommandInteractionOption> getOptions();
     
     /// Gets a [SlashCommandInteractionOption] by name
     ///
@@ -48,7 +49,7 @@ public interface SlashCommandInteractionOptionProvider extends DiscordBridgeApi 
     /// **its** options are also retrieved and appended to the list
     ///
     /// @return list of options
-    default @NotNull List<? extends @NotNull SlashCommandInteractionOption> getArguments() {
+    default @NotNull @Unmodifiable List<? extends @NotNull SlashCommandInteractionOption> getArguments() {
         return getOptions()
                 .stream()
                 .flatMap(SlashCommandInteractionOption::spreadOptions)

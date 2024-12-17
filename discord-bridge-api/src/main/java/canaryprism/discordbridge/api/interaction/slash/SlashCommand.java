@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api.interaction.slash;
 import canaryprism.discordbridge.api.entities.Mentionable;
 import canaryprism.discordbridge.api.interaction.Command;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -33,5 +34,6 @@ public interface SlashCommand extends Command, Mentionable {
     /// Gets the options of this slash command
     ///
     /// @return a list of options for this slash command
-    @NotNull List<? extends @NotNull SlashCommandOption> getOptions();
+    @NotNull @Unmodifiable
+    List<? extends @NotNull SlashCommandOption> getOptions();
 }
