@@ -186,7 +186,7 @@ public final class SlashCommandOptionData {
         name_localizations = Map.copyOf(name_localizations);
         name_localizations.forEach((locale, name) ->
                 SlashCommandData.checkName(name, String.format("name for locale %s", locale)));
-        this.name_localizations = name_localizations
+        this.name_localizations = name_localizations;
         return this;
     }
     
