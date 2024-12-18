@@ -92,7 +92,7 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     
     @Override
     public @NotNull Optional<Server> getServer() {
-        return interaction.getServer().map((e) -> new ServerImpl(((DiscordBridgeJavacord) bridge), e));
+        return interaction.getServer().map((e) -> new ServerImpl(bridge, e));
     }
     
     @Override

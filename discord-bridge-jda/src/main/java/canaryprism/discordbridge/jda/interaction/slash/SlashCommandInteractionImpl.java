@@ -135,7 +135,7 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     @Override
     public @NotNull Optional<? extends Server> getServer() {
         return Optional.ofNullable(interaction.getGuild())
-                .map((e) -> new ServerImpl(((DiscordBridgeJDA) bridge), e));
+                .map((e) -> new ServerImpl(bridge, e));
     }
     
     @Override
