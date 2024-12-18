@@ -19,6 +19,7 @@ package canaryprism.discordbridge.javacord.event.interaction;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.event.interaction.SlashCommandInvokeEvent;
 import canaryprism.discordbridge.api.interaction.Interaction;
+import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import canaryprism.discordbridge.javacord.interaction.slash.SlashCommandInteractionImpl;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ public record SlashCommandInvokeEventImpl(DiscordBridge bridge, SlashCommandCrea
     
     @Override
     public @NotNull Interaction getInteraction() {
-        return new SlashCommandInteractionImpl(bridge, event.getSlashCommandInteraction());
+        return new SlashCommandInteractionImpl(((DiscordBridgeJavacord) bridge), event.getSlashCommandInteraction());
     }
     
     @Override

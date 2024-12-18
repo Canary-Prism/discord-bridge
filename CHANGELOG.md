@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.1.0
+- added full autocomplete listener event and response support
+
 ## v1.0.2
 - fixed `discord-bridge` packaging not being `pom` meaning it couldn't be used as an aggregator
 
