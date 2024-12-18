@@ -19,7 +19,6 @@ package canaryprism.discordbridge.jda.interaction.slash;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
 import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -30,19 +29,15 @@ import java.util.stream.Collectors;
 public record SlashCommandOptionChoiceImpl(DiscordBridge bridge, Command.Choice choice) implements SlashCommandOptionChoice {
     
     @Override
-    public @NotNull Optional<String> getStringValue() {
-        return (choice.getType() == OptionType.STRING) ? Optional.of(choice.getAsString()) : Optional.empty();
+    public @NotNull Optional<?> getValue() {
+        return Optional.ofNullable(switch (choice.getType()) {
+            case STRING -> choice.getAsString();
+            case INTEGER -> choice.getAsLong();
+            case NUMBER -> choice.getAsDouble();
+            default -> null;
+        });
     }
     
-    @Override
-    public @NotNull Optional<Long> getIntegerValue() {
-        return (choice.getType() == OptionType.INTEGER) ? Optional.of(choice.getAsLong()) : Optional.empty();
-    }
-    
-    @Override
-    public @NotNull Optional<Double> getNumberValue() {
-        return (choice.getType() == OptionType.NUMBER) ? Optional.of(choice.getAsDouble()) : Optional.empty();
-    }
     
     @Override
     public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {

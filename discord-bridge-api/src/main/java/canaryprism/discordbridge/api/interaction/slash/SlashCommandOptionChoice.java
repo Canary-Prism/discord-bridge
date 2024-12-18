@@ -27,18 +27,41 @@ import java.util.Optional;
 /// Options with Option Choices lock the user into choosing one of the provided Choices
 public interface SlashCommandOptionChoice extends DiscordBridgeApi, LocalizedNameable {
     
-    /// Gets the [SlashCommandOptionType#STRING] value of this option choice
+    /// Gets the value of this option choice
     ///
-    /// @return String value of this option choice
-    @NotNull Optional<String> getStringValue();
+    /// The value is always present unless this option is of type `SUBCOMMAND` or `SUBCOMMAND_GROUP`
+    ///
+    /// @return the value
+    @NotNull Optional<?> getValue();
     
-    /// Gets the [SlashCommandOptionType#INTEGER] value of this option choice
+    /// Gets the value of this option choice as the provided type
     ///
-    /// @return long value of this option choice
-    @NotNull Optional<Long> getIntegerValue();
+    /// Empty if [#getValue()] is empty or the type cast cannot be made
+    ///
+    /// @param <T> the type to get as
+    /// @param type the runtime class
+    /// @return the value
+    /// @see #getValue()
+    default <T> @NotNull Optional<T> getValue(Class<T> type) {
+        return getValue()
+                .filter(type::isInstance)
+                .map(type::cast);
+    }
     
-    /// Gets the [SlashCommandOptionType#NUMBER] value of this option choice
+    /// Gets the value of this option choice as the provided option type
     ///
-    /// @return double value of this option choice
-    @NotNull Optional<Double> getNumberValue();
+    /// The value will be attempted to be casted to the [SlashCommandOptionType]'s type representation
+    /// by calling [SlashCommandOptionType#getTypeRepresentation()]
+    ///
+    /// Empty if [#getValue()] is empty or the cast cannot be made
+    ///
+    /// @param option_type the `SlashCommandOptionType` to get the value as
+    /// @return the value
+    /// @see #getValue(Class)
+    /// @see #getValue()
+    /// @implNote only SlashCommandOptionTypes with [SlashCommandOptionType#can_be_choices] set to `true`
+    /// should be used here, but it will technically accept any
+    default @NotNull Optional<?> getValue(SlashCommandOptionType option_type) {
+        return getValue(option_type.getTypeRepresentation());
+    }
 }
