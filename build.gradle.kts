@@ -13,7 +13,7 @@ allprojects {
     plugins.apply("com.vanniktech.maven.publish")
 
     group = "io.github.canary-prism"
-    version = "0.0.2"
+    version = "1.0.0"
 
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
@@ -70,6 +70,12 @@ allprojects {
             "implNote:a:Implementation Note:"
         )
     }
+}
+
+dependencies {
+    api(project(":discord-bridge-api"))
+    runtimeOnly(project(":discord-bridge-javacord"))
+    runtimeOnly(project(":discord-bridge-jda"))
 }
 
 subprojects {
