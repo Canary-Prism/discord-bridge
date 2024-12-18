@@ -14,21 +14,21 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.jda.event.interaction;
+package canaryprism.discordbridge.javacord.event.interaction;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.event.interaction.SlashCommandInvokeEvent;
+import canaryprism.discordbridge.api.event.interaction.SlashCommandAutocompleteEvent;
 import canaryprism.discordbridge.api.interaction.Interaction;
-import canaryprism.discordbridge.jda.DiscordBridgeJDA;
-import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInteractionImpl;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
+import canaryprism.discordbridge.javacord.interaction.slash.SlashCommandAutocompleteInteractionImpl;
+import org.javacord.api.event.interaction.AutocompleteCreateEvent;
 import org.jetbrains.annotations.NotNull;
 
-public record SlashCommandInvokeEventImpl(DiscordBridge bridge, SlashCommandInteractionEvent event) implements SlashCommandInvokeEvent {
+public record SlashCommandAutocompleteEventImpl(DiscordBridgeJavacord bridge, AutocompleteCreateEvent event) implements SlashCommandAutocompleteEvent {
     
     @Override
     public @NotNull Interaction getInteraction() {
-        return new SlashCommandInteractionImpl(((DiscordBridgeJDA) bridge), event.getInteraction());
+        return new SlashCommandAutocompleteInteractionImpl(bridge, event.getAutocompleteInteraction());
     }
     
     @Override

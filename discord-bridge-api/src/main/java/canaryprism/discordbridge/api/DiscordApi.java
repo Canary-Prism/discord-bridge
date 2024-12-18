@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api;
 import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
+import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
 import org.jetbrains.annotations.NotNull;
@@ -78,5 +79,10 @@ public interface DiscordApi extends DiscordBridgeApi {
     /// @param listener the listener to add
     default void addSlashCommandInvokeListener(@NotNull SlashCommandInvokeListener listener) {
         addListener(SlashCommandInvokeListener.class, listener);
+    }
+    
+    /// Adds a [SlashCommandAutocompleteListener] to this DiscordApi
+    default void addSlashCommandAutocompleteListener(@NotNull SlashCommandAutocompleteListener listener) {
+        addListener(SlashCommandAutocompleteListener.class, listener);
     }
 }

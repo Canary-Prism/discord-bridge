@@ -14,11 +14,17 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.listener;
+package canaryprism.discordbridge.api.listener.interaction;
 
-import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
-import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
+import canaryprism.discordbridge.api.event.interaction.SlashCommandAutocompleteEvent;
+import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 
-/// A listener that can be attached to a [canaryprism.discordbridge.api.DiscordApi]
-public sealed interface ApiAttachableListener permits SlashCommandAutocompleteListener, SlashCommandInvokeListener {
+/// A listener for [SlashCommandAutocompleteEvent]s
+@FunctionalInterface
+public non-sealed interface SlashCommandAutocompleteListener extends ApiAttachableListener {
+    
+    /// Called on Slash Command autocomplete
+    ///
+    /// @param event the event, never null
+    void onSlashCommandAutocomplete(SlashCommandAutocompleteEvent event);
 }

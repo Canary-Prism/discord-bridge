@@ -14,11 +14,18 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.listener;
+package canaryprism.discordbridge.javacord.listener.interaction;
 
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
-import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
+import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
+import canaryprism.discordbridge.javacord.event.interaction.SlashCommandAutocompleteEventImpl;
+import org.javacord.api.event.interaction.AutocompleteCreateEvent;
+import org.javacord.api.listener.interaction.AutocompleteCreateListener;
 
-/// A listener that can be attached to a [canaryprism.discordbridge.api.DiscordApi]
-public sealed interface ApiAttachableListener permits SlashCommandAutocompleteListener, SlashCommandInvokeListener {
+public record AutocompleteCreateListenerDelegate(DiscordBridgeJavacord bridge, SlashCommandAutocompleteListener listener) implements AutocompleteCreateListener {
+    
+    @Override
+    public void onAutocompleteCreate(AutocompleteCreateEvent event) {
+        listener.onSlashCommandAutocomplete(new SlashCommandAutocompleteEventImpl(bridge, event));
+    }
 }

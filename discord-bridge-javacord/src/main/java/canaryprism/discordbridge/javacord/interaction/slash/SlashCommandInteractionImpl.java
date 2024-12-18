@@ -35,10 +35,19 @@ import canaryprism.discordbridge.javacord.server.ServerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public record SlashCommandInteractionImpl(DiscordBridge bridge, org.javacord.api.interaction.SlashCommandInteraction interaction) implements SlashCommandInteraction {
+public class SlashCommandInteractionImpl implements SlashCommandInteraction {
+    
+    public final DiscordBridgeJavacord bridge;
+    public final org.javacord.api.interaction.SlashCommandInteraction interaction;
+    
+    public SlashCommandInteractionImpl(DiscordBridgeJavacord bridge, org.javacord.api.interaction.SlashCommandInteraction interaction) {
+        this.bridge = bridge;
+        this.interaction = interaction;
+    }
     
     @Override
     public long getApplicationId() {
@@ -107,5 +116,16 @@ public record SlashCommandInteractionImpl(DiscordBridge bridge, org.javacord.api
     @Override
     public @NotNull DiscordBridge getBridge() {
         return bridge;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof SlashCommandInteractionImpl that)
+                && Objects.equals(bridge, that.bridge) && Objects.equals(interaction, that.interaction);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(bridge, interaction);
     }
 }

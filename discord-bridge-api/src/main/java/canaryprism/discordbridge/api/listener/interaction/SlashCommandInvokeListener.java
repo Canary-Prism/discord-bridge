@@ -25,6 +25,6 @@ public non-sealed interface SlashCommandInvokeListener extends ApiAttachableList
     
     /// Called on Slash Command invoke
     ///
-    /// @param event the event
+    /// @param event the event, never null
     void onSlashCommandInvoke(SlashCommandInvokeEvent event);
 }

@@ -33,22 +33,30 @@ import canaryprism.discordbridge.jda.interaction.response.ImmediateResponderImpl
 import canaryprism.discordbridge.jda.interaction.response.ResponseUpdaterImpl;
 import canaryprism.discordbridge.jda.server.ServerImpl;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.CommandInteractionPayload;
 import net.dv8tion.jda.internal.interactions.command.CommandImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public record SlashCommandInteractionImpl(DiscordBridge bridge, net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction interaction, CompletableFuture<Command> future_command) implements SlashCommandInteraction {
+public class SlashCommandInteractionImpl implements SlashCommandInteraction {
+    public final DiscordBridgeJDA bridge;
+    public final CommandInteractionPayload interaction;
+    public final CompletableFuture<Command> future_command;
     
-    public SlashCommandInteractionImpl(DiscordBridge bridge, net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction interaction) {
-        this(bridge, interaction,
-                interaction.getJDA()
+    public SlashCommandInteractionImpl(DiscordBridgeJDA bridge, CommandInteractionPayload interaction) {
+        this.bridge = bridge;
+        this.interaction = interaction;
+        this.future_command = interaction.getJDA()
                         .retrieveCommandById(interaction.getCommandId())
-                        .submit());
+                        .submit();
     }
     
     @Override
@@ -92,19 +100,31 @@ public record SlashCommandInteractionImpl(DiscordBridge bridge, net.dv8tion.jda.
     
     @Override
     public @NotNull ImmediateResponder createImmediateResponder() {
-        return new ImmediateResponderImpl(bridge, interaction.reply(""));
+        try {
+            return new ImmediateResponderImpl(bridge, ((IReplyCallback) interaction).reply(""));
+        } catch (ClassCastException e) {
+            throw new UnsupportedOperationException("can't respond to autocomplete interactions", e);
+        }
     }
     
     @Override
     public @NotNull CompletableFuture<? extends @NotNull ResponseUpdater> respondLater(boolean ephemeral) {
-        return interaction.deferReply(ephemeral)
-                .submit()
-                .thenApply((e) -> new ResponseUpdaterImpl(bridge, e.editOriginal("")));
+        try {
+            return ((IReplyCallback) interaction).deferReply(ephemeral)
+                    .submit()
+                    .thenApply((e) -> new ResponseUpdaterImpl(bridge, e.editOriginal("")));
+        } catch (ClassCastException e) {
+            throw new UnsupportedOperationException("can't respond to autocomplete interactions", e);
+        }
     }
     
     @Override
     public @NotNull FollowupResponder createFollowupResponder() {
-        return new FollowupResponderImpl(bridge, interaction.getHook());
+        try {
+            return new FollowupResponderImpl(bridge, ((IDeferrableCallback) interaction).getHook());
+        } catch (ClassCastException e) {
+            throw new UnsupportedOperationException("can't respond to autocomplete interactions", e);
+        }
     }
     
     @Override
@@ -120,7 +140,9 @@ public record SlashCommandInteractionImpl(DiscordBridge bridge, net.dv8tion.jda.
     
     @Override
     public @NotNull Optional<? extends TextChannel> getChannel() {
-        return Optional.of(new TextChannelImpl(bridge, interaction.getChannel()));
+        return (interaction instanceof net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction e) ?
+                Optional.of(new TextChannelImpl(bridge, e.getChannel()))
+                : Optional.empty();
     }
     
     @Override
@@ -160,5 +182,16 @@ public record SlashCommandInteractionImpl(DiscordBridge bridge, net.dv8tion.jda.
     @Override
     public @NotNull DiscordBridge getBridge() {
         return bridge;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof SlashCommandInteractionImpl that)
+                && Objects.equals(bridge, that.bridge) && Objects.equals(interaction, that.interaction) && Objects.equals(future_command, that.future_command);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(bridge, interaction, future_command);
     }
 }

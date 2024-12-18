@@ -22,9 +22,11 @@ import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
+import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
+import canaryprism.discordbridge.jda.listener.interaction.CommandAutocompleteInteractionEventListenerDelegate;
 import canaryprism.discordbridge.jda.listener.interaction.SlashCommandInteractionEventListenerDelegate;
 import canaryprism.discordbridge.jda.server.ServerImpl;
 import net.dv8tion.jda.api.JDA;
@@ -89,6 +91,11 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) implements Discor
         if (type == SlashCommandInvokeListener.class)
             jda.addEventListener(delegate(((SlashCommandInvokeListener) listener),
                     (e) -> new SlashCommandInteractionEventListenerDelegate(bridge, e)));
+        else if (type == SlashCommandAutocompleteListener.class)
+            jda.addEventListener(delegate(((SlashCommandAutocompleteListener) listener),
+                    (e) -> new CommandAutocompleteInteractionEventListenerDelegate(bridge, e)));
+        else
+            throw new UnsupportedOperationException(String.format("unsupported listener type %s", type));
     }
     
     @Override

@@ -17,18 +17,18 @@
 package canaryprism.discordbridge.jda.event.interaction;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.event.interaction.SlashCommandInvokeEvent;
+import canaryprism.discordbridge.api.event.interaction.SlashCommandAutocompleteEvent;
 import canaryprism.discordbridge.api.interaction.Interaction;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
-import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInteractionImpl;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandAutocompleteInteractionImpl;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
-public record SlashCommandInvokeEventImpl(DiscordBridge bridge, SlashCommandInteractionEvent event) implements SlashCommandInvokeEvent {
+public record SlashCommandAutocompleteEventImpl(DiscordBridgeJDA bridge, CommandAutoCompleteInteractionEvent event) implements SlashCommandAutocompleteEvent {
     
     @Override
     public @NotNull Interaction getInteraction() {
-        return new SlashCommandInteractionImpl(((DiscordBridgeJDA) bridge), event.getInteraction());
+        return new SlashCommandAutocompleteInteractionImpl(bridge, event.getInteraction());
     }
     
     @Override

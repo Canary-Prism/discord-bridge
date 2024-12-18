@@ -22,9 +22,11 @@ import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
+import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.javacord.interaction.slash.SlashCommandImpl;
+import canaryprism.discordbridge.javacord.listener.interaction.AutocompleteCreateListenerDelegate;
 import canaryprism.discordbridge.javacord.listener.interaction.SlashCommandCreateListenerDelegate;
 import canaryprism.discordbridge.javacord.server.ServerImpl;
 import org.javacord.api.listener.GloballyAttachableListener;
@@ -85,6 +87,11 @@ public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.Disc
         if (type == SlashCommandInvokeListener.class)
             api.addSlashCommandCreateListener(delegate(((SlashCommandInvokeListener) listener),
                     (e) -> new SlashCommandCreateListenerDelegate(bridge, e)));
+        else if (type == SlashCommandAutocompleteListener.class)
+            api.addAutocompleteCreateListener(delegate(((SlashCommandAutocompleteListener) listener),
+                    (e) -> new AutocompleteCreateListenerDelegate(bridge, e)));
+        else
+            throw new UnsupportedOperationException(String.format("unsupported listener type %s", type));
     }
     
     @Override
