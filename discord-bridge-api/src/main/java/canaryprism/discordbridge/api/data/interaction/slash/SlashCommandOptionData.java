@@ -323,7 +323,7 @@ public final class SlashCommandOptionData {
         if (type != SlashCommandOptionType.CHANNEL && !channel_type_bounds.isEmpty())
             throw new IllegalStateException("channel type bounds only allowed with type CHANNEL");
         
-        if (choices.stream().allMatch((e) -> e.getType() == type))
+        if (!choices.stream().allMatch((e) -> e.getType() == type))
             throw new IllegalStateException(String.format(
                     "option has choices incompatible with type %s", type));
         
