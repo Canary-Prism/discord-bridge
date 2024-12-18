@@ -13,7 +13,7 @@ allprojects {
     plugins.apply("com.vanniktech.maven.publish")
 
     group = "io.github.canary-prism"
-    version = "1.0.1"
+    version = "1.0.2"
 
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
