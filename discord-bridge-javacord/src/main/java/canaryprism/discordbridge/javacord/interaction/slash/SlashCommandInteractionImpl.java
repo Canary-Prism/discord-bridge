@@ -25,6 +25,7 @@ import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import canaryprism.discordbridge.javacord.channel.TextChannelImpl;
 import canaryprism.discordbridge.javacord.entities.user.UserImpl;
 import canaryprism.discordbridge.javacord.interaction.response.FollowupResponderImpl;
@@ -82,7 +83,7 @@ public record SlashCommandInteractionImpl(DiscordBridge bridge, org.javacord.api
     
     @Override
     public @NotNull Optional<Server> getServer() {
-        return interaction.getServer().map((e) -> new ServerImpl(bridge, e));
+        return interaction.getServer().map((e) -> new ServerImpl(((DiscordBridgeJavacord) bridge), e));
     }
     
     @Override

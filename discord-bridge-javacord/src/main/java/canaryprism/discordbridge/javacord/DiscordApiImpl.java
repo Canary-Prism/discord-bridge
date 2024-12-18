@@ -18,8 +18,8 @@ package canaryprism.discordbridge.javacord;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
-import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
@@ -48,7 +48,7 @@ public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.Disc
     }
     
     @Override
-    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands) {
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull CommandData> commands) {
         return api.bulkOverwriteGlobalApplicationCommands(
                         commands.stream()
                                 .map(SlashCommandData.class::cast)

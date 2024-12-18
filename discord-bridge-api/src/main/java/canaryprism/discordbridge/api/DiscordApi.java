@@ -16,7 +16,7 @@
 
 package canaryprism.discordbridge.api;
 
-import canaryprism.discordbridge.api.interaction.Command;
+import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
@@ -43,7 +43,7 @@ public interface DiscordApi extends DiscordBridgeApi {
     ///
     /// @param commands the set of global commands to register
     /// @return a future for the update request
-    @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands);
+    @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull CommandData> commands);
     
     /// Gets all the servers the bot is in and has cached
     ///

@@ -18,8 +18,8 @@ package canaryprism.discordbridge.jda;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
-import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
@@ -52,7 +52,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) implements Discor
     }
     
     @Override
-    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull Command> commands) {
+    public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull CommandData> commands) {
         return jda.updateCommands()
                 .addCommands(commands.stream()
                         .map(SlashCommandData.class::cast)
