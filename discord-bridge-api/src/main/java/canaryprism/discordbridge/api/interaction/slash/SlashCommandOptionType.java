@@ -42,17 +42,17 @@ public enum SlashCommandOptionType implements PartialSupport, TypeValue<Class<?>
     SUBCOMMAND_GROUP(Void.class, false),
     
     /// String values may contain mention tags
-    STRING(String.class, false),
+    STRING(String.class, true),
     
     /// Discord's `INTEGER` is a signed integer between `-2^53` and `2^53`
     /// (aka as much as a float 64 is able to achieve with integer precision)
     ///
     /// so the value is represented as a [Long]
-    INTEGER(Long.class, false),
+    INTEGER(Long.class, true),
     
     /// Discord's `NUMBER` means a double between `-2^53` and `2^53`
     /// (aka a double within integer precision)
-    NUMBER(Double.class, false),
+    NUMBER(Double.class, true),
     
     /// Just a [Boolean] value
     BOOLEAN(Boolean.class, false),
