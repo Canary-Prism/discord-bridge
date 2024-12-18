@@ -72,12 +72,6 @@ allprojects {
     }
 }
 
-dependencies {
-    api(project(":discord-bridge-api"))
-    runtimeOnly(project(":discord-bridge-javacord"))
-    runtimeOnly(project(":discord-bridge-jda"))
-}
-
 subprojects {
     apply(plugin = "java-library")
 
@@ -97,4 +91,16 @@ subprojects {
         useJUnitPlatform()
     }
 
+}
+
+dependencies {
+    api(project(":discord-bridge-api"))
+    runtimeOnly(project(":discord-bridge-javacord"))
+    runtimeOnly(project(":discord-bridge-jda"))
+}
+
+mavenPublishing {
+    pom {
+        packaging = "pom"
+    }
 }
