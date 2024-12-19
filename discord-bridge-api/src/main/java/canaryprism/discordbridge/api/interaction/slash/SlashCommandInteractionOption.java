@@ -55,6 +55,9 @@ public interface SlashCommandInteractionOption extends Nameable, SlashCommandInt
     ///
     /// The value is always present unless this option is of type `SUBCOMMAND` or `SUBCOMMAND_GROUP`
     ///
+    /// If a value exists and this interaction option corresponds to an option with a [SlashCommandOptionType] `type`,
+    /// then the returned value must be assignable to calling [SlashCommandOptionType#getTypeRepresentation()] on `type`
+    ///
     /// @return the value
     @NotNull Optional<?> getValue();
     

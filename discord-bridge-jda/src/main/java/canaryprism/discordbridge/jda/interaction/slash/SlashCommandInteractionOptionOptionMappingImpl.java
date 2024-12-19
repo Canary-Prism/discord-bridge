@@ -18,6 +18,12 @@ package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
+import canaryprism.discordbridge.jda.channel.ChannelImpl;
+import canaryprism.discordbridge.jda.entities.user.UserImpl;
+import canaryprism.discordbridge.jda.message.AttachmentImpl;
+import canaryprism.discordbridge.jda.server.permission.RoleImpl;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.CommandAutoCompleteInteraction;
 import net.dv8tion.jda.api.interactions.commands.CommandInteractionPayload;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -64,12 +70,20 @@ public record SlashCommandInteractionOptionOptionMappingImpl(DiscordBridge bridg
             case STRING -> mapping.getAsString();
             case INTEGER -> mapping.getAsLong();
             case BOOLEAN -> mapping.getAsBoolean();
-            case USER -> mapping.getAsUser();
-            case CHANNEL -> mapping.getAsChannel();
-            case ROLE -> mapping.getAsRole();
-            case MENTIONABLE -> mapping.getAsMentionable();
+            case USER -> new UserImpl(bridge, mapping.getAsUser());
+            case CHANNEL -> new ChannelImpl(bridge, mapping.getAsChannel());
+            case ROLE -> new RoleImpl(bridge, mapping.getAsRole());
+            case MENTIONABLE -> {
+                var mentionable = mapping.getAsMentionable();
+                if (mentionable instanceof User user)
+                    yield new UserImpl(bridge, user);
+                else if (mentionable instanceof Role role)
+                    yield new RoleImpl(bridge, role);
+                else
+                    throw new IllegalStateException("what even");
+            }
             case NUMBER -> mapping.getAsDouble();
-            case ATTACHMENT -> mapping.getAsAttachment();
+            case ATTACHMENT -> new AttachmentImpl(bridge, mapping.getAsAttachment());
         });
     }
     
