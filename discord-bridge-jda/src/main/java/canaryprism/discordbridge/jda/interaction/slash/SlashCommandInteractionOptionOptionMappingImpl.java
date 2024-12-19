@@ -73,15 +73,13 @@ public record SlashCommandInteractionOptionOptionMappingImpl(DiscordBridge bridg
             case USER -> new UserImpl(bridge, mapping.getAsUser());
             case CHANNEL -> new ChannelImpl(bridge, mapping.getAsChannel());
             case ROLE -> new RoleImpl(bridge, mapping.getAsRole());
-            case MENTIONABLE -> {
-                var mentionable = mapping.getAsMentionable();
-                if (mentionable instanceof User user)
-                    yield new UserImpl(bridge, user);
-                else if (mentionable instanceof Role role)
-                    yield new RoleImpl(bridge, role);
-                else
-                    throw new IllegalStateException("what even");
-            }
+            case MENTIONABLE -> (mapping.getAsMentionable() instanceof User user) ?
+                    new UserImpl(bridge, user)
+                    :
+                    (mapping.getAsMentionable() instanceof Role role) ?
+                            new RoleImpl(bridge, role)
+                            :
+                            null;
             case NUMBER -> mapping.getAsDouble();
             case ATTACHMENT -> new AttachmentImpl(bridge, mapping.getAsAttachment());
         });
