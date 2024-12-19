@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.3.0
+- added a couple new channel type interfaces
+
 ## v1.2.0
 - fixed discord-bridge-jda's `SlashCommandInteractionOption::getValue` not returning compliant values
 - added `getImplementationType()` to `DiscordBridge`
