@@ -25,61 +25,65 @@ import org.jetbrains.annotations.NotNull;
 public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Channel>>, DiscordBridgeEnum {
     
     /// Unknown Channel
-    UNKNOWN,
+    UNKNOWN(Channel.class),
     
     /// Private Channels (DMs)
-    PRIVATE,
+    PRIVATE(TextChannel.class),
     
     /// Group Channel (Group Chats)
     ///
     /// Unused as bots can't join group chats
-    GROUP,
+    GROUP(TextChannel.class),
     
     /// Server Text Channel
-    SERVER_TEXT,
+    SERVER_TEXT(ServerTextChannel.class),
     
     /// Server Voice Channel
-    SERVER_VOICE,
+    SERVER_VOICE(ServerChannel.class),
     
     /// Channel Category (Server only)
-    SERVER_CATEGORY,
+    SERVER_CATEGORY(ServerChannel.class),
     
     /// Server Announcement Channel
-    SERVER_NEWS,
+    SERVER_NEWS(ServerTextChannel.class),
     
     /// Server Stage Channel
-    SERVER_STAGE,
+    SERVER_STAGE(ServerChannel.class),
     
     /// Server Announcement Channel Thread
-    SERVER_THREAD_NEWS,
+    SERVER_THREAD_NEWS(ServerTextChannel.class),
     
     /// Server Public Channel Thread
-    SERVER_THREAD_PUBLIC,
+    SERVER_THREAD_PUBLIC(ServerTextChannel.class),
     
     /// Server Private Channel Thread
-    SERVER_THREAD_PRIVATE,
+    SERVER_THREAD_PRIVATE(ServerTextChannel.class),
     
     /// Server Forum Channel
-    SERVER_FORUM,
+    SERVER_FORUM(ServerChannel.class),
     
     /// Server Media Channel
-    SERVER_MEDIA,
+    SERVER_MEDIA(ServerChannel.class),
     
     /// Server Shop Channel
-    SERVER_SHOP,
+    SERVER_SHOP(ServerChannel.class),
     
     /// Server Directory Channel
-    SERVER_DIRECTORY,
+    SERVER_DIRECTORY(ServerChannel.class),
     
     ;
     
+    public final Class<? extends Channel> type_representation;
     
+    ChannelType(Class<? extends Channel> type_representation) {
+        this.type_representation = type_representation;
+    }
     
     /// Subtypes not implemented yet
     ///
     /// @return Channel.class
     @Override
-    public @NotNull Class<Channel> getTypeRepresentation() {
-        return Channel.class;
+    public @NotNull Class<? extends Channel> getTypeRepresentation() {
+        return this.type_representation;
     }
 }
