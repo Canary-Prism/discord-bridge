@@ -17,12 +17,12 @@
 package canaryprism.discordbridge.jda.channel;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.TextChannel;
-import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import canaryprism.discordbridge.api.channel.ServerTextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
-public class TextChannelImpl<T extends MessageChannelUnion> extends ChannelImpl<T> implements TextChannel {
+public class ServerTextChannelImpl<T extends GuildMessageChannel> extends ServerChannelImpl<T> implements ServerTextChannel {
     
-    public TextChannelImpl(DiscordBridge bridge, T channel) {
+    public ServerTextChannelImpl(DiscordBridge bridge, T channel) {
         super(bridge, channel);
     }
 }

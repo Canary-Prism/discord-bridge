@@ -18,7 +18,7 @@ package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
-import canaryprism.discordbridge.jda.channel.ChannelImpl;
+import canaryprism.discordbridge.jda.channel.ChannelDirector;
 import canaryprism.discordbridge.jda.entities.user.UserImpl;
 import canaryprism.discordbridge.jda.message.AttachmentImpl;
 import canaryprism.discordbridge.jda.server.permission.RoleImpl;
@@ -71,7 +71,7 @@ public record SlashCommandInteractionOptionOptionMappingImpl(DiscordBridge bridg
             case INTEGER -> mapping.getAsLong();
             case BOOLEAN -> mapping.getAsBoolean();
             case USER -> new UserImpl(bridge, mapping.getAsUser());
-            case CHANNEL -> new ChannelImpl(bridge, mapping.getAsChannel());
+            case CHANNEL -> ChannelDirector.wrapChannel(bridge, mapping.getAsChannel());
             case ROLE -> new RoleImpl(bridge, mapping.getAsRole());
             case MENTIONABLE -> (mapping.getAsMentionable() instanceof User user) ?
                     new UserImpl(bridge, user)

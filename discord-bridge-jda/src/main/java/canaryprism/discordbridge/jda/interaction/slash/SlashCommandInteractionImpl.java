@@ -26,7 +26,7 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
-import canaryprism.discordbridge.jda.channel.TextChannelImpl;
+import canaryprism.discordbridge.jda.channel.ChannelDirector;
 import canaryprism.discordbridge.jda.entities.user.UserImpl;
 import canaryprism.discordbridge.jda.interaction.response.FollowupResponderImpl;
 import canaryprism.discordbridge.jda.interaction.response.ImmediateResponderImpl;
@@ -141,7 +141,7 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     @Override
     public @NotNull Optional<? extends TextChannel> getChannel() {
         return (interaction instanceof net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction e) ?
-                Optional.of(new TextChannelImpl(bridge, e.getChannel()))
+                Optional.of(ChannelDirector.wrapChannel(bridge, e.getChannel()))
                 : Optional.empty();
     }
     

@@ -17,37 +17,28 @@
 package canaryprism.discordbridge.jda.channel;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.Channel;
-import canaryprism.discordbridge.api.channel.ChannelType;
+import canaryprism.discordbridge.api.channel.ServerChannel;
+import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.jda.DiscordBridgeJDA;
+import canaryprism.discordbridge.jda.server.ServerImpl;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import org.jetbrains.annotations.NotNull;
 
-public class ChannelImpl<T extends net.dv8tion.jda.api.entities.channel.Channel> implements Channel {
+import java.util.concurrent.CompletableFuture;
+
+public class ServerChannelImpl<T extends GuildChannel> extends ChannelImpl<T> implements ServerChannel {
     
-    public final DiscordBridge bridge;
-    public final T channel;
-    
-    public ChannelImpl(DiscordBridge bridge, T channel) {
-        this.bridge = bridge;
-        this.channel = channel;
+    public ServerChannelImpl(DiscordBridge bridge, T channel) {
+        super(bridge, channel);
     }
     
     @Override
-    public @NotNull ChannelType getType() {
-        return bridge.convertInternalObject(ChannelType.class, channel.getType());
+    public @NotNull Server getServer() {
+        return new ServerImpl(((DiscordBridgeJDA) bridge), channel.getGuild());
     }
     
     @Override
-    public @NotNull String getIdAsString() {
-        return channel.getId();
-    }
-    
-    @Override
-    public @NotNull Object getImplementation() {
-        return channel;
-    }
-    
-    @Override
-    public @NotNull DiscordBridge getBridge() {
-        return bridge;
+    public @NotNull CompletableFuture<Void> delete() {
+        return channel.delete().submit();
     }
 }

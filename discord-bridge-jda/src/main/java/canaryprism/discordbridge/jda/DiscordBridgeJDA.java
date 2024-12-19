@@ -30,6 +30,7 @@ import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.jda.channel.ChannelImpl;
+import canaryprism.discordbridge.jda.channel.ServerChannelImpl;
 import canaryprism.discordbridge.jda.channel.TextChannelImpl;
 import canaryprism.discordbridge.jda.entities.user.UserImpl;
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteEventImpl;
@@ -362,7 +363,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
             // copied from the javacord impl
             @SuppressWarnings("unchecked")
             static final Map<Class<? extends DiscordBridgeApi>, Class<?>> map = Stream.of(
-                            ChannelImpl.class, TextChannelImpl.class,
+                            ChannelImpl.class, TextChannelImpl.class, ServerChannelImpl.class, ServerChannelImpl.class,
                             UserImpl.class,
                             SlashCommandAutocompleteEventImpl.class, SlashCommandInvokeEventImpl.class,
                             FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,
