@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0
+- fixed discord-bridge-jda's `SlashCommandInteractionOption::getValue` not returning compliant values
+- added `getImplementationType()` to `DiscordBridge`
+
 ## v1.1.0
 - added full autocomplete listener event and response support
 
