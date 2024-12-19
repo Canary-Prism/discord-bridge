@@ -18,7 +18,7 @@ package canaryprism.discordbridge.javacord.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
-import canaryprism.discordbridge.javacord.channel.ChannelImpl;
+import canaryprism.discordbridge.javacord.channel.ChannelDirector;
 import canaryprism.discordbridge.javacord.entities.user.UserImpl;
 import canaryprism.discordbridge.javacord.message.AttachmentImpl;
 import canaryprism.discordbridge.javacord.server.permission.RoleImpl;
@@ -41,7 +41,7 @@ public record SlashCommandInteractionOptionImpl(DiscordBridge bridge, org.javaco
         return ((Optional<Object>) (Optional<?>) option.getStringValue())
                 .or(() -> option.getAttachmentValue().map((e) -> new AttachmentImpl(bridge, e)))
                 .or(option::getBooleanValue)
-                .or(() -> option.getChannelValue().map((e) -> new ChannelImpl(bridge, e)))
+                .or(() -> option.getChannelValue().map((e) -> ChannelDirector.wrapChannel(bridge, e)))
                 .or(option::getDecimalValue)
                 .or(option::getLongValue)
                 .or(() -> option.getMentionableValue().map((e) ->

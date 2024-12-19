@@ -17,11 +17,27 @@
 package canaryprism.discordbridge.javacord.channel;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.TextChannel;
+import canaryprism.discordbridge.api.channel.ServerChannel;
+import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
+import canaryprism.discordbridge.javacord.server.ServerImpl;
+import org.jetbrains.annotations.NotNull;
 
-public class TextChannelImpl<T extends org.javacord.api.entity.channel.TextChannel> extends ChannelImpl<T> implements TextChannel {
+import java.util.concurrent.CompletableFuture;
+
+public class ServerChannelImpl<T extends org.javacord.api.entity.channel.ServerChannel> extends ChannelImpl<T> implements ServerChannel {
     
-    public TextChannelImpl(DiscordBridge bridge, T channel) {
+    public ServerChannelImpl(DiscordBridge bridge, T channel) {
         super(bridge, channel);
+    }
+    
+    @Override
+    public @NotNull Server getServer() {
+        return new ServerImpl((DiscordBridgeJavacord) bridge, channel.getServer());
+    }
+    
+    @Override
+    public @NotNull CompletableFuture<Void> delete() {
+        return channel.delete();
     }
 }

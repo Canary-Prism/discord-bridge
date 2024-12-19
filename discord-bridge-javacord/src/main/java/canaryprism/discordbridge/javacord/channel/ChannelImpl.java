@@ -21,13 +21,13 @@ import canaryprism.discordbridge.api.channel.Channel;
 import canaryprism.discordbridge.api.channel.ChannelType;
 import org.jetbrains.annotations.NotNull;
 
-public class ChannelImpl implements Channel {
+public class ChannelImpl<T extends org.javacord.api.entity.channel.Channel> implements Channel {
     
-    private final DiscordBridge bridge;
+    public final DiscordBridge bridge;
     
-    private final org.javacord.api.entity.channel.Channel channel;
+    public final T channel;
     
-    public ChannelImpl(DiscordBridge bridge, org.javacord.api.entity.channel.Channel channel) {
+    public ChannelImpl(DiscordBridge bridge, T channel) {
         this.bridge = bridge;
         this.channel = channel;
     }
