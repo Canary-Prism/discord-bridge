@@ -18,6 +18,7 @@ package canaryprism.discordbridge.javacord;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionData;
@@ -26,6 +27,18 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
+import canaryprism.discordbridge.javacord.channel.ChannelImpl;
+import canaryprism.discordbridge.javacord.channel.TextChannelImpl;
+import canaryprism.discordbridge.javacord.entities.user.UserImpl;
+import canaryprism.discordbridge.javacord.event.interaction.SlashCommandAutocompleteEventImpl;
+import canaryprism.discordbridge.javacord.event.interaction.SlashCommandInvokeEventImpl;
+import canaryprism.discordbridge.javacord.interaction.response.FollowupResponderImpl;
+import canaryprism.discordbridge.javacord.interaction.response.ImmediateResponderImpl;
+import canaryprism.discordbridge.javacord.interaction.response.ResponseUpdaterImpl;
+import canaryprism.discordbridge.javacord.interaction.slash.*;
+import canaryprism.discordbridge.javacord.message.AttachmentImpl;
+import canaryprism.discordbridge.javacord.server.ServerImpl;
+import canaryprism.discordbridge.javacord.server.permission.RoleImpl;
 import org.javacord.api.entity.Attachment;
 import org.javacord.api.entity.Mentionable;
 import org.javacord.api.entity.channel.*;
@@ -37,11 +50,9 @@ import org.javacord.api.interaction.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /// The Javacord implementation of [DiscordBridge]
 public final class DiscordBridgeJavacord implements DiscordBridge {
@@ -347,6 +358,38 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         }
         
         throw new ClassCastException(String.format("Can't convert %s to %s", value, type));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Class<?>> getImplementationType(@NotNull Class<? extends DiscordBridgeApi> type) {
+        // the implementation type is stored as the second param in all of the constructors
+        // so we can pretty much just fish for those using reflection
+        class Holder {
+            @SuppressWarnings("unchecked")
+            static final Map<Class<? extends DiscordBridgeApi>, Class<?>> map = Stream.of(
+                    ChannelImpl.class, TextChannelImpl.class,
+                    UserImpl.class,
+                    SlashCommandAutocompleteEventImpl.class, SlashCommandInvokeEventImpl.class,
+                    FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,
+                    SlashCommandAutocompleteInteractionImpl.class,
+                    SlashCommandImpl.class,
+                    SlashCommandInteractionImpl.class,
+                    SlashCommandInteractionOptionImpl.class,
+                    SlashCommandOptionChoiceImpl.class,
+                    SlashCommandOptionImpl.class,
+                    AttachmentImpl.class,
+                    ServerImpl.class,
+                    RoleImpl.class,
+                    ServerImpl.class,
+                    DiscordApiImpl.class)
+                    .map((e) -> Map.entry(
+                            ((Class<? extends DiscordBridgeApi>) e.getInterfaces()[0]),
+                            e.getConstructors()[0].getParameterTypes()[1]
+                    ))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
+        
+        return Optional.ofNullable(Holder.map.get(type));
     }
     
     @Override

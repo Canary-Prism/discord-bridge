@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -88,6 +89,34 @@ public interface DiscordBridge {
     /// @return the counterpart in the type
     /// @throws ClassCastException if the value is not convertible to the type
     <T extends DiscordBridgeEnum> @NotNull T convertInternalObject(@NotNull Class<T> type, @NotNull Object value);
+    
+    /// Gets the internal implementation type of the given [DiscordBridgeApi] type
+    ///
+    /// This is an optional operation **FOR NOW**, it will become abstract in the next major update
+    /// (because default methods that do nothing annoy me);
+    /// if not overridden unconditionally returns an empty optional
+    ///
+    /// For any interface extending DiscordBridgeApi, its implementation's [DiscordBridgeApi#getImplementation()] method
+    /// must return a value assignable to the returned type
+    ///
+    /// For example, calling this method with `canaryprism.discordbridge.api.DiscordApi.class` might return
+    /// `org.javacord.api.DiscordApi.class` or `net.dev8tion.jda.api.JDA.class`
+    ///
+    /// If a DiscordBridgeApi type has no representation due to being unsupported in an implementation,
+    /// this method returns an empty optional
+    ///
+    /// The contract if calling this method returns a type is that the passed type is ***semantically equivalent***
+    /// to the passed type, or in other words, that users may expect when they obtain an instance of the passed type
+    /// from this implementation, the value returned by calling [DiscordBridgeApi#getImplementation()]
+    /// ***will always*** be an instance of the type returned by this method.
+    /// If this cannot be achieved, for example because implementation details necessitate multiple different implementations
+    /// of the passed type, this method shall also return an empty optional
+    ///
+    /// @param type the DiscordBridgeApi class to get the implementation type of
+    /// @return the implementation type
+    default @NotNull Optional<? extends Class<?>> getImplementationType(@NotNull Class<? extends DiscordBridgeApi> type) {
+        return Optional.empty();
+    }
     
     /// Gets the String representation of this DiscordBridge
     ///

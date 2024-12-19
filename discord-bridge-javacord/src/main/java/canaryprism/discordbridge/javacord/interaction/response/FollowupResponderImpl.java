@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public record FollowupResponderImpl(DiscordBridge bridge, InteractionFollowupMessageBuilder responder) implements ResponseBuilderImpl<FollowupResponder>, FollowupResponder {
+public record FollowupResponderImpl(DiscordBridge bridge, InteractionFollowupMessageBuilder responder) implements FollowupResponder, ResponseBuilderImpl<FollowupResponder> {
     
     @Override
     public @NotNull CompletableFuture<?> send() {

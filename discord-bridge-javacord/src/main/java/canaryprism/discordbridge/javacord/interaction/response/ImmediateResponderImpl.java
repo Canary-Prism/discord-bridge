@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public record ImmediateResponderImpl(DiscordBridge bridge, InteractionImmediateResponseBuilder responder) implements ResponseBuilderImpl<ImmediateResponder>, ImmediateResponder {
+public record ImmediateResponderImpl(DiscordBridge bridge, InteractionImmediateResponseBuilder responder) implements ImmediateResponder, ResponseBuilderImpl<ImmediateResponder> {
     
     @Override
     public @NotNull CompletableFuture<?> respond() {

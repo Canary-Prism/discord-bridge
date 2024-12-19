@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public record ResponseUpdaterImpl(DiscordBridge bridge, InteractionOriginalResponseUpdater updater) implements ResponseBuilderImpl<ResponseUpdater>, ResponseUpdater {
+public record ResponseUpdaterImpl(DiscordBridge bridge, InteractionOriginalResponseUpdater updater) implements ResponseUpdater, ResponseBuilderImpl<ResponseUpdater> {
     
     @Override
     public @NotNull CompletableFuture<?> update() {

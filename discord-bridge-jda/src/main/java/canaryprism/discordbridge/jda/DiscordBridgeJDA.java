@@ -18,6 +18,7 @@ package canaryprism.discordbridge.jda;
 
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionData;
@@ -28,6 +29,21 @@ import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationExcepti
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
+import canaryprism.discordbridge.jda.channel.ChannelImpl;
+import canaryprism.discordbridge.jda.channel.TextChannelImpl;
+import canaryprism.discordbridge.jda.entities.user.UserImpl;
+import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteEventImpl;
+import canaryprism.discordbridge.jda.event.interaction.SlashCommandInvokeEventImpl;
+import canaryprism.discordbridge.jda.interaction.response.FollowupResponderImpl;
+import canaryprism.discordbridge.jda.interaction.response.ImmediateResponderImpl;
+import canaryprism.discordbridge.jda.interaction.response.ResponseUpdaterImpl;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandAutocompleteInteractionImpl;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInteractionImpl;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandOptionChoiceImpl;
+import canaryprism.discordbridge.jda.message.AttachmentImpl;
+import canaryprism.discordbridge.jda.server.ServerImpl;
+import canaryprism.discordbridge.jda.server.permission.RoleImpl;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.IMentionable;
@@ -50,6 +66,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /// The JDA implementation of [DiscordBridge]
 public final class DiscordBridgeJDA implements DiscordBridge {
@@ -334,6 +351,40 @@ public final class DiscordBridgeJDA implements DiscordBridge {
         }
         
         throw new ClassCastException(String.format("Can't convert %s to %s", value, type));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Class<?>> getImplementationType(@NotNull Class<? extends DiscordBridgeApi> type) {
+        
+        // the implementation type is stored as the second param in all of the constructors
+        // so we can pretty much just fish for those using reflection
+        class Holder {
+            // copied from the javacord impl
+            @SuppressWarnings("unchecked")
+            static final Map<Class<? extends DiscordBridgeApi>, Class<?>> map = Stream.of(
+                            ChannelImpl.class, TextChannelImpl.class,
+                            UserImpl.class,
+                            SlashCommandAutocompleteEventImpl.class, SlashCommandInvokeEventImpl.class,
+                            FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,
+                            SlashCommandAutocompleteInteractionImpl.class,
+                            SlashCommandImpl.class,
+                            SlashCommandInteractionImpl.class,
+                            // SlashCommandInteractionOptionImpl.class, N/A since there is no single internal type equivalent
+                            SlashCommandOptionChoiceImpl.class,
+                            // SlashCommandOptionImpl.class, N/A since there is no single internal type equivalent
+                            AttachmentImpl.class,
+                            ServerImpl.class,
+                            RoleImpl.class,
+                            ServerImpl.class,
+                            DiscordApiImpl.class)
+                    .map((e) -> Map.entry(
+                            ((Class<? extends DiscordBridgeApi>) e.getInterfaces()[0]),
+                            e.getConstructors()[0].getParameterTypes()[1]
+                    ))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
+        
+        return Optional.ofNullable(Holder.map.get(type));
     }
     
     @Override
