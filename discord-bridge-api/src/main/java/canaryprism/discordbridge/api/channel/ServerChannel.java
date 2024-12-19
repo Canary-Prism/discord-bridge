@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 
 /// Represents a [Channel] in a [Server]
+///
+/// Also includes server categories
 public interface ServerChannel extends Channel {
     
     /// Gets the [Server] this channel belongs to
