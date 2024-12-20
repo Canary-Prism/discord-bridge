@@ -6,8 +6,15 @@ it's a unified api for other Discord api wrappers for Java
 i mostly made this so i could make [Slavacord](https://github.com/Canary-Prism/slavacord) api implementation agnostic  
 but i figured other people might find this project interesting
 
-currently this repo provides implementations for [Javacord](https://javacord.org/) and [JDA](https://jda.wiki/), 
-i plan on adding support for [Discord4J](https://docs.discord4j.com/) and [Kord](https://github.com/kordlib/kord) in the future
+## implementations
+
+currently this repo provides implementations for:
+- [Javacord](https://javacord.org/) 
+- [JDA](https://jda.wiki/)
+
+i plan on adding support in the future for: 
+- [Discord4J](https://docs.discord4j.com/) 
+- [Kord](https://github.com/kordlib/kord) 
 
 ## adding as dependency and whatever
 
