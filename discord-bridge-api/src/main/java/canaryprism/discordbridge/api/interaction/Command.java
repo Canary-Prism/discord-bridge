@@ -20,6 +20,7 @@ import canaryprism.discordbridge.api.entities.DiscordEntity;
 import canaryprism.discordbridge.api.misc.LocalizedDescribable;
 import canaryprism.discordbridge.api.misc.LocalizedNameable;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Optional;
 import java.util.Set;
@@ -47,7 +48,7 @@ public interface Command extends DiscordEntity, LocalizedNameable, LocalizedDesc
     /// this is only a default and moderators may change this in their server
     ///
     /// @return a set of required PermissionTypes
-    Optional<? extends Set<? extends PermissionType>> getDefaultRequiredPermissions();
+    Optional<? extends @Unmodifiable Set<? extends PermissionType>> getDefaultRequiredPermissions();
     
     /// Gets whether this command can be used in DMs or not
     ///
