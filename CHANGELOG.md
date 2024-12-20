@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.1
+- allow passing any arbitrary set to `SlashCommandData::setRequiredPermissions`
+
 ## v2.0.0
 - added `DiscordLocale` enum and moved around some stuff
 - fixed root project defaulting to Java version 23
