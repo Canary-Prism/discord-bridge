@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.2
+- added a missing `@Unmodifiable` annotation
+- fixed a broken javadoc link
+- allow even bounded wildcards in the sets for `SlashCommandData::setRequiredPermissions`
+
 ## v2.0.1
 - allow passing any arbitrary set to `SlashCommandData::setRequiredPermissions`
 
