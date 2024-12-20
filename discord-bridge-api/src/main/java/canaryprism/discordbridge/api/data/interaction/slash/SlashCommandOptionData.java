@@ -575,7 +575,7 @@ public final class SlashCommandOptionData {
         if (number < min)
             throw new IllegalArgumentException(String.format("%s must not be less than %s", name, min));
         if (number > max)
-            throw new IllegalArgumentException(String.format("%s must not be greater than %s", name, min));
+            throw new IllegalArgumentException(String.format("%s must not be greater than %s", name, max));
     }
     
     /// Gets the [ChannelType] bounds of this option data
