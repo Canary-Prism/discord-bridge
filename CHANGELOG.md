@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.3
+- allow passing any arbitrary set even with bounded wildcards in the sets for `SlashCommandOptionData::setChannelTypeBounds`
+
 ## v2.0.2
 - added a missing `@Unmodifiable` annotation
 - fixed a broken javadoc link
