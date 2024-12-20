@@ -13,7 +13,7 @@ allprojects {
     plugins.apply("com.vanniktech.maven.publish")
 
     group = "io.github.canary-prism"
-    version = "1.3.0"
+    version = "2.0.0"
 
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
@@ -56,6 +56,9 @@ allprojects {
 
     java {
         modularity.inferModulePath = true
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
 
 
@@ -74,12 +77,6 @@ allprojects {
 
 subprojects {
     apply(plugin = "java-library")
-
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
-        }
-    }
 
     dependencies {
         testImplementation(platform("org.junit:junit-bom:5.10.0"))

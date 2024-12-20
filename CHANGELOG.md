@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.0
+- added `DiscordLocale` enum and moved around some stuff
+- fixed root project defaulting to Java version 23
+
 ## v1.3.0
 - added a couple new channel type interfaces
 
