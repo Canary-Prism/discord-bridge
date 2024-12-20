@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.4
+- fixed `SlashCommandOptionData` bounds validation just being wrong
+
 ## v2.0.3
 - allow passing any arbitrary set even with bounded wildcards in the sets for `SlashCommandOptionData::setChannelTypeBounds`
 
