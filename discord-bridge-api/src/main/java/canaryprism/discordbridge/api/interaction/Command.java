@@ -46,7 +46,7 @@ public interface Command extends DiscordEntity, LocalizedNameable, LocalizedDesc
     ///
     /// this is only a default and moderators may change this in their server
     ///
-    /// @return a set of required [PermissionType]s
+    /// @return a set of required PermissionTypes
     Optional<? extends Set<? extends PermissionType>> getDefaultRequiredPermissions();
     
     /// Gets whether this command can be used in DMs or not
