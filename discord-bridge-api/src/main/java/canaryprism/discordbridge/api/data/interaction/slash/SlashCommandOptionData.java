@@ -625,7 +625,7 @@ public final class SlashCommandOptionData {
     public synchronized @NotNull SlashCommandOptionData setIntegerBoundsMin(@Nullable @Range(from = MIN_NUMBER, to = MAX_NUMBER) Long min_integer) {
         expectType(SlashCommandOptionType.INTEGER, "integer bounds may only be set on INTEGER options");
         if (min_integer != null)
-            limitNumber(min_integer, MIN_NUMBER, MIN_NUMBER, "min integer");
+            limitNumber(min_integer, MIN_NUMBER, MAX_NUMBER, "min integer");
         
         var max_integer = this.max_integer;
         if (min_integer != null && max_integer != null)
@@ -657,7 +657,7 @@ public final class SlashCommandOptionData {
     public synchronized @NotNull SlashCommandOptionData setIntegerBoundsMax(@Nullable @Range(from = MIN_NUMBER, to = MAX_NUMBER) Long max_integer) {
         expectType(SlashCommandOptionType.INTEGER, "integer bounds may only be set on INTEGER options");
         if (max_integer != null)
-            limitNumber(max_integer, MIN_NUMBER, MIN_NUMBER, "max integer");
+            limitNumber(max_integer, MIN_NUMBER, MAX_NUMBER, "max integer");
         
         var min_integer = this.min_integer;
         if (min_integer != null && max_integer != null)
@@ -689,7 +689,7 @@ public final class SlashCommandOptionData {
     public @NotNull SlashCommandOptionData setNumberBoundsMin(@Nullable @Range(from = MIN_NUMBER, to = MAX_NUMBER) Double min_number) {
         expectType(SlashCommandOptionType.NUMBER, "number bounds may only be set on NUMBER options");
         if (min_number != null)
-            limitNumber(min_number, MIN_NUMBER, MIN_NUMBER, "min number");
+            limitNumber(min_number, MIN_NUMBER, MAX_NUMBER, "min number");
         
         var max_number = this.max_number;
         if (min_number != null && max_number != null)
@@ -721,7 +721,7 @@ public final class SlashCommandOptionData {
     public @NotNull SlashCommandOptionData setNumberBoundsMax(@Nullable @Range(from = MIN_NUMBER, to = MAX_NUMBER) Double max_number) {
         expectType(SlashCommandOptionType.NUMBER, "number bounds may only be set on NUMBER options");
         if (max_number != null)
-            limitNumber(max_number, MIN_NUMBER, MIN_NUMBER, "min number");
+            limitNumber(max_number, MIN_NUMBER, MAX_NUMBER, "min number");
         
         var min_number = this.min_number;
         if (min_number != null && max_number != null)
@@ -752,7 +752,7 @@ public final class SlashCommandOptionData {
     public @NotNull SlashCommandOptionData setStringLengthBoundsMin(@Nullable @Range(from = 0, to = MAX_STRING_LENGTH) Long min_length) {
         expectType(SlashCommandOptionType.STRING, "string length bounds may only be set on STRING options");
         if (min_length != null)
-            limitNumber(min_length, MIN_NUMBER, MIN_NUMBER, "min length");
+            limitNumber(min_length, 0, MAX_STRING_LENGTH, "min length");
         
         var max_length = this.max_length;
         if (min_length != null && max_length != null)
@@ -783,7 +783,7 @@ public final class SlashCommandOptionData {
     public @NotNull SlashCommandOptionData setStringLengthBoundsMax(@Nullable @Range(from = 1, to = MAX_STRING_LENGTH) Long max_length) {
         expectType(SlashCommandOptionType.STRING, "string length bounds may only be set on STRING options");
         if (max_length != null)
-            limitNumber(max_length, MIN_NUMBER, MIN_NUMBER, "min length");
+            limitNumber(max_length, 1, MAX_STRING_LENGTH, "min length");
         
         var min_length = this.min_length;
         if (min_length != null && max_length != null)
