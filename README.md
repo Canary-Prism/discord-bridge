@@ -14,7 +14,7 @@ i plan on adding support for [Discord4J](https://docs.discord4j.com/) and [Kord]
 Minimum Java version: 17
 
 ### Gradle:
-```declarative
+```kotlin
 repositories {
     mavenCentral()
 }
