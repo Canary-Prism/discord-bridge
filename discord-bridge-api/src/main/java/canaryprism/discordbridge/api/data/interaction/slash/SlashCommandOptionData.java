@@ -594,9 +594,13 @@ public final class SlashCommandOptionData {
     /// @param channel_type_bounds the ChannelType bounds to set to or empty to allow all types
     /// @return this
     /// @throws IllegalStateException if option isn't of type `SlashCommandOptionType.CHANNEL`
-    public @NotNull SlashCommandOptionData setChannelTypeBounds(@NotNull EnumSet<ChannelType> channel_type_bounds) {
+    @SuppressWarnings({ "unchecked", "OverlyStrongTypeCast" })
+    public @NotNull SlashCommandOptionData setChannelTypeBounds(@NotNull Set<? extends ChannelType> channel_type_bounds) {
         expectType(SlashCommandOptionType.CHANNEL, "channel type bounds may only be set on CHANNEL options");
-        this.channel_type_bounds = channel_type_bounds;
+        if (channel_type_bounds.isEmpty())
+            this.channel_type_bounds = EnumSet.noneOf(ChannelType.class);
+        else
+            this.channel_type_bounds = EnumSet.copyOf(((Set<ChannelType>) channel_type_bounds));
         return this;
     }
     
