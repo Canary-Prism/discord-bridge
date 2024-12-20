@@ -352,7 +352,7 @@ public final class SlashCommandData implements CommandData {
     /// @param required_permissions EnumSet of required PermissionTypes to set
     /// @return this
     /// @throws NullPointerException if the set is null
-    public @NotNull SlashCommandData setRequiredPermissions(@Nullable EnumSet<PermissionType> required_permissions) {
+    public @NotNull SlashCommandData setRequiredPermissions(@Nullable Set<PermissionType> required_permissions) {
         if (required_permissions != null)
             this.required_permissions = EnumSet.copyOf(required_permissions);
         else
