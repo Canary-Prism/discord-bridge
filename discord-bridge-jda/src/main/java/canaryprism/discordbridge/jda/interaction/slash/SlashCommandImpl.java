@@ -19,7 +19,9 @@ package canaryprism.discordbridge.jda.interaction.slash;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
+import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -117,13 +119,13 @@ public record SlashCommandImpl(DiscordBridge bridge, Command command) implements
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return command.getNameLocalizations()
                 .toMap()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
-                        Locale.forLanguageTag(e.getKey().getLocale()),
+                        DiscordBridgeJDA.convertLocale(e.getKey()),
                         e.getValue()
                 ))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -135,13 +137,13 @@ public record SlashCommandImpl(DiscordBridge bridge, Command command) implements
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
         return command.getDescriptionLocalizations()
                 .toMap()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
-                        Locale.forLanguageTag(e.getKey().getLocale()),
+                        DiscordBridgeJDA.convertLocale(e.getKey()),
                         e.getValue()
                 ))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));

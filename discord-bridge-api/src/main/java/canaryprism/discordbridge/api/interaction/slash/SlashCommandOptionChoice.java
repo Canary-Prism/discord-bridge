@@ -17,7 +17,7 @@
 package canaryprism.discordbridge.api.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridgeApi;
-import canaryprism.discordbridge.api.entities.LocalizedNameable;
+import canaryprism.discordbridge.api.misc.LocalizedNameable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

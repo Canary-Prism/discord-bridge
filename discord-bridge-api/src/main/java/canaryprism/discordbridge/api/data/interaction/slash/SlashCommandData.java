@@ -18,6 +18,7 @@ package canaryprism.discordbridge.api.data.interaction.slash;
 
 import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,8 +47,8 @@ public final class SlashCommandData implements CommandData {
     
     private volatile @NotNull String name;
     private volatile @NotNull String description;
-    private volatile @NotNull Map<Locale, @NotNull String> name_localizations = Map.of();
-    private volatile @NotNull Map<Locale, @NotNull String> description_localizations = Map.of();
+    private volatile @NotNull Map<DiscordLocale, @NotNull String> name_localizations = Map.of();
+    private volatile @NotNull Map<DiscordLocale, @NotNull String> description_localizations = Map.of();
     
     private volatile @NotNull List<@NotNull SlashCommandOptionData> options = List.of();
     
@@ -151,7 +152,7 @@ public final class SlashCommandData implements CommandData {
     /// Gets the name localizations of this slash command data
     ///
     /// @return the name localizations
-    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return name_localizations;
     }
     
@@ -164,7 +165,7 @@ public final class SlashCommandData implements CommandData {
     /// @throws IllegalArgumentException if any localized name is invalid
     /// @throws NullPointerException if the map or any of the values in the map is null
     /// @see #setName(String)
-    public @NotNull SlashCommandData setNameLocalizations(@NotNull Map<Locale, @NotNull String> name_localizations) {
+    public @NotNull SlashCommandData setNameLocalizations(@NotNull Map<DiscordLocale, @NotNull String> name_localizations) {
         name_localizations = Map.copyOf(name_localizations);
         name_localizations.forEach((locale, name) ->
                 checkName(name, String.format("name for locale %s", locale)));
@@ -175,7 +176,7 @@ public final class SlashCommandData implements CommandData {
     /// Gets the description localizations of this slash command data
     ///
     /// @return the description localizations
-    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
         return description_localizations;
     }
     
@@ -188,7 +189,7 @@ public final class SlashCommandData implements CommandData {
     /// @throws IllegalArgumentException if any localized description is invalid
     /// @throws NullPointerException if the map or any of the values in the map is null
     /// @see #setDescription(String)
-    public @NotNull SlashCommandData setDescriptionLocalizations(@NotNull Map<Locale, @NotNull String> description_localizations) {
+    public @NotNull SlashCommandData setDescriptionLocalizations(@NotNull Map<DiscordLocale, @NotNull String> description_localizations) {
         description_localizations = Map.copyOf(description_localizations);
         description_localizations.forEach((locale, description) ->
                 checkStringLength(description, MAX_DESCRIPTION_LENGTH, String.format("description for locale %s", locale)));

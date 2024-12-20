@@ -19,6 +19,7 @@ package canaryprism.discordbridge.javacord.interaction.slash;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import org.jetbrains.annotations.NotNull;
@@ -107,7 +108,7 @@ public record SlashCommandImpl(DiscordBridge bridge, org.javacord.api.interactio
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return command.getNameLocalizations()
                 .entrySet()
                 .stream()
@@ -124,7 +125,7 @@ public record SlashCommandImpl(DiscordBridge bridge, org.javacord.api.interactio
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
         return command.getDescriptionLocalizations()
                 .entrySet()
                 .stream()

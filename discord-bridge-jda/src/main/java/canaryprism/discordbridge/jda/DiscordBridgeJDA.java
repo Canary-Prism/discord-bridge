@@ -393,12 +393,13 @@ public final class DiscordBridgeJDA implements DiscordBridge {
         return "DiscordBridge JDA Implementation";
     }
     
-    public static Locale convertLocale(@NotNull DiscordLocale locale) {
-        return Locale.forLanguageTag(locale.getLocale());
+    public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {
+        return canaryprism.discordbridge.api.misc.DiscordLocale.fromLocale(Locale.forLanguageTag(locale.getLocale()))
+                .orElse(canaryprism.discordbridge.api.misc.DiscordLocale.UNKNOWN);
     }
     
-    public static DiscordLocale convertLocale(@NotNull Locale locale) {
-        return DiscordLocale.from(locale);
+    public static DiscordLocale convertLocale(@NotNull canaryprism.discordbridge.api.misc.DiscordLocale locale) {
+        return DiscordLocale.from(locale.locale);
     }
     
     public @NotNull net.dv8tion.jda.api.interactions.commands.build.SlashCommandData convertData(@NotNull SlashCommandData data) {

@@ -16,7 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction.slash;
 
-import canaryprism.discordbridge.api.entities.Nameable;
+import canaryprism.discordbridge.api.misc.Nameable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 

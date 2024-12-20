@@ -21,6 +21,8 @@ import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
+import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.jetbrains.annotations.NotNull;
@@ -103,13 +105,13 @@ public record SlashCommandOptionOptionImpl(DiscordBridge bridge, Command.Option 
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return option.getNameLocalizations()
                 .toMap()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
-                        Locale.forLanguageTag(e.getKey().getLocale()),
+                        DiscordBridgeJDA.convertLocale(e.getKey()),
                         e.getValue()
                 ))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -121,13 +123,13 @@ public record SlashCommandOptionOptionImpl(DiscordBridge bridge, Command.Option 
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
         return option.getDescriptionLocalizations()
                 .toMap()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
-                        Locale.forLanguageTag(e.getKey().getLocale()),
+                        DiscordBridgeJDA.convertLocale(e.getKey()),
                         e.getValue()
                 ))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));

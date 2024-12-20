@@ -18,10 +18,11 @@ package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
+import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,13 +41,13 @@ public record SlashCommandOptionChoiceImpl(DiscordBridge bridge, Command.Choice 
     
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return choice.getNameLocalizations()
                 .toMap()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
-                        Locale.forLanguageTag(e.getKey().getLocale()),
+                        DiscordBridgeJDA.convertLocale(e.getKey()),
                         e.getValue()
                 ))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));

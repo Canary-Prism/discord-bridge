@@ -18,7 +18,7 @@ package canaryprism.discordbridge.api.entities.user;
 
 import canaryprism.discordbridge.api.entities.DiscordEntity;
 import canaryprism.discordbridge.api.entities.Mentionable;
-import canaryprism.discordbridge.api.entities.Nameable;
+import canaryprism.discordbridge.api.misc.Nameable;
 import org.jetbrains.annotations.NotNull;
 
 /// Represents a Discord User

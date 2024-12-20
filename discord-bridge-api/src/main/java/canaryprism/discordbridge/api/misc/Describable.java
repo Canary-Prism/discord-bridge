@@ -14,18 +14,14 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.entities;
+package canaryprism.discordbridge.api.misc;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Locale;
-import java.util.Map;
-
-/// Represents an object that has localized descriptions
-public interface LocalizedDescribable extends Describable {
-    /// Gets the description localisations of this command
+/// Represents a thing that has a description
+public interface Describable {
+    /// Gets the description of this object
     ///
-    /// @return the description localisations of this command
-    @NotNull @Unmodifiable Map<Locale, @NotNull String> getDescriptionLocalizations();
+    /// @return the description of this object
+    @NotNull String getDescription();
 }

@@ -21,6 +21,7 @@ import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -105,7 +106,7 @@ public record SlashCommandOptionImpl(DiscordBridge bridge, org.javacord.api.inte
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return option.getNameLocalizations()
                 .entrySet()
                 .stream()
@@ -122,7 +123,7 @@ public record SlashCommandOptionImpl(DiscordBridge bridge, org.javacord.api.inte
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
         return option.getDescriptionLocalizations()
                 .entrySet()
                 .stream()

@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api.data.interaction.slash;
 import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -56,8 +57,8 @@ public final class SlashCommandOptionData {
     
     private volatile @NotNull String name;
     private volatile @NotNull String description;
-    private volatile @NotNull Map<Locale, @NotNull String> name_localizations = Map.of();
-    private volatile @NotNull Map<Locale, @NotNull String> description_localizations = Map.of();
+    private volatile @NotNull Map<DiscordLocale, @NotNull String> name_localizations = Map.of();
+    private volatile @NotNull Map<DiscordLocale, @NotNull String> description_localizations = Map.of();
     
     private volatile @NotNull SlashCommandOptionType type;
     private volatile boolean required = true;
@@ -168,7 +169,7 @@ public final class SlashCommandOptionData {
     /// Gets the name localizations of this option data
     ///
     /// @return the name localizations
-    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return name_localizations;
     }
     
@@ -184,7 +185,7 @@ public final class SlashCommandOptionData {
     /// @throws NullPointerException if the map or any of the values in the map is null
     /// @see #setName(String)
     /// @see SlashCommandData#setName(String)
-    public @NotNull SlashCommandOptionData setNameLocalizations(@NotNull Map<Locale, @NotNull String> name_localizations) {
+    public @NotNull SlashCommandOptionData setNameLocalizations(@NotNull Map<DiscordLocale, @NotNull String> name_localizations) {
         name_localizations = Map.copyOf(name_localizations);
         name_localizations.forEach((locale, name) ->
                 SlashCommandData.checkName(name, String.format("name for locale %s", locale)));
@@ -195,7 +196,7 @@ public final class SlashCommandOptionData {
     /// Gets the description localizations of this slash command data
     ///
     /// @return the description localizations
-    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getDescriptionLocalizations() {
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
         return description_localizations;
     }
     
@@ -210,7 +211,7 @@ public final class SlashCommandOptionData {
     /// @throws NullPointerException if the map or any of the values in the map is null
     /// @see #setDescription(String)
     /// @see SlashCommandData#setDescription(String)
-    public @NotNull SlashCommandOptionData setDescriptionLocalizations(@NotNull Map<Locale, @NotNull String> description_localizations) {
+    public @NotNull SlashCommandOptionData setDescriptionLocalizations(@NotNull Map<DiscordLocale, @NotNull String> description_localizations) {
         description_localizations = Map.copyOf(description_localizations);
         description_localizations.forEach((locale, description) ->
                 SlashCommandData.checkStringLength(description, MAX_DESCRIPTION_LENGTH, String.format("description for locale %s", locale)));
@@ -434,6 +435,11 @@ public final class SlashCommandOptionData {
         checkChoiceType(choices);
         
         this.choices = choices;
+        
+        for (var e : choices) {
+            e.parent = this;
+        }
+        
         return this;
     }
     

@@ -18,7 +18,7 @@ package canaryprism.discordbridge.api.server;
 
 import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.entities.DiscordEntity;
-import canaryprism.discordbridge.api.entities.Nameable;
+import canaryprism.discordbridge.api.misc.Nameable;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import org.jetbrains.annotations.NotNull;

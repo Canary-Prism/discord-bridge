@@ -37,6 +37,7 @@ module canaryprism.discordbridge.api {
     exports canaryprism.discordbridge.api.enums;
     exports canaryprism.discordbridge.api.data.interaction.slash;
     exports canaryprism.discordbridge.api.data.interaction;
+    exports canaryprism.discordbridge.api.misc;
     
     uses canaryprism.discordbridge.api.DiscordBridge;
 }

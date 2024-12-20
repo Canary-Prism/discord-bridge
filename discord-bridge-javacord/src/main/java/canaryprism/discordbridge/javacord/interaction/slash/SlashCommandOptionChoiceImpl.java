@@ -18,10 +18,10 @@ package canaryprism.discordbridge.javacord.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,7 +36,7 @@ public record SlashCommandOptionChoiceImpl(DiscordBridge bridge, org.javacord.ap
     }
     
     @Override
-    public @NotNull Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return choice.getNameLocalizations()
                 .entrySet()
                 .stream()

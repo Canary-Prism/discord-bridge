@@ -399,12 +399,13 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         return "DiscordBridge Javacord Implementation";
     }
     
-    public static Locale convertLocale(@NotNull DiscordLocale locale) {
-        return Locale.forLanguageTag(locale.getLocaleCode());
+    public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {
+        return canaryprism.discordbridge.api.misc.DiscordLocale.fromLocale(Locale.forLanguageTag(locale.getLocaleCode()))
+                .orElse(canaryprism.discordbridge.api.misc.DiscordLocale.UNKNOWN);
     }
     
-    public static DiscordLocale convertLocale(@NotNull Locale locale) {
-        return DiscordLocale.fromLocaleCode(locale.toLanguageTag());
+    public static DiscordLocale convertLocale(@NotNull canaryprism.discordbridge.api.misc.DiscordLocale locale) {
+        return DiscordLocale.fromLocaleCode(locale.locale.toLanguageTag());
     }
     
     public @NotNull SlashCommandBuilder convertData(@NotNull SlashCommandData data) {

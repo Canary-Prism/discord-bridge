@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.data.interaction.slash;
 
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
+import canaryprism.discordbridge.api.misc.DiscordLocale;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -30,11 +31,11 @@ import java.util.*;
 /// As such an instance of this class can be submitted to discord with low chance of failure
 public final class SlashCommandOptionChoiceData {
     
-    private volatile @Nullable SlashCommandOptionData parent;
+    volatile @Nullable SlashCommandOptionData parent;
     
     private volatile @NotNull SlashCommandOptionType type;
     private volatile @NotNull String name;
-    private volatile @NotNull Map<Locale, @NotNull String> name_localizations = Map.of();
+    private volatile @NotNull Map<DiscordLocale, @NotNull String> name_localizations = Map.of();
     private volatile @NotNull Object value;
     
     /// Constructs a new SlashCommandOptionChoiceData with the given type, name, and value
@@ -153,7 +154,7 @@ public final class SlashCommandOptionChoiceData {
     /// Gets the name localizations of this option choice data
     ///
     /// @return the name localizations
-    public @NotNull @Unmodifiable Map<Locale, @NotNull String> getNameLocalizations() {
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
         return name_localizations;
     }
     
@@ -166,7 +167,7 @@ public final class SlashCommandOptionChoiceData {
     /// @throws IllegalArgumentException if any localized name is invalid
     /// @throws NullPointerException if the map or any of the values in the map is null
     /// @see #setName(String)
-    public SlashCommandOptionChoiceData setNameLocalizations(@NotNull Map<Locale, @NotNull String> name_localizations) {
+    public SlashCommandOptionChoiceData setNameLocalizations(@NotNull Map<DiscordLocale, @NotNull String> name_localizations) {
         this.name_localizations = Map.copyOf(name_localizations);
         return this;
     }

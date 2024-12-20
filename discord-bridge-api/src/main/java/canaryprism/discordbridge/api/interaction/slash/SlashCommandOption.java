@@ -18,8 +18,8 @@ package canaryprism.discordbridge.api.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.channel.ChannelType;
-import canaryprism.discordbridge.api.entities.LocalizedDescribable;
-import canaryprism.discordbridge.api.entities.LocalizedNameable;
+import canaryprism.discordbridge.api.misc.LocalizedDescribable;
+import canaryprism.discordbridge.api.misc.LocalizedNameable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
