@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     // this depends on discord-bridge-api and all the provided implementations in this repository by default
-    implementation("io.github.canary-prism:discord-bridge:2.0.4") {
+    implementation("io.github.canary-prism:discord-bridge:2.0.5") {
         // you can optionally exclude unneeded implementations
         exclude(module="discord-bridge-javacord") // change this to the module you want to disable if you want
     }
@@ -40,7 +40,7 @@ dependencies {
 <dependency>
   <groupId>io.github.canary-prism</groupId>
   <artifactId>discord-bridge</artifactId>
-  <version>2.0.4</version>
+  <version>2.0.5</version>
 </dependency>
 ```
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.5
+- fixed `discord-bridge-javacord` and `discord-bridge-jda` having a bug with their `DiscordBridge::getImplementationType` methods that makes them never load
+- added a feature where `DiscordBridge.load()` will return the passed parameter untouched if the parameter is already a `DiscordApi` object
+
 ## v2.0.4
 - fixed `SlashCommandOptionData` bounds validation just being wrong
 
