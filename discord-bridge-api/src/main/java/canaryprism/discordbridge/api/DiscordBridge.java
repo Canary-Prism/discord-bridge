@@ -150,6 +150,10 @@ public interface DiscordBridge {
     /// @throws NullPointerException if `api` is null
     static @NotNull DiscordApi load(@NotNull Object api) {
         Objects.requireNonNull(api, "api can't be null");
+        
+        if (api instanceof DiscordApi discord_api)
+            return discord_api;
+        
         return getCanLoad(api)
                 .findAny()
                 .orElseThrow(() -> new UnsupportedImplementationException(String.format(
