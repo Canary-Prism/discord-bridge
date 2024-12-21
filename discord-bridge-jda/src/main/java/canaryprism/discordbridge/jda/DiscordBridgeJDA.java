@@ -374,7 +374,6 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                             SlashCommandOptionChoiceImpl.class,
                             // SlashCommandOptionImpl.class, N/A since there is no single internal type equivalent
                             AttachmentImpl.class,
-                            ServerImpl.class,
                             RoleImpl.class,
                             ServerImpl.class,
                             DiscordApiImpl.class)

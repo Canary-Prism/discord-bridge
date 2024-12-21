@@ -380,7 +380,6 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
                     SlashCommandOptionChoiceImpl.class,
                     SlashCommandOptionImpl.class,
                     AttachmentImpl.class,
-                    ServerImpl.class,
                     RoleImpl.class,
                     ServerImpl.class,
                     DiscordApiImpl.class)
