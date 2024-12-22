@@ -34,7 +34,7 @@ public interface SlashCommandOptionChoice extends DiscordBridgeApi, LocalizedNam
     
     /// Gets the value of this option choice as the provided type
     ///
-    /// Empty if [#getValue()] is empty or the type cast cannot be made
+    /// Empty if the type cast cannot be made
     ///
     /// @param <T> the type to get as
     /// @param type the runtime class
@@ -51,7 +51,7 @@ public interface SlashCommandOptionChoice extends DiscordBridgeApi, LocalizedNam
     /// The value will be attempted to be casted to the [SlashCommandOptionType]'s type representation
     /// by calling [SlashCommandOptionType#getTypeRepresentation()]
     ///
-    /// Empty if [#getValue()] is empty or the cast cannot be made
+    /// Empty if the cast cannot be made
     ///
     /// @param option_type the `SlashCommandOptionType` to get the value as
     /// @return the value
