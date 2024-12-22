@@ -423,6 +423,9 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                 .setGuildOnly(!data.isEnabledInDMs())
                 .setNSFW(data.isNSFW());
         
+        if (data.getAllowedContexts().isPresent())
+            throw new UnsupportedOperationException(String.format("%s does not support contexts", this));
+        
         if (data.isDefaultDisabled())
             builder.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
         

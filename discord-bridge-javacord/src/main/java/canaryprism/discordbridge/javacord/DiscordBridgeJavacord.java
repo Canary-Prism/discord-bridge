@@ -418,6 +418,9 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
                 .setEnabledInDms(data.isEnabledInDMs())
                 .setNsfw(data.isNSFW());
         
+        if (data.getAllowedContexts().isPresent())
+            throw new UnsupportedOperationException(String.format("%s does not support contexts", this));
+        
         if (data.isDefaultDisabled())
             builder.setDefaultDisabled();
         

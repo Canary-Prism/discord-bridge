@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.api.data.interaction.slash;
 
 import canaryprism.discordbridge.api.data.interaction.CommandData;
+import canaryprism.discordbridge.api.interaction.ContextType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
@@ -55,6 +56,7 @@ public final class SlashCommandData implements CommandData {
     private volatile boolean default_disabled = false;
     private volatile @Nullable EnumSet<PermissionType> required_permissions = null;
     private volatile boolean enabled_in_DMs = true;
+    private volatile @Nullable EnumSet<ContextType> allowed_contexts = null;
     private volatile boolean nsfw = false;
     
     /// Constructs a new SlashCommandData instance with the given name and description
@@ -387,6 +389,31 @@ public final class SlashCommandData implements CommandData {
     /// @return this
     public @NotNull SlashCommandData setEnabledInDMs(boolean enabled_in_DMs) {
         this.enabled_in_DMs = enabled_in_DMs;
+        return this;
+    }
+    
+    public @NotNull Optional<EnumSet<ContextType>> getAllowedContexts() {
+        return Optional.ofNullable(allowed_contexts)
+                .map(EnumSet::copyOf);
+    }
+    
+    /// Sets the contexts this slash command data is allowed to be invoked in
+    ///
+    /// Should be used instead of [#setEnabledInDMs(boolean)] which is deprecated
+    ///
+    /// @param allowed_contexts contexts where this slash command data may be used
+    /// @return this
+    @SuppressWarnings({ "unchecked", "OverlyStrongTypeCast" })
+    public @NotNull SlashCommandData setAllowedContexts(@Nullable Set<? extends ContextType> allowed_contexts) {
+        if (allowed_contexts != null) {
+            if (allowed_contexts.isEmpty())
+                this.allowed_contexts = EnumSet.noneOf(ContextType.class);
+            else
+                this.allowed_contexts = EnumSet.copyOf(((Set<ContextType>) allowed_contexts));
+        } else {
+            this.required_permissions = null;
+        }
+        
         return this;
     }
     

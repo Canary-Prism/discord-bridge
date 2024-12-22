@@ -20,6 +20,7 @@ import canaryprism.discordbridge.api.entities.DiscordEntity;
 import canaryprism.discordbridge.api.misc.LocalizedDescribable;
 import canaryprism.discordbridge.api.misc.LocalizedNameable;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Optional;
@@ -48,14 +49,24 @@ public interface Command extends DiscordEntity, LocalizedNameable, LocalizedDesc
     /// this is only a default and moderators may change this in their server
     ///
     /// @return a set of required PermissionTypes
-    Optional<? extends @Unmodifiable Set<? extends PermissionType>> getDefaultRequiredPermissions();
+    @NotNull Optional<? extends @Unmodifiable Set<? extends PermissionType>> getDefaultRequiredPermissions();
     
     /// Gets whether this command can be used in DMs or not
     ///
     /// Server commands (commands registered to an individual server) will always return `false`
     ///
+    /// @deprecated [Discord api docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure) states "**Deprecated (use [contexts][#getAllowedContexts()] instead)**"
     /// @return whether this command can be used in DMs
+    /// @see #getAllowedContexts()
+    @Deprecated(since = "3.0.0")
     boolean isEnabledInDMs();
+    
+    /// [ContextType]s where the command is allowed to be used in
+    ///
+    /// Not applicable to and therefore empty for Server Commands since by definition they're only allowed in [ContextType#SERVER]
+    ///
+    /// @return contexts where this command may be used
+    @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts();
     
     /// Gets whether this command is a global command or not
     ///

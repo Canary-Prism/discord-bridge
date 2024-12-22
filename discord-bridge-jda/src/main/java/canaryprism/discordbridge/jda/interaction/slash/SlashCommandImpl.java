@@ -17,6 +17,7 @@
 package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.interaction.ContextType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
@@ -27,6 +28,7 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.internal.interactions.command.CommandImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -64,7 +66,7 @@ public record SlashCommandImpl(DiscordBridge bridge, Command command) implements
     }
     
     @Override
-    public Optional<? extends Set<? extends PermissionType>> getDefaultRequiredPermissions() {
+    public @NotNull Optional<? extends Set<? extends PermissionType>> getDefaultRequiredPermissions() {
         return Optional.ofNullable(command.getDefaultPermissions().getPermissionsRaw())
                 .map((value) -> Permission.getPermissions(value)
                         .stream()
@@ -76,6 +78,11 @@ public record SlashCommandImpl(DiscordBridge bridge, Command command) implements
     @Override
     public boolean isEnabledInDMs() {
         return !command.isGuildOnly();
+    }
+    
+    @Override
+    public @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts() {
+        throw new UnsupportedOperationException(String.format("%s does not support contexts", bridge));
     }
     
     @Override

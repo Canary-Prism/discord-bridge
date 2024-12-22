@@ -17,12 +17,14 @@
 package canaryprism.discordbridge.javacord.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.interaction.ContextType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -49,7 +51,7 @@ public record SlashCommandImpl(DiscordBridge bridge, org.javacord.api.interactio
     }
     
     @Override
-    public Optional<Set<PermissionType>> getDefaultRequiredPermissions() {
+    public @NotNull Optional<Set<PermissionType>> getDefaultRequiredPermissions() {
         return command.getDefaultRequiredPermissions()
                 .map((set) -> set.stream()
                         .map((e) -> bridge.convertInternalObject(PermissionType.class, e))
@@ -60,6 +62,11 @@ public record SlashCommandImpl(DiscordBridge bridge, org.javacord.api.interactio
     @Override
     public boolean isEnabledInDMs() {
         return command.isEnabledInDms();
+    }
+    
+    @Override
+    public @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts() {
+        throw new UnsupportedOperationException(String.format("%s does not support contexts", bridge));
     }
     
     @Override
