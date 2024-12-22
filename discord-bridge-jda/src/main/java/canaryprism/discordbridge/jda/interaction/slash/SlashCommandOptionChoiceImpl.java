@@ -24,19 +24,18 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public record SlashCommandOptionChoiceImpl(DiscordBridge bridge, Command.Choice choice) implements SlashCommandOptionChoice {
     
     @Override
-    public @NotNull Optional<?> getValue() {
-        return Optional.ofNullable(switch (choice.getType()) {
+    public @NotNull Object getValue() {
+        return switch (choice.getType()) {
             case STRING -> choice.getAsString();
             case INTEGER -> choice.getAsLong();
             case NUMBER -> choice.getAsDouble();
-            default -> null;
-        });
+            default -> throw new IllegalArgumentException(String.format("illegal choice type %s", choice.getType()));
+        };
     }
     
     

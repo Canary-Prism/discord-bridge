@@ -29,10 +29,8 @@ public interface SlashCommandOptionChoice extends DiscordBridgeApi, LocalizedNam
     
     /// Gets the value of this option choice
     ///
-    /// The value is always present unless this option is of type `SUBCOMMAND` or `SUBCOMMAND_GROUP`
-    ///
     /// @return the value
-    @NotNull Optional<?> getValue();
+    @NotNull Object getValue();
     
     /// Gets the value of this option choice as the provided type
     ///
@@ -43,7 +41,7 @@ public interface SlashCommandOptionChoice extends DiscordBridgeApi, LocalizedNam
     /// @return the value
     /// @see #getValue()
     default <T> @NotNull Optional<T> getValue(Class<T> type) {
-        return getValue()
+        return Optional.of(getValue())
                 .filter(type::isInstance)
                 .map(type::cast);
     }

@@ -29,10 +29,11 @@ import java.util.stream.Collectors;
 public record SlashCommandOptionChoiceImpl(DiscordBridge bridge, org.javacord.api.interaction.SlashCommandOptionChoice choice) implements SlashCommandOptionChoice {
     
     @Override
-    public @NotNull Optional<?> getValue() {
+    public @NotNull Object getValue() {
         return Optional.empty()
                 .or(choice::getStringValue)
-                .or(choice::getLongValue);
+                .or(choice::getLongValue)
+                .orElseThrow();
     }
     
     @Override
