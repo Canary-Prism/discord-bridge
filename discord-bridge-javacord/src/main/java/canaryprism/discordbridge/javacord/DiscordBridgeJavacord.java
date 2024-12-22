@@ -395,7 +395,7 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
     
     @Override
     public @NotNull String toString() {
-        return "DiscordBridge Javacord Implementation";
+        return "DiscordBridge Javacord 3.8.0 Implementation";
     }
     
     public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {

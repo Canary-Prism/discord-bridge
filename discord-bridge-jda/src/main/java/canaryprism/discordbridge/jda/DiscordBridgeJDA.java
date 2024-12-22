@@ -389,7 +389,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
     
     @Override
     public @NotNull String toString() {
-        return "DiscordBridge JDA Implementation";
+        return "DiscordBridge JDA 5.0.1 Implementation";
     }
     
     public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {
