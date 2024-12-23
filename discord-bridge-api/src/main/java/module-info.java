@@ -25,8 +25,8 @@ module canaryprism.discordbridge.api {
     exports canaryprism.discordbridge.api.interaction.slash;
     exports canaryprism.discordbridge.api.server;
     exports canaryprism.discordbridge.api.exceptions;
-    exports canaryprism.discordbridge.api.entities;
-    exports canaryprism.discordbridge.api.entities.user;
+    exports canaryprism.discordbridge.api.entity;
+    exports canaryprism.discordbridge.api.entity.user;
     exports canaryprism.discordbridge.api.channel;
     exports canaryprism.discordbridge.api.listener;
     exports canaryprism.discordbridge.api.listener.interaction;

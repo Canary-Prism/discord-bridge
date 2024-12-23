@@ -32,7 +32,7 @@ import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.jda.channel.ChannelImpl;
 import canaryprism.discordbridge.jda.channel.ServerChannelImpl;
 import canaryprism.discordbridge.jda.channel.TextChannelImpl;
-import canaryprism.discordbridge.jda.entities.user.UserImpl;
+import canaryprism.discordbridge.jda.entity.user.UserImpl;
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteEventImpl;
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandInvokeEventImpl;
 import canaryprism.discordbridge.jda.interaction.response.FollowupResponderImpl;

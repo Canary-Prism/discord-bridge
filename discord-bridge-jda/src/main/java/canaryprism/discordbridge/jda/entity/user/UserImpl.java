@@ -14,24 +14,31 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.entities;
+package canaryprism.discordbridge.jda.entity.user;
 
-import canaryprism.discordbridge.api.DiscordBridgeApi;
+import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.entity.user.User;
 import org.jetbrains.annotations.NotNull;
 
-/// Represents an entity in Discord. An entity has a Snowflake ID
-public interface DiscordEntity extends DiscordBridgeApi {
+public record UserImpl(DiscordBridge bridge, net.dv8tion.jda.api.entities.User user) implements User {
     
-    /// Gets the ID of this entity as a long
-    ///
-    /// @return the ID of this entity as a long
-    /// @implNote The default implementation just parses [#getIdAsString()] to a long
-    default long getId() {
-        return Long.parseLong(getIdAsString());
+    @Override
+    public @NotNull String getIdAsString() {
+        return user.getId();
     }
     
-    /// Gets the ID of this entity as a String
-    ///
-    /// @return the ID of this entity as a String
-    @NotNull String getIdAsString();
+    @Override
+    public @NotNull Object getImplementation() {
+        return user;
+    }
+    
+    @Override
+    public @NotNull DiscordBridge getBridge() {
+        return bridge;
+    }
+    
+    @Override
+    public @NotNull String getName() {
+        return user.getName();
+    }
 }

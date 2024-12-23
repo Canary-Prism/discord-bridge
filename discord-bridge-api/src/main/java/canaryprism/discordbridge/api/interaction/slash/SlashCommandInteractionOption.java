@@ -86,7 +86,7 @@ public interface SlashCommandInteractionOption extends Nameable, SlashCommandInt
     /// succeed even if the option type doesn't exactly match
     ///
     /// For example, attempting to get the value of a [SlashCommandOptionType#USER] option as a [SlashCommandOptionType#MENTIONABLE]
-    /// will succeed since [canaryprism.discordbridge.api.entities.user.User] can be cast to [canaryprism.discordbridge.api.entities.Mentionable]
+    /// will succeed since [canaryprism.discordbridge.api.entity.user.User] can be cast to [canaryprism.discordbridge.api.entity.Mentionable]
     ///
     /// @param option_type the `SlashCommandOptionType` to get the value as
     /// @return the value

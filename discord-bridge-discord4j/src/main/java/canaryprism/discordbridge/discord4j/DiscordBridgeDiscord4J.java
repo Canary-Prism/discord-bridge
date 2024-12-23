@@ -36,7 +36,7 @@ import canaryprism.discordbridge.discord4j.channel.ChannelImpl;
 import canaryprism.discordbridge.discord4j.channel.ServerChannelImpl;
 import canaryprism.discordbridge.discord4j.channel.ServerTextChannelImpl;
 import canaryprism.discordbridge.discord4j.channel.TextChannelImpl;
-import canaryprism.discordbridge.discord4j.entities.user.UserImpl;
+import canaryprism.discordbridge.discord4j.entity.user.UserImpl;
 import canaryprism.discordbridge.discord4j.event.interaction.SlashCommandAutocompleteEventImpl;
 import canaryprism.discordbridge.discord4j.event.interaction.SlashCommandInvokeEventImpl;
 import canaryprism.discordbridge.discord4j.interaction.response.FollowupResponderImpl;

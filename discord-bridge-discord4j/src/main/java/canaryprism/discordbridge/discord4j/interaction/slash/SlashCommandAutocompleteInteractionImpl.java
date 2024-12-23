@@ -19,7 +19,7 @@ package canaryprism.discordbridge.discord4j.interaction.slash;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.channel.TextChannel;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
-import canaryprism.discordbridge.api.entities.user.User;
+import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
@@ -28,7 +28,7 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOp
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
 import canaryprism.discordbridge.discord4j.channel.ChannelDirector;
-import canaryprism.discordbridge.discord4j.entities.user.UserImpl;
+import canaryprism.discordbridge.discord4j.entity.user.UserImpl;
 import canaryprism.discordbridge.discord4j.server.ServerImpl;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputAutoCompleteEvent;

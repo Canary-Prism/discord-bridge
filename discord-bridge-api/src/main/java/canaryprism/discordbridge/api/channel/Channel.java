@@ -16,8 +16,8 @@
 
 package canaryprism.discordbridge.api.channel;
 
-import canaryprism.discordbridge.api.entities.DiscordEntity;
-import canaryprism.discordbridge.api.entities.Mentionable;
+import canaryprism.discordbridge.api.entity.DiscordEntity;
+import canaryprism.discordbridge.api.entity.Mentionable;
 import org.jetbrains.annotations.NotNull;
 
 /// Represents a base Discord Channel

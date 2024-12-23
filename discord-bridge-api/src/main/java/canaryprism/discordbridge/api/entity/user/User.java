@@ -14,36 +14,18 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.javacord.entities.user;
+package canaryprism.discordbridge.api.entity.user;
 
-import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.entities.user.User;
+import canaryprism.discordbridge.api.entity.DiscordEntity;
+import canaryprism.discordbridge.api.entity.Mentionable;
+import canaryprism.discordbridge.api.misc.Nameable;
 import org.jetbrains.annotations.NotNull;
 
-public record UserImpl(DiscordBridge bridge, org.javacord.api.entity.user.User user) implements User {
+/// Represents a Discord User
+public interface User extends DiscordEntity, Nameable, Mentionable {
     
     @Override
-    public long getId() {
-        return user.getId();
-    }
-    
-    @Override
-    public @NotNull String getIdAsString() {
-        return user.getIdAsString();
-    }
-    
-    @Override
-    public @NotNull Object getImplementation() {
-        return user;
-    }
-    
-    @Override
-    public @NotNull DiscordBridge getBridge() {
-        return bridge;
-    }
-    
-    @Override
-    public @NotNull String getName() {
-        return user.getName();
+    default @NotNull String getMentionTag() {
+        return String.format("<@%s>", getIdAsString());
     }
 }

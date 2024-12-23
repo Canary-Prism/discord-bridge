@@ -14,15 +14,24 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.entities;
+package canaryprism.discordbridge.api.entity;
 
+import canaryprism.discordbridge.api.DiscordBridgeApi;
 import org.jetbrains.annotations.NotNull;
 
-/// A Mentionable entity has a Mention tag
-public interface Mentionable extends DiscordEntity {
+/// Represents an entity in Discord. An entity has a Snowflake ID
+public interface DiscordEntity extends DiscordBridgeApi {
     
-    /// Gets the mention tag of this entity
+    /// Gets the ID of this entity as a long
     ///
-    /// @return the mention tag of this entity
-    @NotNull String getMentionTag();
+    /// @return the ID of this entity as a long
+    /// @implNote The default implementation just parses [#getIdAsString()] to a long
+    default long getId() {
+        return Long.parseLong(getIdAsString());
+    }
+    
+    /// Gets the ID of this entity as a String
+    ///
+    /// @return the ID of this entity as a String
+    @NotNull String getIdAsString();
 }

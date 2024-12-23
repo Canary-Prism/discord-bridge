@@ -18,7 +18,7 @@ package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.channel.TextChannel;
-import canaryprism.discordbridge.api.entities.user.User;
+import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
@@ -27,7 +27,7 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOp
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import canaryprism.discordbridge.jda.channel.ChannelDirector;
-import canaryprism.discordbridge.jda.entities.user.UserImpl;
+import canaryprism.discordbridge.jda.entity.user.UserImpl;
 import canaryprism.discordbridge.jda.interaction.response.FollowupResponderImpl;
 import canaryprism.discordbridge.jda.interaction.response.ImmediateResponderImpl;
 import canaryprism.discordbridge.jda.interaction.response.ResponseUpdaterImpl;

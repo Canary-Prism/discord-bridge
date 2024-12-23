@@ -19,7 +19,7 @@ package canaryprism.discordbridge.javacord.interaction.slash;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.javacord.channel.ChannelDirector;
-import canaryprism.discordbridge.javacord.entities.user.UserImpl;
+import canaryprism.discordbridge.javacord.entity.user.UserImpl;
 import canaryprism.discordbridge.javacord.message.AttachmentImpl;
 import canaryprism.discordbridge.javacord.server.permission.RoleImpl;
 import org.javacord.api.entity.permission.Role;

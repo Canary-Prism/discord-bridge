@@ -14,11 +14,15 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.message;
+package canaryprism.discordbridge.api.entity;
 
-import canaryprism.discordbridge.api.entity.DiscordEntity;
+import org.jetbrains.annotations.NotNull;
 
-/// Represents an attachment in a message
-public interface Attachment extends DiscordEntity {
-
+/// A Mentionable entity has a Mention tag
+public interface Mentionable extends DiscordEntity {
+    
+    /// Gets the mention tag of this entity
+    ///
+    /// @return the mention tag of this entity
+    @NotNull String getMentionTag();
 }

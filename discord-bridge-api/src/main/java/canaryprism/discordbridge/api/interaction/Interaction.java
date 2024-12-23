@@ -18,7 +18,7 @@ package canaryprism.discordbridge.api.interaction;
 
 import canaryprism.discordbridge.api.DiscordBridgeApi;
 import canaryprism.discordbridge.api.channel.TextChannel;
-import canaryprism.discordbridge.api.entities.user.User;
+import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;

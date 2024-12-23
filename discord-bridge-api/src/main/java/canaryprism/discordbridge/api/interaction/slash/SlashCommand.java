@@ -16,7 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction.slash;
 
-import canaryprism.discordbridge.api.entities.Mentionable;
+import canaryprism.discordbridge.api.entity.Mentionable;
 import canaryprism.discordbridge.api.interaction.Command;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

@@ -20,7 +20,7 @@ import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
 import canaryprism.discordbridge.discord4j.channel.ChannelDirector;
-import canaryprism.discordbridge.discord4j.entities.user.UserImpl;
+import canaryprism.discordbridge.discord4j.entity.user.UserImpl;
 import canaryprism.discordbridge.discord4j.message.AttachmentImpl;
 import canaryprism.discordbridge.discord4j.server.permission.RoleImpl;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;

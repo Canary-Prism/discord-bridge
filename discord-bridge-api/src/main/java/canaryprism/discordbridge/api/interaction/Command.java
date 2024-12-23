@@ -16,7 +16,7 @@
 
 package canaryprism.discordbridge.api.interaction;
 
-import canaryprism.discordbridge.api.entities.DiscordEntity;
+import canaryprism.discordbridge.api.entity.DiscordEntity;
 import canaryprism.discordbridge.api.misc.LocalizedDescribable;
 import canaryprism.discordbridge.api.misc.LocalizedNameable;
 import canaryprism.discordbridge.api.server.permission.PermissionType;

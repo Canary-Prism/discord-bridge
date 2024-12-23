@@ -14,17 +14,22 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.jda.entities.user;
+package canaryprism.discordbridge.javacord.entity.user;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.entities.user.User;
+import canaryprism.discordbridge.api.entity.user.User;
 import org.jetbrains.annotations.NotNull;
 
-public record UserImpl(DiscordBridge bridge, net.dv8tion.jda.api.entities.User user) implements User {
+public record UserImpl(DiscordBridge bridge, org.javacord.api.entity.user.User user) implements User {
+    
+    @Override
+    public long getId() {
+        return user.getId();
+    }
     
     @Override
     public @NotNull String getIdAsString() {
-        return user.getId();
+        return user.getIdAsString();
     }
     
     @Override
