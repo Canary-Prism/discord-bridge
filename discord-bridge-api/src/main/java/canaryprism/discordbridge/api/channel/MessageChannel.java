@@ -16,7 +16,7 @@
 
 package canaryprism.discordbridge.api.channel;
 
-/// Represents a Text Channel
+/// Represents a [Channel] that is Messageable, in other words a channel you can send messages in
 public interface MessageChannel extends Channel {
 
 }
