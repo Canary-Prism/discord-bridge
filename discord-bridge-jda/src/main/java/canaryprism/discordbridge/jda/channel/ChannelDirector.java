@@ -18,7 +18,6 @@ package canaryprism.discordbridge.jda.channel;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.channel.Channel;
-import canaryprism.discordbridge.api.channel.MessageChannel;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
@@ -30,7 +29,7 @@ public final class ChannelDirector {
     
     @SuppressWarnings("unchecked")
     public static <T extends Channel> T wrapChannel(DiscordBridge bridge, net.dv8tion.jda.api.entities.channel.Channel channel) {
-        var compatible = Stream.of(ChannelImpl.class, MessageChannel.class, ServerChannelImpl.class, ServerMessageChannelImpl.class)
+        var compatible = Stream.of(ChannelImpl.class, MessageChannelImpl.class, ServerChannelImpl.class, ServerMessageChannelImpl.class)
                 .map((e) -> e.getConstructors()[0])
                 .filter((e) -> e.getParameters()[1].getType().isInstance(channel))
                 .collect(Collectors.toSet());
