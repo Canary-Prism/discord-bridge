@@ -36,11 +36,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.EventListenerList;
-import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList listener_list) implements DiscordApi {
@@ -52,15 +49,17 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
     public DiscordApiImpl {
         jda.addEventListener(new ListenerAdapter() {
             @Override
-            public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
+            public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent e) {
+                var event = new SlashCommandAutocompleteEventImpl(bridge, e);
                 for (var listener : listener_list.getListeners(SlashCommandAutocompleteListener.class))
-                    listener.onSlashCommandAutocomplete(new SlashCommandAutocompleteEventImpl(bridge, event));
+                    listener.onSlashCommandAutocomplete(event);
             }
             
             @Override
-            public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+            public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent e) {
+                var event = new SlashCommandInvokeEventImpl(bridge, e);
                 for (var listener : listener_list.getListeners(SlashCommandInvokeListener.class))
-                    listener.onSlashCommandInvoke(new SlashCommandInvokeEventImpl(bridge, event));
+                    listener.onSlashCommandInvoke(event);
             }
         });
     }
@@ -96,17 +95,6 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .stream()
                 .map((e) -> new ServerImpl(bridge, e))
                 .collect(Collectors.toUnmodifiableSet());
-    }
-    
-    private static final Map<ApiAttachableListener, ListenerAdapter> listener_delegate_map = new WeakHashMap<>();
-    
-    @SuppressWarnings("unchecked")
-    private static <T extends ApiAttachableListener, R extends ListenerAdapter> R delegate(T listener, Function<? super T, ? extends R> delegate_function) {
-        if (listener_delegate_map.containsKey(listener))
-            return ((R) listener_delegate_map.get(listener));
-        var delegate = delegate_function.apply(listener);
-        listener_delegate_map.put(listener, delegate);
-        return delegate;
     }
     
     @Override
