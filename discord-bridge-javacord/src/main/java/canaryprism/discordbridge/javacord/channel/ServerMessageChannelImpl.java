@@ -17,11 +17,11 @@
 package canaryprism.discordbridge.javacord.channel;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.ServerTextChannel;
+import canaryprism.discordbridge.api.channel.ServerMessageChannel;
 
-public class ServerTextChannelImpl<T extends org.javacord.api.entity.channel.ServerTextChannel> extends ServerChannelImpl<T> implements ServerTextChannel {
+public class ServerMessageChannelImpl<T extends org.javacord.api.entity.channel.ServerTextChannel> extends ServerChannelImpl<T> implements ServerMessageChannel {
     
-    public ServerTextChannelImpl(DiscordBridge bridge, T channel) {
+    public ServerMessageChannelImpl(DiscordBridge bridge, T channel) {
         super(bridge, channel);
     }
 }

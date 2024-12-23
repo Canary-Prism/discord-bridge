@@ -34,8 +34,8 @@ import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.discord4j.channel.ChannelImpl;
 import canaryprism.discordbridge.discord4j.channel.ServerChannelImpl;
-import canaryprism.discordbridge.discord4j.channel.ServerTextChannelImpl;
-import canaryprism.discordbridge.discord4j.channel.TextChannelImpl;
+import canaryprism.discordbridge.discord4j.channel.ServerMessageChannelImpl;
+import canaryprism.discordbridge.discord4j.channel.MessageChannelImpl;
 import canaryprism.discordbridge.discord4j.entity.user.UserImpl;
 import canaryprism.discordbridge.discord4j.event.interaction.SlashCommandAutocompleteEventImpl;
 import canaryprism.discordbridge.discord4j.event.interaction.SlashCommandInvokeEventImpl;
@@ -373,7 +373,7 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
         class Holder {
             @SuppressWarnings("unchecked")
             static final Map<Class<? extends DiscordBridgeApi>, Class<?>> map = Stream.of(
-                            ChannelImpl.class, TextChannelImpl.class, ServerChannelImpl.class, ServerTextChannelImpl.class,
+                            ChannelImpl.class, MessageChannelImpl.class, ServerChannelImpl.class, ServerMessageChannelImpl.class,
                             UserImpl.class,
                             SlashCommandAutocompleteEventImpl.class, SlashCommandInvokeEventImpl.class,
                             FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,

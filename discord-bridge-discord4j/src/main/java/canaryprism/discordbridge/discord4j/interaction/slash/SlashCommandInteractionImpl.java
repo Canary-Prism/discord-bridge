@@ -17,7 +17,7 @@
 package canaryprism.discordbridge.discord4j.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.TextChannel;
+import canaryprism.discordbridge.api.channel.MessageChannel;
 import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public record SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event, Interaction interaction, ApplicationCommandInteraction command_interaction, Mono<ServerImpl> server, Mono<? extends TextChannel> channel) implements SlashCommandInteraction {
+public record SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event, Interaction interaction, ApplicationCommandInteraction command_interaction, Mono<ServerImpl> server, Mono<? extends MessageChannel> channel) implements SlashCommandInteraction {
     
     public SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event) {
         this(
@@ -120,7 +120,7 @@ public record SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInp
     }
     
     @Override
-    public @NotNull Optional<? extends TextChannel> getChannel() {
+    public @NotNull Optional<? extends MessageChannel> getChannel() {
         return channel.blockOptional();
     }
     

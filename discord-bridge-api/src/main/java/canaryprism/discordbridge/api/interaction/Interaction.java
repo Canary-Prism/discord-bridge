@@ -17,7 +17,7 @@
 package canaryprism.discordbridge.api.interaction;
 
 import canaryprism.discordbridge.api.DiscordBridgeApi;
-import canaryprism.discordbridge.api.channel.TextChannel;
+import canaryprism.discordbridge.api.channel.MessageChannel;
 import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
@@ -108,5 +108,5 @@ public interface Interaction extends DiscordBridgeApi {
     /// Gets the channel this interaction originated from
     ///
     /// @return the channel
-    @NotNull Optional<? extends TextChannel> getChannel();
+    @NotNull Optional<? extends MessageChannel> getChannel();
 }

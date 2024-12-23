@@ -14,15 +14,9 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.jda.channel;
+package canaryprism.discordbridge.api.channel;
 
-import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.TextChannel;
-import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+/// Represents a Text Channel
+public interface MessageChannel extends Channel {
 
-public class TextChannelImpl<T extends MessageChannelUnion> extends ChannelImpl<T> implements TextChannel {
-    
-    public TextChannelImpl(DiscordBridge bridge, T channel) {
-        super(bridge, channel);
-    }
 }

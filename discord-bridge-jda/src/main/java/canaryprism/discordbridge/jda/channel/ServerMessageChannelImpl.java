@@ -14,15 +14,15 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.discord4j.channel;
+package canaryprism.discordbridge.jda.channel;
 
-import canaryprism.discordbridge.api.channel.ServerTextChannel;
-import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
-import discord4j.core.object.entity.channel.GuildMessageChannel;
+import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.channel.ServerMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
-public class ServerTextChannelImpl<T extends GuildMessageChannel> extends ServerChannelImpl<T> implements ServerTextChannel {
+public class ServerMessageChannelImpl<T extends GuildMessageChannel> extends ServerChannelImpl<T> implements ServerMessageChannel {
     
-    public ServerTextChannelImpl(DiscordBridgeDiscord4J bridge, T channel) {
+    public ServerMessageChannelImpl(DiscordBridge bridge, T channel) {
         super(bridge, channel);
     }
 }

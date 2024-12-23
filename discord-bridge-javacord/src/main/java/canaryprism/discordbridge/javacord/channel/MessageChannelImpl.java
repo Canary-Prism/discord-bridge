@@ -14,9 +14,14 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.api.channel;
+package canaryprism.discordbridge.javacord.channel;
 
-/// Represents a [TextChannel] with a [canaryprism.discordbridge.api.server.Server] and so also a [ServerChannel]
-public interface ServerTextChannel extends TextChannel, ServerChannel {
+import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.channel.MessageChannel;
 
+public class MessageChannelImpl<T extends org.javacord.api.entity.channel.TextChannel> extends ChannelImpl<T> implements MessageChannel {
+    
+    public MessageChannelImpl(DiscordBridge bridge, T channel) {
+        super(bridge, channel);
+    }
 }

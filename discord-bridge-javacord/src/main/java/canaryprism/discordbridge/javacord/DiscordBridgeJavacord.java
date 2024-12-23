@@ -29,8 +29,8 @@ import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationExcepti
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import canaryprism.discordbridge.javacord.channel.ChannelImpl;
 import canaryprism.discordbridge.javacord.channel.ServerChannelImpl;
-import canaryprism.discordbridge.javacord.channel.ServerTextChannelImpl;
-import canaryprism.discordbridge.javacord.channel.TextChannelImpl;
+import canaryprism.discordbridge.javacord.channel.ServerMessageChannelImpl;
+import canaryprism.discordbridge.javacord.channel.MessageChannelImpl;
 import canaryprism.discordbridge.javacord.entity.user.UserImpl;
 import canaryprism.discordbridge.javacord.event.interaction.SlashCommandAutocompleteEventImpl;
 import canaryprism.discordbridge.javacord.event.interaction.SlashCommandInvokeEventImpl;
@@ -369,7 +369,7 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         class Holder {
             @SuppressWarnings("unchecked")
             static final Map<Class<? extends DiscordBridgeApi>, Class<?>> map = Stream.of(
-                    ChannelImpl.class, TextChannelImpl.class, ServerChannelImpl.class, ServerTextChannelImpl.class,
+                    ChannelImpl.class, MessageChannelImpl.class, ServerChannelImpl.class, ServerMessageChannelImpl.class,
                     UserImpl.class,
                     SlashCommandAutocompleteEventImpl.class, SlashCommandInvokeEventImpl.class,
                     FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,

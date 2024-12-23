@@ -28,15 +28,15 @@ public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Cha
     UNKNOWN(Channel.class),
     
     /// Private Channels (DMs)
-    PRIVATE(TextChannel.class),
+    PRIVATE(MessageChannel.class),
     
     /// Group Channel (Group Chats)
     ///
     /// Unused as bots can't join group chats
-    GROUP(TextChannel.class),
+    GROUP(MessageChannel.class),
     
     /// Server Text Channel
-    SERVER_TEXT(ServerTextChannel.class),
+    SERVER_TEXT(ServerMessageChannel.class),
     
     /// Server Voice Channel
     SERVER_VOICE(ServerChannel.class),
@@ -45,19 +45,19 @@ public enum ChannelType implements PartialSupport, TypeValue<Class<? extends Cha
     SERVER_CATEGORY(ServerChannel.class),
     
     /// Server Announcement Channel
-    SERVER_NEWS(ServerTextChannel.class),
+    SERVER_NEWS(ServerMessageChannel.class),
     
     /// Server Stage Channel
     SERVER_STAGE(ServerChannel.class),
     
     /// Server Announcement Channel Thread
-    SERVER_THREAD_NEWS(ServerTextChannel.class),
+    SERVER_THREAD_NEWS(ServerMessageChannel.class),
     
     /// Server Public Channel Thread
-    SERVER_THREAD_PUBLIC(ServerTextChannel.class),
+    SERVER_THREAD_PUBLIC(ServerMessageChannel.class),
     
     /// Server Private Channel Thread
-    SERVER_THREAD_PRIVATE(ServerTextChannel.class),
+    SERVER_THREAD_PRIVATE(ServerMessageChannel.class),
     
     /// Server Forum Channel
     SERVER_FORUM(ServerChannel.class),

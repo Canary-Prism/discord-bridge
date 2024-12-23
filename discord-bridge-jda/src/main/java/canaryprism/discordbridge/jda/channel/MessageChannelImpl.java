@@ -14,14 +14,15 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.javacord.channel;
+package canaryprism.discordbridge.jda.channel;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.TextChannel;
+import canaryprism.discordbridge.api.channel.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 
-public class TextChannelImpl<T extends org.javacord.api.entity.channel.TextChannel> extends ChannelImpl<T> implements TextChannel {
+public class MessageChannelImpl<T extends MessageChannelUnion> extends ChannelImpl<T> implements MessageChannel {
     
-    public TextChannelImpl(DiscordBridge bridge, T channel) {
+    public MessageChannelImpl(DiscordBridge bridge, T channel) {
         super(bridge, channel);
     }
 }

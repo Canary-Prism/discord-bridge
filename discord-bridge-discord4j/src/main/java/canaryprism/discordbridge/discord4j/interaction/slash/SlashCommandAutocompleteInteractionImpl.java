@@ -17,7 +17,7 @@
 package canaryprism.discordbridge.discord4j.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
-import canaryprism.discordbridge.api.channel.TextChannel;
+import canaryprism.discordbridge.api.channel.MessageChannel;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
 import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
@@ -98,7 +98,7 @@ public record SlashCommandAutocompleteInteractionImpl(DiscordBridgeDiscord4J bri
     }
     
     @Override
-    public @NotNull Optional<? extends TextChannel> getChannel() {
+    public @NotNull Optional<? extends MessageChannel> getChannel() {
         return event.getInteraction()
                 .getChannel()
                 .blockOptional()
