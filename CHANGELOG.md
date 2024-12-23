@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.0.1
+- fixed Channel implementations and ChannelDirector just not working at all
+
 ## v3.0.0
 - changed Option Choices to not return optionals since they must always have values
 - added `ContextType`s
