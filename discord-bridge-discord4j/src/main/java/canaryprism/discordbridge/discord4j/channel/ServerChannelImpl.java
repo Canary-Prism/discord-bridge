@@ -47,7 +47,7 @@ public class ServerChannelImpl<T extends GuildChannel> extends ChannelImpl<T> im
     
     @Override
     public @NotNull Server getServer() {
-        return server.join()
+        return server.join();
     }
     
     @Override
