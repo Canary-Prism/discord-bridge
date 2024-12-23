@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/discord-bridge-discord4j" />
             <option value="$PROJECT_DIR$/discord-bridge-javacord" />
             <option value="$PROJECT_DIR$/discord-bridge-jda" />
+            <option value="$PROJECT_DIR$/discord-bridge-kord" />
           </set>
         </option>
       </GradleProjectSettings>
