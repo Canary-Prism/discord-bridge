@@ -19,6 +19,7 @@ module canaryprism.discordbridge.jda {
     requires static org.jetbrains.annotations;
     requires canaryprism.discordbridge.api;
     requires net.dv8tion.jda;
+    requires java.desktop;
     
     provides canaryprism.discordbridge.api.DiscordBridge
             with canaryprism.discordbridge.jda.DiscordBridgeJDA;

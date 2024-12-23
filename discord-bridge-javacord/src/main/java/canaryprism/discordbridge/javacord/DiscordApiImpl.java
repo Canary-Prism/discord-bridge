@@ -30,11 +30,13 @@ import canaryprism.discordbridge.javacord.listener.interaction.AutocompleteCreat
 import canaryprism.discordbridge.javacord.listener.interaction.SlashCommandCreateListenerDelegate;
 import canaryprism.discordbridge.javacord.server.ServerImpl;
 import org.javacord.api.listener.GloballyAttachableListener;
+import org.javacord.api.listener.interaction.AutocompleteCreateListener;
+import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -71,7 +73,7 @@ public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.Disc
                 .collect(Collectors.toUnmodifiableSet());
     }
     
-    private static final Map<ApiAttachableListener, GloballyAttachableListener> listener_delegate_map = new HashMap<>();
+    private static final Map<ApiAttachableListener, GloballyAttachableListener> listener_delegate_map = new WeakHashMap<>();
     
     @SuppressWarnings("unchecked")
     private static <T extends ApiAttachableListener, R extends GloballyAttachableListener> R delegate(T listener, Function<? super T, ? extends R> delegate_function) {
@@ -95,9 +97,15 @@ public record DiscordApiImpl(DiscordBridgeJavacord bridge, org.javacord.api.Disc
     }
     
     @Override
-    public void removeListener(@NotNull ApiAttachableListener listener) {
-        if (listener_delegate_map.containsKey(listener))
-            api.removeListener(listener_delegate_map.get(listener));
+    public <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener) {
+        if (listener_delegate_map.containsKey(listener)) {
+            if (type == SlashCommandInvokeListener.class)
+                api.removeListener(SlashCommandCreateListener.class, ((SlashCommandCreateListener) listener_delegate_map.get(listener)));
+            else if (type == SlashCommandAutocompleteListener.class)
+                api.removeListener(AutocompleteCreateListener.class, ((AutocompleteCreateListener) listener_delegate_map.get(listener)));
+            else
+                throw new UnsupportedOperationException(String.format("unsupported listener type %s", type));
+        }
     }
     
     @Override

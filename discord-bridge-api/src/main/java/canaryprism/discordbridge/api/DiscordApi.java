@@ -71,8 +71,10 @@ public interface DiscordApi extends DiscordBridgeApi {
     
     /// Removes a listener from this DiscordApi
     ///
+    /// @param type the runtime class of the listener
     /// @param listener the listener to remove
-    void removeListener(@NotNull ApiAttachableListener listener);
+    /// @param <T> the type of the listener
+    <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener);
     
     /// Adds a [SlashCommandInvokeListener] to this DiscordApi
     ///

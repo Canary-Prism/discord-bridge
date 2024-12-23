@@ -19,6 +19,8 @@ package canaryprism.discordbridge.api.listener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 
+import java.util.EventListener;
+
 /// A listener that can be attached to a [canaryprism.discordbridge.api.DiscordApi]
-public sealed interface ApiAttachableListener permits SlashCommandAutocompleteListener, SlashCommandInvokeListener {
+public sealed interface ApiAttachableListener extends EventListener permits SlashCommandAutocompleteListener, SlashCommandInvokeListener {
 }

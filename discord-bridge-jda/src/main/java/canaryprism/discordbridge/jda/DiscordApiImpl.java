@@ -25,22 +25,45 @@ import canaryprism.discordbridge.api.listener.ApiAttachableListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
 import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteEventImpl;
+import canaryprism.discordbridge.jda.event.interaction.SlashCommandInvokeEventImpl;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
-import canaryprism.discordbridge.jda.listener.interaction.CommandAutocompleteInteractionEventListenerDelegate;
-import canaryprism.discordbridge.jda.listener.interaction.SlashCommandInteractionEventListenerDelegate;
 import canaryprism.discordbridge.jda.server.ServerImpl;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import javax.swing.event.EventListenerList;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) implements DiscordApi {
+public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList listener_list) implements DiscordApi {
+    
+    public DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) {
+        this(bridge, jda, new EventListenerList());
+    }
+    
+    public DiscordApiImpl {
+        jda.addEventListener(new ListenerAdapter() {
+            @Override
+            public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
+                for (var listener : listener_list.getListeners(SlashCommandAutocompleteListener.class))
+                    listener.onSlashCommandAutocomplete(new SlashCommandAutocompleteEventImpl(bridge, event));
+            }
+            
+            @Override
+            public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+                for (var listener : listener_list.getListeners(SlashCommandInvokeListener.class))
+                    listener.onSlashCommandInvoke(new SlashCommandInvokeEventImpl(bridge, event));
+            }
+        });
+    }
     
     @Override
     public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands() {
@@ -75,7 +98,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) implements Discor
                 .collect(Collectors.toUnmodifiableSet());
     }
     
-    private static final Map<ApiAttachableListener, ListenerAdapter> listener_delegate_map = new HashMap<>();
+    private static final Map<ApiAttachableListener, ListenerAdapter> listener_delegate_map = new WeakHashMap<>();
     
     @SuppressWarnings("unchecked")
     private static <T extends ApiAttachableListener, R extends ListenerAdapter> R delegate(T listener, Function<? super T, ? extends R> delegate_function) {
@@ -88,20 +111,12 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) implements Discor
     
     @Override
     public <T extends ApiAttachableListener> void addListener(@NotNull Class<T> type, @NotNull T listener) {
-        if (type == SlashCommandInvokeListener.class)
-            jda.addEventListener(delegate(((SlashCommandInvokeListener) listener),
-                    (e) -> new SlashCommandInteractionEventListenerDelegate(bridge, e)));
-        else if (type == SlashCommandAutocompleteListener.class)
-            jda.addEventListener(delegate(((SlashCommandAutocompleteListener) listener),
-                    (e) -> new CommandAutocompleteInteractionEventListenerDelegate(bridge, e)));
-        else
-            throw new UnsupportedOperationException(String.format("unsupported listener type %s", type));
+        listener_list.add(type, listener);
     }
     
     @Override
-    public void removeListener(@NotNull ApiAttachableListener listener) {
-        if (listener_delegate_map.containsKey(listener))
-            jda.removeEventListener(listener_delegate_map.get(listener));
+    public <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener) {
+        listener_list.remove(type, listener);
     }
     
     @Override
