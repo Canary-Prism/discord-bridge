@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.0.0
+- changed Option Choices to not return optionals since they must always have values
+- added `ContextType`s
+- deprecated methods related to commands and enabledInDMs stuff
+- added version information to DiscordBridge implementation `toString`
+- changed how event listeners work, you must now specify the type of event listener to remove in `DiscordApi::removeListener`
+- added Discord4J implementation `discord-bridge-discord4j`
+- renamed `canaryprism.discordbridge.entities` to `canaryprism.discordbridge.entity`
+- renamed `TextChannel` and related to `MessageChannel` since a TextChannel or ServerTextChannel means specifically the SERVER_TEXT channel type ONLY rather than any channel you can send messages in
+
 ## v2.0.5
 - fixed `discord-bridge-javacord` and `discord-bridge-jda` having a bug with their `DiscordBridge::getImplementationType` methods that makes them never load
 - added a feature where `DiscordBridge.load()` will return the passed parameter untouched if the parameter is already a `DiscordApi` object

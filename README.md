@@ -11,9 +11,9 @@ but i figured other people might find this project interesting
 currently this repo provides implementations for:
 - [Javacord](https://javacord.org/) 
 - [JDA](https://jda.wiki/)
+- [Discord4J](https://docs.discord4j.com/)
 
 i plan on adding support in the future for: 
-- [Discord4J](https://docs.discord4j.com/) 
 - [Kord](https://github.com/kordlib/kord) 
 
 ## adding as dependency and whatever
@@ -57,7 +57,11 @@ DiscordBridge also defines static methods to load DiscordApis
 ### DiscordApi
 
 after you add a dependency for the discord bridge implementation you want you must create some discord api object or equivalent in the specific implementation  
-for example, if you're using `discord-bridge-javacord`, create a `DiscordApi` object, if you're using `discord-bridge-jda`, create a `JDA` object  
+for example, 
+if you're using `discord-bridge-javacord`, create a `DiscordApi` object, 
+if you're using `discord-bridge-jda`, create a `JDA` object,
+if you're using `discord-bridge-discord4j`, create a `GatewayDiscordClient` object
+
 in any case, obtain the object in the specific implementation that represents your discord application (bot) session, and can be used to perform global application operations
 
 once you have one, pass it into `DiscordBridge.load(Object)`
