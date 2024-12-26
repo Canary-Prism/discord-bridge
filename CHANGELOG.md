@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.1.0
+- added Kord implementation `discord-bridge-kord`
+
 ## v3.0.1
 - fixed Channel implementations and ChannelDirector just not working at all
 

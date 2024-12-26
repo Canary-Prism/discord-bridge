@@ -12,9 +12,7 @@ currently this repo provides implementations for:
 - [Javacord](https://javacord.org/) 
 - [JDA](https://jda.wiki/)
 - [Discord4J](https://docs.discord4j.com/)
-
-i plan on adding support in the future for: 
-- [Kord](https://github.com/kordlib/kord) 
+- [Kord](https://github.com/kordlib/kord)
 
 ## adding as dependency and whatever
 
@@ -28,7 +26,7 @@ repositories {
 
 dependencies {
     // this depends on discord-bridge-api and all the provided implementations in this repository by default
-    implementation("io.github.canary-prism:discord-bridge:3.0.1") {
+    implementation("io.github.canary-prism:discord-bridge:3.1.0") {
         // you can optionally exclude unneeded implementations
         exclude(module="discord-bridge-javacord") // change this to the module you want to disable if you want
     }
@@ -40,7 +38,7 @@ dependencies {
 <dependency>
   <groupId>io.github.canary-prism</groupId>
   <artifactId>discord-bridge</artifactId>
-  <version>3.0.1</version>
+  <version>3.1.0</version>
 </dependency>
 ```
 
