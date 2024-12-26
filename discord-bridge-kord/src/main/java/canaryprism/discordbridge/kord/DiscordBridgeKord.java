@@ -30,18 +30,47 @@ import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
-import canaryprism.discordbridge.kord.interaction.slash.SlashCommandImpl;
+import canaryprism.discordbridge.kord.channel.ChannelImpl;
+import canaryprism.discordbridge.kord.channel.MessageChannelImpl;
+import canaryprism.discordbridge.kord.channel.ServerChannelImpl;
+import canaryprism.discordbridge.kord.channel.ServerMessageChannelImpl;
+import canaryprism.discordbridge.kord.entity.user.UserImpl;
+import canaryprism.discordbridge.kord.event.interaction.SlashCommandAutocompleteEventImpl;
+import canaryprism.discordbridge.kord.event.interaction.SlashCommandInvokeEventImpl;
+import canaryprism.discordbridge.kord.interaction.response.FollowupResponderImpl;
+import canaryprism.discordbridge.kord.interaction.response.ImmediateResponderImpl;
+import canaryprism.discordbridge.kord.interaction.response.ResponseUpdaterImpl;
+import canaryprism.discordbridge.kord.interaction.slash.*;
+import canaryprism.discordbridge.kord.message.AttachmentImpl;
+import canaryprism.discordbridge.kord.server.ServerImpl;
+import canaryprism.discordbridge.kord.server.permission.RoleImpl;
 import dev.kord.common.entity.*;
 import dev.kord.common.entity.optional.OptionalBoolean;
 import dev.kord.core.Kord;
-import dev.kord.core.entity.channel.Channel;
+import dev.kord.core.entity.Attachment;
+import dev.kord.core.entity.Entity;
+import dev.kord.core.entity.Role;
+import dev.kord.core.entity.User;
+import dev.kord.core.entity.channel.*;
+import dev.kord.core.entity.channel.thread.NewsChannelThread;
+import dev.kord.core.entity.channel.thread.TextChannelThread;
+import dev.kord.core.event.Event;
 import dev.kord.rest.json.request.ApplicationCommandCreateRequest;
+import kotlin.Unit;
 import kotlin.collections.MapsKt;
+import kotlin.coroutines.EmptyCoroutineContext;
+import kotlin.jvm.internal.Reflection;
+import kotlinx.coroutines.BuildersKt;
+import kotlinx.coroutines.CoroutineStart;
+import kotlinx.coroutines.channels.BufferOverflow;
+import kotlinx.coroutines.flow.FlowKt;
 import kotlinx.serialization.json.JsonElementKt;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -106,25 +135,28 @@ public class DiscordBridgeKord implements DiscordBridge {
                 .collect(Collectors.toUnmodifiableSet());
     }
     
-    @SuppressWarnings("DuplicateBranchesInSwitch")
     @Override
     public @NotNull Type getInternalTypeRepresentation(@NotNull TypeValue<?> value) {
-        if (value instanceof canaryprism.discordbridge.api.channel.ChannelType type)
-            return switch (((ChannelType) getImplementationValue(type))) {
-                case UNKNOWN -> Channel.class;
-                case PRIVATE_CHANNEL -> PrivateChannel.class;
-                case GROUP_CHANNEL -> Channel.class;
-                case SERVER_TEXT_CHANNEL -> ServerTextChannel.class;
-                case SERVER_VOICE_CHANNEL -> ServerVoiceChannel.class;
-                case CHANNEL_CATEGORY -> ChannelCategory.class;
-                case SERVER_NEWS_CHANNEL -> ServerTextChannel.class;
-                case SERVER_STAGE_VOICE_CHANNEL -> ServerStageVoiceChannel.class;
-                case SERVER_NEWS_THREAD -> ServerThreadChannel.class;
-                case SERVER_PUBLIC_THREAD, SERVER_PRIVATE_THREAD -> ServerThreadChannel.class;
-                case SERVER_FORUM_CHANNEL -> ServerForumChannel.class;
-                case SERVER_STORE_CHANNEL -> Channel.class;
-                case SERVER_DIRECTORY_CHANNEL -> Channel.class;
-            };
+        if (value instanceof canaryprism.discordbridge.api.channel.ChannelType type) {
+            class ChannelTypeConversion {
+                static final Map<ChannelType, Class<? extends Channel>> MAP = Map.ofEntries(
+                        entry(ChannelType.DM.INSTANCE, DmChannel.class),
+                        entry(ChannelType.GroupDM.INSTANCE, Channel.class),
+                        entry(ChannelType.GuildText.INSTANCE, TextChannel.class),
+                        entry(ChannelType.GuildVoice.INSTANCE, VoiceChannel.class),
+                        entry(ChannelType.GuildCategory.INSTANCE, Category.class),
+                        entry(ChannelType.GuildNews.INSTANCE, NewsChannel.class),
+                        entry(ChannelType.GuildStageVoice.INSTANCE, StageChannel.class),
+                        entry(ChannelType.PublicNewsThread.INSTANCE, NewsChannelThread.class),
+                        entry(ChannelType.PublicGuildThread.INSTANCE, TextChannelThread.class),
+                        entry(ChannelType.PrivateThread.INSTANCE, TextChannelThread.class),
+                        entry(ChannelType.GuildForum.INSTANCE, ForumChannel.class),
+                        entry(ChannelType.GuildMedia.INSTANCE, MediaChannel.class),
+                        entry(ChannelType.GuildDirectory.INSTANCE, GuildChannel.class)
+                );
+            }
+            return ChannelTypeConversion.MAP.getOrDefault(((ChannelType) getImplementationValue(type)), Channel.class);
+        }
         else if (value instanceof SlashCommandOptionType type)
             return switch (type) {
                 case SUBCOMMAND, SUBCOMMAND_GROUP -> Void.class;
@@ -133,9 +165,9 @@ public class DiscordBridgeKord implements DiscordBridge {
                 case NUMBER -> Double.class;
                 case BOOLEAN -> Boolean.class;
                 case USER -> User.class;
-                case CHANNEL -> ServerChannel.class;
+                case CHANNEL -> GuildChannel.class;
                 case ROLE -> Role.class;
-                case MENTIONABLE -> Mentionable.class;
+                case MENTIONABLE -> Entity.class;
                 case ATTACHMENT -> Attachment.class;
                 case UNKNOWN -> Object.class;
             };
@@ -151,6 +183,7 @@ public class DiscordBridgeKord implements DiscordBridge {
     @SuppressWarnings("DuplicateBranchesInSwitch")
     private static @NotNull Object staticGetImplementationValue(@NotNull DiscordBridgeEnum value) {
         if (value instanceof canaryprism.discordbridge.api.channel.ChannelType type)
+            
             return switch (type) {
                 case UNKNOWN -> throw new UnsupportedValueException(type);
                 case PRIVATE -> ChannelType.DM.INSTANCE;
@@ -265,7 +298,7 @@ public class DiscordBridgeKord implements DiscordBridge {
             if (type == canaryprism.discordbridge.api.channel.ChannelType.class) {
                 if (!(value instanceof ChannelType e)) break conversion_attempt;
                 class ChannelTypeConversion {
-                    static final Map<ChannelType, canaryprism.discordbridge.api.channel.ChannelType> map = Map.ofEntries(
+                    static final Map<ChannelType, canaryprism.discordbridge.api.channel.ChannelType> MAP = Map.ofEntries(
                             entry(ChannelType.DM.INSTANCE, canaryprism.discordbridge.api.channel.ChannelType.PRIVATE),
                             entry(ChannelType.GroupDM.INSTANCE, canaryprism.discordbridge.api.channel.ChannelType.GROUP),
                             entry(ChannelType.GuildText.INSTANCE, canaryprism.discordbridge.api.channel.ChannelType.SERVER_TEXT),
@@ -281,11 +314,11 @@ public class DiscordBridgeKord implements DiscordBridge {
                             entry(ChannelType.GuildDirectory.INSTANCE, canaryprism.discordbridge.api.channel.ChannelType.SERVER_DIRECTORY)
                     );
                 }
-                return ((T) ChannelTypeConversion.map.getOrDefault(e, canaryprism.discordbridge.api.channel.ChannelType.UNKNOWN));
+                return ((T) ChannelTypeConversion.MAP.getOrDefault(e, canaryprism.discordbridge.api.channel.ChannelType.UNKNOWN));
             } else if (type == SlashCommandOptionType.class) {
                 if (!(value instanceof ApplicationCommandOptionType e)) break conversion_attempt;
                 class SlashCommandOptionTypeConversion {
-                    static final Map<ApplicationCommandOptionType, SlashCommandOptionType> map = Map.ofEntries(
+                    static final Map<ApplicationCommandOptionType, SlashCommandOptionType> MAP = Map.ofEntries(
                             entry(ApplicationCommandOptionType.SubCommand.INSTANCE, SlashCommandOptionType.SUBCOMMAND),
                             entry(ApplicationCommandOptionType.SubCommandGroup.INSTANCE, SlashCommandOptionType.SUBCOMMAND_GROUP),
                             entry(ApplicationCommandOptionType.String.INSTANCE, SlashCommandOptionType.STRING),
@@ -299,20 +332,20 @@ public class DiscordBridgeKord implements DiscordBridge {
                             entry(ApplicationCommandOptionType.Attachment.INSTANCE, SlashCommandOptionType.ATTACHMENT)
                     );
                 }
-                return (T) SlashCommandOptionTypeConversion.map.getOrDefault(e, SlashCommandOptionType.UNKNOWN);
+                return (T) SlashCommandOptionTypeConversion.MAP.getOrDefault(e, SlashCommandOptionType.UNKNOWN);
             } else if (type == canaryprism.discordbridge.api.message.MessageFlag.class) {
                 if (!(value instanceof MessageFlag e)) break conversion_attempt;
                 class MessageFlagConversion {
-                    static final Map<MessageFlag, canaryprism.discordbridge.api.message.MessageFlag> map = Map.ofEntries(
+                    static final Map<MessageFlag, canaryprism.discordbridge.api.message.MessageFlag> MAP = Map.ofEntries(
                             entry(MessageFlag.Ephemeral.INSTANCE, canaryprism.discordbridge.api.message.MessageFlag.EPHEMERAL),
                             entry(MessageFlag.SuppressNotifications.INSTANCE, canaryprism.discordbridge.api.message.MessageFlag.SILENT)
                     );
                 }
-                return (T) MessageFlagConversion.map.getOrDefault(e, canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN);
+                return (T) MessageFlagConversion.MAP.getOrDefault(e, canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN);
             } else if (type == PermissionType.class) {
                 if (!(value instanceof Permission e)) break conversion_attempt;
                 class PermissionTypeConversion {
-                    static final Map<Permission, PermissionType> map = Map.ofEntries(
+                    static final Map<Permission, PermissionType> MAP = Map.ofEntries(
                             entry(Permission.ViewChannel.INSTANCE, PermissionType.VIEW_CHANNEL),
                             entry(Permission.ManageChannels.INSTANCE, PermissionType.MANAGE_CHANNEL),
                             entry(Permission.ManageRoles.INSTANCE, PermissionType.MANAGE_ROLES),
@@ -370,7 +403,7 @@ public class DiscordBridgeKord implements DiscordBridge {
                             entry(Permission.ViewCreatorMonetizationAnalytics.INSTANCE, PermissionType.VIEW_MONETIZATION_ANALYTICS)
                     );
                 }
-                return (T) PermissionTypeConversion.map.getOrDefault(e, PermissionType.UNKNOWN);
+                return (T) PermissionTypeConversion.MAP.getOrDefault(e, PermissionType.UNKNOWN);
             }
         }
         
@@ -391,7 +424,7 @@ public class DiscordBridgeKord implements DiscordBridge {
                             SlashCommandAutocompleteInteractionImpl.class,
                             SlashCommandImpl.class,
                             SlashCommandInteractionImpl.class,
-                            SlashCommandInteractionOptionImpl.class,
+                            // SlashCommandInteractionOptionImpl.class,
                             SlashCommandOptionChoiceImpl.class,
                             SlashCommandOptionImpl.class,
                             AttachmentImpl.class,
@@ -410,7 +443,7 @@ public class DiscordBridgeKord implements DiscordBridge {
     
     @Override
     public @NotNull String toString() {
-        return "DiscordBridge Javacord 3.8.0 Implementation";
+        return "DiscordBridge Kord 0.15.0 Implementation";
     }
     
     public static DiscordLocale convertLocale(@NotNull dev.kord.common.Locale locale) {
@@ -450,7 +483,7 @@ public class DiscordBridgeKord implements DiscordBridge {
                 new OptionalBoolean.Value(data.isEnabledInDMs()),
                 new OptionalBoolean.Value(!data.isDefaultDisabled()),
                 new OptionalBoolean.Value(data.isNSFW())
-        )
+        );
     }
     
     public ApplicationCommandOption convertData(@NotNull SlashCommandOptionData data) {
@@ -494,7 +527,7 @@ public class DiscordBridgeKord implements DiscordBridge {
                 data.getStringLengthBoundsMin()
                         .map(Long::intValue)
                         .<dev.kord.common.entity.optional.OptionalInt>map(dev.kord.common.entity.optional.OptionalInt.Value::new)
-                        .orElse(dev.kord.common.entity.optional.OptionalInt.Missing.INSTANCE)
+                        .orElse(dev.kord.common.entity.optional.OptionalInt.Missing.INSTANCE),
                 data.getStringLengthBoundsMax()
                         .map(Long::intValue)
                         .<dev.kord.common.entity.optional.OptionalInt>map(dev.kord.common.entity.optional.OptionalInt.Value::new)
@@ -539,5 +572,35 @@ public class DiscordBridgeKord implements DiscordBridge {
             default -> throw new UnsupportedOperationException(
                     String.format("%s doesn't support option choices for type %s", this, data.getType()));
         };
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static <T extends Event> void on(Kord kord, Class<T> type, Consumer<? super T> listener, Logger logger) {
+        FlowKt.launchIn(
+                FlowKt.onEach(
+                        FlowKt.filterIsInstance(
+                                FlowKt.buffer(
+                                        kord.getEvents(),
+                                        kotlinx.coroutines.channels.Channel.BUFFERED,
+                                        BufferOverflow.SUSPEND),
+                                Reflection.getOrCreateKotlinClass(type)),
+                        (e, c) -> {
+                            BuildersKt.launch(
+                                    kord,
+                                    EmptyCoroutineContext.INSTANCE,
+                                    CoroutineStart.DEFAULT,
+                                    (scope, c2) -> {
+                                        try {
+                                            listener.accept(((T) e));
+                                        } catch (Throwable throwable) {
+                                            logger.error("Exception in event listener", throwable);
+                                        }
+                                        c.resumeWith(Unit.INSTANCE);
+                                        return Unit.INSTANCE;
+                                    });
+                            c.resumeWith(Unit.INSTANCE);
+                            return Unit.INSTANCE;
+                        }),
+                kord);
     }
 }

@@ -23,9 +23,10 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.kord.DiscordBridgeKord;
+import dev.kord.common.Locale;
+import dev.kord.common.entity.ApplicationCommandOption;
+import dev.kord.common.entity.Choice;
 import dev.kord.common.entity.optional.Optional.Value;
-import dev.kord.core.cache.data.ApplicationCommandOptionChoiceData;
-import dev.kord.core.cache.data.ApplicationCommandOptionData;
 import kotlinx.serialization.json.JsonPrimitive;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -37,12 +38,48 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record SlashCommandOptionImpl(DiscordBridgeKord bridge, ApplicationCommandOptionData option) implements SlashCommandOption {
+public record SlashCommandOptionImpl(DiscordBridgeKord bridge, ApplicationCommandOption option) implements SlashCommandOption {
     
     @Override
     public @NotNull SlashCommandOptionType getType() {
         return bridge.convertInternalObject(SlashCommandOptionType.class, option.getType());
     }
+    
+    @Override
+    public @NotNull String getName() {
+        return option.getName();
+    }
+    
+    @Override
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
+        return (option.getNameLocalizations() instanceof Value<Map<Locale, String>> localizations) ?
+                localizations.getValue()
+                        .entrySet()
+                        .stream()
+                        .map((e) -> Map.entry(
+                                DiscordBridgeKord.convertLocale(e.getKey()),
+                                e.getValue()
+                        ))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                : Map.of();    }
+    
+    @Override
+    public @NotNull String getDescription() {
+        return option.getDescription();
+    }
+    
+    @Override
+    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
+        return (option.getDescriptionLocalizations() instanceof Value<Map<Locale, String>> localizations) ?
+                localizations.getValue()
+                        .entrySet()
+                        .stream()
+                        .map((e) -> Map.entry(
+                                DiscordBridgeKord.convertLocale(e.getKey()),
+                                e.getValue()
+                        ))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                : Map.of();    }
     
     @Override
     public boolean isRequired() {
@@ -56,7 +93,7 @@ public record SlashCommandOptionImpl(DiscordBridgeKord bridge, ApplicationComman
     
     @Override
     public @NotNull @Unmodifiable List<? extends @NotNull SlashCommandOptionChoice> getChoices() {
-        return (option.getChoices() instanceof Value<List<ApplicationCommandOptionChoiceData>> value) ?
+        return (option.getChoices() instanceof Value<List<Choice>> value) ?
                 value.getValue()
                         .stream()
                         .map((e) -> new SlashCommandOptionChoiceImpl(bridge, e))
@@ -66,7 +103,7 @@ public record SlashCommandOptionImpl(DiscordBridgeKord bridge, ApplicationComman
     
     @Override
     public @NotNull @Unmodifiable List<? extends @NotNull SlashCommandOption> getOptions() {
-        return (option.getOptions() instanceof Value<List<ApplicationCommandOptionData>> value) ?
+        return (option.getOptions() instanceof Value<List<ApplicationCommandOption>> value) ?
                 value.getValue()
                         .stream()
                         .map((e) -> new SlashCommandOptionImpl(bridge, e))
@@ -142,25 +179,5 @@ public record SlashCommandOptionImpl(DiscordBridgeKord bridge, ApplicationComman
     @Override
     public @NotNull DiscordBridge getBridge() {
         return bridge;
-    }
-    
-    @Override
-    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
-        throw new UnsupportedOperationException(String.format("localization data inaccessible by %s", bridge));
-    }
-    
-    @Override
-    public @NotNull String getDescription() {
-        return option.getDescription();
-    }
-    
-    @Override
-    public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
-        throw new UnsupportedOperationException(String.format("localization data inaccessible by %s", bridge));
-    }
-    
-    @Override
-    public @NotNull String getName() {
-        return option.getName();
     }
 }

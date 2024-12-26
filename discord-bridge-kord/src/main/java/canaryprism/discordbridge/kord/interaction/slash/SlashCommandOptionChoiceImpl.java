@@ -20,13 +20,16 @@ import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionChoice;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.kord.DiscordBridgeKord;
-import dev.kord.core.cache.data.ApplicationCommandOptionChoiceData;
+import dev.kord.common.Locale;
+import dev.kord.common.entity.Choice;
+import dev.kord.common.entity.optional.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public record SlashCommandOptionChoiceImpl(DiscordBridgeKord bridge, ApplicationCommandOptionChoiceData choice) implements SlashCommandOptionChoice {
+public record SlashCommandOptionChoiceImpl(DiscordBridgeKord bridge, Choice choice) implements SlashCommandOptionChoice {
     
     @Override
     public @NotNull Object getValue() {
@@ -45,8 +48,16 @@ public record SlashCommandOptionChoiceImpl(DiscordBridgeKord bridge, Application
     
     @Override
     public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
-        throw new UnsupportedOperationException(String.format("localization data inaccessible by %s", bridge));
-    }
+        return (choice.getNameLocalizations() instanceof Optional.Value<Map<Locale, String>> localizations) ?
+                localizations.getValue()
+                        .entrySet()
+                        .stream()
+                        .map((e) -> Map.entry(
+                                DiscordBridgeKord.convertLocale(e.getKey()),
+                                e.getValue()
+                        ))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                : Map.of();    }
     
     @Override
     public @NotNull String getName() {

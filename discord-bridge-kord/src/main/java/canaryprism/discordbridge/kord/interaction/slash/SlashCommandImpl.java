@@ -23,29 +23,29 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.kord.DiscordBridgeKord;
+import dev.kord.common.Locale;
+import dev.kord.common.entity.ApplicationCommandOption;
+import dev.kord.common.entity.DiscordApplicationCommand;
 import dev.kord.common.entity.Permissions;
 import dev.kord.common.entity.Snowflake;
 import dev.kord.common.entity.optional.Optional.Value;
-import dev.kord.core.cache.data.ApplicationCommandOptionData;
-import dev.kord.core.entity.application.ChatInputCommandCommand;
+import dev.kord.core.Kord;
+import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand command) implements SlashCommand {
+public record SlashCommandImpl(DiscordBridgeKord bridge, DiscordApplicationCommand command, Kord kord) implements SlashCommand {
     
     @Override
     public @NotNull @Unmodifiable List<? extends @NotNull SlashCommandOption> getOptions() {
-        return (command.getData().getOptions() instanceof Value<List<ApplicationCommandOptionData>> value) ?
+        return (command.getOptions() instanceof Value<List<ApplicationCommandOption>> value) ?
                 value.getValue()
                         .stream()
                         .map((e) -> new SlashCommandOptionImpl(bridge, e))
@@ -65,14 +65,16 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand
     
     @Override
     public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getNameLocalizations() {
-        return command.getNameLocalizations()
+        return (command.getNameLocalizations() instanceof Value<Map<Locale, String>> localizations) ?
+                localizations.getValue()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
                         DiscordBridgeKord.convertLocale(e.getKey()),
                         e.getValue()
                 ))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                : Map.of();
     }
     
     @Override
@@ -83,20 +85,23 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand
     
     @Override
     public @NotNull @Unmodifiable Map<DiscordLocale, @NotNull String> getDescriptionLocalizations() {
-        return command.getDescriptionLocalizations()
+        return (command.getDescriptionLocalizations() instanceof Value<Map<Locale, String>> localizations) ?
+                localizations.getValue()
                 .entrySet()
                 .stream()
                 .map((e) -> Map.entry(
                         DiscordBridgeKord.convertLocale(e.getKey()),
                         e.getValue()
                 ))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                : Map.of();
     }
     
     @SuppressWarnings("deprecation")
     @Override
     public boolean isDefaultDisabled() {
         return !Optional.ofNullable(command.getDefaultPermission())
+                .map((e) -> e.orElse(true))
                 .orElse(true);
     }
     
@@ -114,7 +119,7 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand
     @Deprecated(since = "3.0.0")
     @Override
     public boolean isEnabledInDMs() {
-        return command.getData().getDmPermission().orElse(true);
+        return command.getDmPermission().orElse(true);
     }
     
     @Override
@@ -124,7 +129,7 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand
     
     @Override
     public boolean isGlobalCommand() {
-        return command.getData().getGuildId().getAsOptional() instanceof dev.kord.common.entity.optional.Optional.Missing<Snowflake>;
+        return command.getGuildId().getAsOptional() instanceof dev.kord.common.entity.optional.Optional.Missing<Snowflake>;
     }
     
     @Override
@@ -134,13 +139,14 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand
     
     @Override
     public boolean isNSFW() {
-        return command.getData().getNsfw().orElse(false);
+        return command.getNsfw().orElse(false);
     }
     
     @Override
     public CompletableFuture<Void> delete() {
         var future = new CompletableFuture<Void>();
-        command.delete(new Continuation<>() {
+        var continuation = new Continuation<Unit>() {
+            
             @Override
             public @NotNull CoroutineContext getContext() {
                 return EmptyCoroutineContext.INSTANCE;
@@ -150,7 +156,16 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, ChatInputCommandCommand
             public void resumeWith(@NotNull Object o) {
                 future.complete(null);
             }
-        });
+        };
+        if (this.isGlobalCommand()) {
+            kord.getRest()
+                    .getInteraction()
+                    .deleteGlobalApplicationCommand(kord.getSelfId(), command.getId(), continuation);
+        } else {
+            kord.getRest()
+                    .getInteraction()
+                    .deleteGuildApplicationCommand(kord.getSelfId(), Objects.requireNonNull(command.getGuildId().getValue()), command.getId(), continuation);
+        }
         return future;
     }
     

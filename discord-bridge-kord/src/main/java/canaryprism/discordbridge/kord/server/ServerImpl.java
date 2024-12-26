@@ -14,65 +14,38 @@
  *    limitations under the License.
  */
 
-package canaryprism.discordbridge.kord;
+package canaryprism.discordbridge.kord.server;
 
-import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
+import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
-import canaryprism.discordbridge.api.listener.ApiAttachableListener;
-import canaryprism.discordbridge.api.listener.interaction.SlashCommandAutocompleteListener;
-import canaryprism.discordbridge.api.listener.interaction.SlashCommandInvokeListener;
 import canaryprism.discordbridge.api.server.Server;
-import canaryprism.discordbridge.kord.event.interaction.SlashCommandAutocompleteEventImpl;
-import canaryprism.discordbridge.kord.event.interaction.SlashCommandInvokeEventImpl;
+import canaryprism.discordbridge.kord.DiscordBridgeKord;
 import canaryprism.discordbridge.kord.interaction.slash.SlashCommandImpl;
-import canaryprism.discordbridge.kord.server.ServerImpl;
 import dev.kord.common.entity.DiscordApplicationCommand;
 import dev.kord.core.Kord;
-import dev.kord.core.event.interaction.AutoCompleteInteractionCreateEvent;
-import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent;
-import kotlin.Unit;
+import dev.kord.core.entity.Guild;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.swing.event.EventListenerList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerList listener_list) implements DiscordApi {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DiscordApiImpl.class);
-    
-    public DiscordApiImpl(DiscordBridgeKord bridge, Kord kord) {
-        this(bridge, kord, new EventListenerList());
-        DiscordBridgeKord.on(kord, ChatInputCommandInteractionCreateEvent.class, (e) -> {
-            for (var listener : listener_list.getListeners(SlashCommandInvokeListener.class))
-                listener.onSlashCommandInvoke(new SlashCommandInvokeEventImpl(bridge, e));
-        }, logger);
-        DiscordBridgeKord.on(kord, AutoCompleteInteractionCreateEvent.class, (e) -> {
-            for (var listener : listener_list.getListeners(SlashCommandAutocompleteListener.class))
-                listener.onSlashCommandAutocomplete(new SlashCommandAutocompleteEventImpl(bridge, e));
-        }, logger);
-    }
+public record ServerImpl(DiscordBridgeKord bridge, Guild server, Kord kord) implements Server {
     
     @Override
-    public @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands() {
-        
-        var future = new CompletableFuture<Set<? extends SlashCommand>>();
-        
+    public @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> getServerSlashCommands() {
+        var future = new CompletableFuture<Set<SlashCommandImpl>>();
         kord.getRest()
                 .getInteraction()
-                .getGlobalApplicationCommands(kord.getSelfId(), true, new Continuation<>() {
+                .getGuildApplicationCommands(kord.getSelfId(), server.getId(), true, new Continuation<>() {
                     @Override
                     public @NotNull CoroutineContext getContext() {
                         return EmptyCoroutineContext.INSTANCE;
@@ -87,17 +60,18 @@ public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerL
                                 .collect(Collectors.toUnmodifiableSet()));
                     }
                 });
-            
+        
         return future;
     }
     
     @Override
-    public @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> bulkUpdateGlobalCommands(@NotNull Set<? extends @NotNull CommandData> commands) {
+    public @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull Command>> bulkUpdateServerCommands(Set<? extends @NotNull CommandData> commands) {
         var future = new CompletableFuture<Set<SlashCommandImpl>>();
         kord.getRest()
                 .getInteraction()
-                .createGlobalApplicationCommands(
+                .createGuildApplicationCommands(
                         kord.getSelfId(),
+                        server.getId(),
                         commands.stream()
                                 .map(SlashCommandData.class::cast)
                                 .map(bridge::convertData)
@@ -122,46 +96,22 @@ public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerL
     }
     
     @Override
-    public @NotNull @Unmodifiable Set<? extends Server> getServers() {
-        var future = new CompletableFuture<Set<? extends Server>>();
-        var set = new HashSet<ServerImpl>();
-        kord.getGuilds()
-                .collect((e, c) -> {
-                    set.add(new ServerImpl(bridge, e, kord));
-                    c.resumeWith(Unit.INSTANCE);
-                    return Unit.INSTANCE;
-                }, new Continuation<Unit>() {
-                    @Override
-                    public @NotNull CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-                    
-                    @Override
-                    public void resumeWith(@NotNull Object o) {
-                        future.complete(set);
-                    }
-                });
-        
-        return future.join();
-    }
-    
-    @Override
-    public <T extends ApiAttachableListener> void addListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.add(type, listener);
-    }
-    
-    @Override
-    public <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.remove(type, listener);
+    public @NotNull String getIdAsString() {
+        return server.getId().toString();
     }
     
     @Override
     public @NotNull Object getImplementation() {
-        return kord;
+        return server;
     }
     
     @Override
     public @NotNull DiscordBridge getBridge() {
         return bridge;
+    }
+    
+    @Override
+    public @NotNull String getName() {
+        return server.getName();
     }
 }

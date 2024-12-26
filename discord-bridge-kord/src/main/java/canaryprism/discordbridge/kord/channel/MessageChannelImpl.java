@@ -14,19 +14,14 @@
  *    limitations under the License.
  */
 
-/// Module for Kord implementation of discord-bridge
-module canaryprism.discordbridge.kord {
-    requires static org.jetbrains.annotations;
-    requires canaryprism.discordbridge.api;
-    requires core.jvm;
-    requires common.jvm;
-    requires rest.jvm;
-    requires kotlinx.serialization.json;
-    requires kotlinx.coroutines.core;
-    requires io.ktor.client.core;
-    requires org.slf4j;
-    requires java.desktop;
+package canaryprism.discordbridge.kord.channel;
+
+import canaryprism.discordbridge.api.channel.MessageChannel;
+import canaryprism.discordbridge.kord.DiscordBridgeKord;
+
+public class MessageChannelImpl<T extends dev.kord.core.entity.channel.MessageChannel> extends ChannelImpl<T> implements MessageChannel {
     
-    provides canaryprism.discordbridge.api.DiscordBridge
-            with canaryprism.discordbridge.kord.DiscordBridgeKord;
+    public MessageChannelImpl(DiscordBridgeKord bridge, T channel) {
+        super(bridge, channel);
+    }
 }
