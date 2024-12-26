@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.1.2
+- added `Automatic-Module-Name` to META-INF/MANIFEST.MF of `discord-bridge-kord`
+
 ## v3.1.1
 - removed `discord-bridge-discord4j`, `discord-bridge-jda`, and `discord-bridge-kord`'s dependency on `java.desktop` module
 
