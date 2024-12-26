@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.1.1
+- removed `discord-bridge-discord4j`, `discord-bridge-jda`, and `discord-bridge-kord`'s dependency on `java.desktop` module
+
 ## v3.1.0
 - added Kord implementation `discord-bridge-kord`
 
