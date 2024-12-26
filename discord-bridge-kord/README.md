@@ -4,6 +4,9 @@ the [Kord](https://github.com/kordlib/kord) implementation of Discord Bridge
 
 this implementation does not support Interaction Contexts, you must utilise the deprecated `enabledInDMs` property
 
+discord-bridge-kord doesn't participate in JPMS because Kord doesn't either and doesn't even have an automatic module name  
+it seems Kotlin just doesn't have JPMS anyway so,,
+
 since Kord is a Kotlin thing and uses a burdensome amount of coroutines the Java interop is,,,, painful  
 manual continuations were created with EmptyCoroutineContexts which then manually completed CompletableFutures  
 i have no idea what this means for any Kotlin users crazy enough to use Discord Bridge, how the coroutine system will behave,
