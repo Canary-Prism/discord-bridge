@@ -116,7 +116,7 @@ public record SlashCommandInteractionImpl(DiscordBridgeKord bridge, ChatInputCom
                 .map((e) -> {
                     var future = new CompletableFuture<ServerImpl>();
                     interaction.getKord()
-                            .getGuild(e, interaction.getKord().getResources().getDefaultStrategy(), new Continuation<Guild>() {
+                            .getGuild(e, interaction.getKord().getResources().getDefaultStrategy(), new Continuation<>() {
                                 @Override
                                 public @NotNull CoroutineContext getContext() {
                                     return EmptyCoroutineContext.INSTANCE;
@@ -141,7 +141,7 @@ public record SlashCommandInteractionImpl(DiscordBridgeKord bridge, ChatInputCom
     public @NotNull Optional<? extends MessageChannel> getChannel() {
         var future = new CompletableFuture<MessageChannel>();
         
-        interaction.getChannel(new Continuation<dev.kord.core.entity.channel.MessageChannel>() {
+        interaction.getChannel(new Continuation<>() {
             @Override
             public @NotNull CoroutineContext getContext() {
                 return EmptyCoroutineContext.INSTANCE;

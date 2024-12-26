@@ -23,7 +23,6 @@ import canaryprism.discordbridge.kord.server.ServerImpl;
 import dev.kord.core.entity.Guild;
 import dev.kord.core.entity.channel.GuildChannel;
 import kotlin.ResultKt;
-import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
@@ -65,7 +64,7 @@ public class ServerChannelImpl<T extends GuildChannel> extends ChannelImpl<T> im
     @Override
     public @NotNull CompletableFuture<Void> delete() {
         var future = new CompletableFuture<Void>();
-        channel.delete(null, new Continuation<Unit>() {
+        channel.delete(null, new Continuation<>() {
             @Override
             public @NotNull CoroutineContext getContext() {
                 return EmptyCoroutineContext.INSTANCE;

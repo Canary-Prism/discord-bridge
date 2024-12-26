@@ -130,7 +130,7 @@ public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerL
                     set.add(new ServerImpl(bridge, e, kord));
                     c.resumeWith(Unit.INSTANCE);
                     return Unit.INSTANCE;
-                }, new Continuation<Unit>() {
+                }, new Continuation<>() {
                     @Override
                     public @NotNull CoroutineContext getContext() {
                         return EmptyCoroutineContext.INSTANCE;
