@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.jda;
 
+import canaryprism.commons.event.EventListenerList;
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.data.interaction.CommandData;
@@ -35,15 +36,14 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.event.EventListenerList;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList listener_list) implements DiscordApi {
+public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList<ApiAttachableListener> listener_list) implements DiscordApi {
     
     public DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) {
-        this(bridge, jda, new EventListenerList());
+        this(bridge, jda, new EventListenerList<>());
     }
     
     public DiscordApiImpl {
@@ -99,12 +99,12 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
     
     @Override
     public <T extends ApiAttachableListener> void addListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.add(type, listener);
+        listener_list.addListener(type, listener);
     }
     
     @Override
     public <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.remove(type, listener);
+        listener_list.removeListener(type, listener);
     }
     
     @Override

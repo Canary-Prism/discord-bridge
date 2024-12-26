@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.kord;
 
+import canaryprism.commons.event.EventListenerList;
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.data.interaction.CommandData;
@@ -42,19 +43,18 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.event.EventListenerList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerList listener_list) implements DiscordApi {
+public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerList<ApiAttachableListener> listener_list) implements DiscordApi {
     
     private static final Logger logger = LoggerFactory.getLogger(DiscordApiImpl.class);
     
     public DiscordApiImpl(DiscordBridgeKord bridge, Kord kord) {
-        this(bridge, kord, new EventListenerList());
+        this(bridge, kord, new EventListenerList<>());
         DiscordBridgeKord.on(kord, ChatInputCommandInteractionCreateEvent.class, (e) -> {
             for (var listener : listener_list.getListeners(SlashCommandInvokeListener.class))
                 listener.onSlashCommandInvoke(new SlashCommandInvokeEventImpl(bridge, e));
@@ -147,12 +147,12 @@ public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerL
     
     @Override
     public <T extends ApiAttachableListener> void addListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.add(type, listener);
+        listener_list.addListener(type, listener);
     }
     
     @Override
     public <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.remove(type, listener);
+        listener_list.removeListener(type, listener);
     }
     
     @Override

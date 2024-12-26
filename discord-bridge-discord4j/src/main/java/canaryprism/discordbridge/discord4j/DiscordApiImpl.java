@@ -16,6 +16,7 @@
 
 package canaryprism.discordbridge.discord4j;
 
+import canaryprism.commons.event.EventListenerList;
 import canaryprism.discordbridge.api.DiscordApi;
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.data.interaction.CommandData;
@@ -38,7 +39,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
-import javax.swing.event.EventListenerList;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public class DiscordApiImpl implements DiscordApi {
     public final CompletableFuture<Long> app_id;
     public final CompletableFuture<Set<ServerImpl>> guilds;
     
-    public final EventListenerList listener_list = new EventListenerList();
+    public final canaryprism.commons.event.EventListenerList<ApiAttachableListener> listener_list = new EventListenerList<>();
     
     public DiscordApiImpl(DiscordBridgeDiscord4J bridge, GatewayDiscordClient api) {
         this.bridge = bridge;
@@ -114,12 +114,12 @@ public class DiscordApiImpl implements DiscordApi {
     }
     @Override
     public <T extends ApiAttachableListener> void addListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.add(type, listener);
+        listener_list.addListener(type, listener);
     }
     
     @Override
     public <T extends ApiAttachableListener> void removeListener(@NotNull Class<T> type, @NotNull T listener) {
-        listener_list.remove(type, listener);
+        listener_list.removeListener(type, listener);
     }
     
     @Override
