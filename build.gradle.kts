@@ -43,9 +43,9 @@ allprojects {
             }
 
             scm {
-                url = "https://github.com/Canary-Prism/slavacord"
-                connection = "scm:git:git://github.com/Canary-Prism/slavacord.git"
-                developerConnection = "scm:git:ssh://git@github.com:Canary-Prism/slavacord.git"
+                url = "https://github.com/Canary-Prism/discord-bridge"
+                connection = "scm:git:git://github.com/Canary-Prism/discord-bridge.git"
+                developerConnection = "scm:git:ssh://git@github.com:Canary-Prism/discord-bridge.git"
             }
         }
     }
