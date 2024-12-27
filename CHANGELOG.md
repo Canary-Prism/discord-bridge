@@ -1,7 +1,7 @@
 # Changelog
 
 ## v3.2.1
-- fixed bug where depending on the root project didn't bring in dependencies for `discord-bridge=discord4j` and `discord-bridge-kord`
+- fixed bug where depending on the root project didn't bring in dependencies for `discord-bridge-discord4j` and `discord-bridge-kord`
 
 ## v3.2.0
 - fixed bug where class loading errors in service providers caused errors that would crash the service loader instead of just trying another provider
