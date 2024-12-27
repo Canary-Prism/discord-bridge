@@ -136,7 +136,13 @@ public interface DiscordBridge {
     private static Stream<ServiceLoader.Provider<DiscordBridge>> getCanLoad(@NotNull Object o) {
         return getServiceLoader()
                 .stream()
-                .filter((e) -> e.get().canLoadApi(o));
+                .filter((e) -> {
+                    try {
+                        return e.get().canLoadApi(o);
+                    } catch (Throwable t) {
+                        return false;
+                    }
+                });
     }
     
     /// Attempts to load the provided object and wrap it to a [DiscordApi] object,
