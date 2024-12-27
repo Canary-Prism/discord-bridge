@@ -83,8 +83,24 @@ public interface DiscordApi extends DiscordBridgeApi {
         addListener(SlashCommandInvokeListener.class, listener);
     }
     
+    /// Removes a [SlashCommandInvokeListener] from this DiscordApi
+    ///
+    /// @param listener the listener to remove
+    default void removeSlashCommandInvokeListener(@NotNull SlashCommandInvokeListener listener) {
+        removeListener(SlashCommandInvokeListener.class, listener);
+    }
+    
     /// Adds a [SlashCommandAutocompleteListener] to this DiscordApi
+    ///
+    /// @param listener the listener to add
     default void addSlashCommandAutocompleteListener(@NotNull SlashCommandAutocompleteListener listener) {
         addListener(SlashCommandAutocompleteListener.class, listener);
+    }
+    
+    /// Removes a [SlashCommandAutocompleteListener] from this DiscordApi
+    ///
+    /// @param listener the listener to remove
+    default void removeSlashCommandAutocompleteListener(@NotNull SlashCommandAutocompleteListener listener) {
+        removeListener(SlashCommandAutocompleteListener.class, listener);
     }
 }
