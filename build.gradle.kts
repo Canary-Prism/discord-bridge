@@ -73,10 +73,6 @@ allprojects {
             "implNote:a:Implementation Note:"
         )
     }
-}
-
-subprojects {
-    apply(plugin = "java-library")
 
     dependencies {
         testImplementation(platform("org.junit:junit-bom:5.10.0"))

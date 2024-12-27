@@ -11,4 +11,6 @@ repositories {
 dependencies {
     compileOnly(project(":discord-bridge-api"))
     compileOnly("org.javacord:javacord:3.8.0")
+
+    testImplementation(project(":discord-bridge-api"))
 }
