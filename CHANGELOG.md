@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.2.0
+- fixed bug where class loading errors in service providers caused errors that would crash the service loader instead of just trying another provider
+- added default convenience methods for removing listeners
+
 ## v3.1.2
 - added `Automatic-Module-Name` to META-INF/MANIFEST.MF of `discord-bridge-kord`
 
