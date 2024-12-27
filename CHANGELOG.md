@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.2.2
+- fixed bug where `discord-bridge-discord4j` and `discord-bridge-kord` didn't bring enough runtime dependencies to minimally load
+
 ## v3.2.1
 - fixed bug where depending on the root project didn't bring in dependencies for `discord-bridge-discord4j` and `discord-bridge-kord`
 
