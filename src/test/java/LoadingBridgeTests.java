@@ -46,4 +46,8 @@ public class LoadingBridgeTests {
     void kord() {
         tryLoad("canaryprism.discordbridge.kord.DiscordBridgeKord");
     }
+    
+    void discordjar() {
+        tryLoad("canaryprism.discordbridge.discordjar.DiscordBridgeDiscordJar");
+    }
 }
