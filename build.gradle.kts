@@ -94,6 +94,8 @@ dependencies {
     api(project(":discord-bridge-api"))
     runtimeOnly(project(":discord-bridge-javacord"))
     runtimeOnly(project(":discord-bridge-jda"))
+    runtimeOnly(project(":discord-bridge-discord4j"))
+    runtimeOnly(project(":discord-bridge-kord"))
 }
 
 mavenPublishing {
