@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     compileOnly(project(":discord-bridge-api"))
-    compileOnly("com.github.discord-jar:b-1.2")
+    compileOnly("com.github.discord-jar:discord.jar:b-1.2")
 
     testImplementation(project(":discord-bridge-api"))
 }
