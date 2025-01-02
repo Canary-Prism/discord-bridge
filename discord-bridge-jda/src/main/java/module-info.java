@@ -20,6 +20,7 @@ module canaryprism.discordbridge.jda {
     requires canaryprism.discordbridge.api;
     requires net.dv8tion.jda;
     requires canaryprism.commons.event;
+    requires org.slf4j;
     
     provides canaryprism.discordbridge.api.DiscordBridge
             with canaryprism.discordbridge.jda.DiscordBridgeJDA;

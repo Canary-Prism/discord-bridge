@@ -33,9 +33,9 @@ import canaryprism.discordbridge.api.message.MessageFlag;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.discord4j.channel.ChannelImpl;
+import canaryprism.discordbridge.discord4j.channel.MessageChannelImpl;
 import canaryprism.discordbridge.discord4j.channel.ServerChannelImpl;
 import canaryprism.discordbridge.discord4j.channel.ServerMessageChannelImpl;
-import canaryprism.discordbridge.discord4j.channel.MessageChannelImpl;
 import canaryprism.discordbridge.discord4j.entity.user.UserImpl;
 import canaryprism.discordbridge.discord4j.event.interaction.SlashCommandAutocompleteEventImpl;
 import canaryprism.discordbridge.discord4j.event.interaction.SlashCommandInvokeEventImpl;
@@ -56,6 +56,8 @@ import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.rest.util.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -65,6 +67,8 @@ import java.util.stream.Stream;
 /// The Discord4J implementation of [DiscordBridge]
 public final class DiscordBridgeDiscord4J implements DiscordBridge {
     
+    private static final Logger log = LoggerFactory.getLogger(DiscordBridgeDiscord4J.class);
+    
     @Override
     public boolean canLoadApi(@NotNull Object o) {
         return o instanceof GatewayDiscordClient;
@@ -72,11 +76,12 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
     
     @Override
     public @NotNull DiscordApi loadApi(@NotNull Object api) {
+        log.trace("loading '{}'", api);
         try {
             return new DiscordApiImpl(this, ((GatewayDiscordClient) api));
         } catch (ClassCastException e) {
             throw new UnsupportedImplementationException(
-                    String.format("discord-bridge-discord4j implementation can't load object %s", api));
+                    String.format("%s implementation can't load object %s", this, api));
         }
     }
     
@@ -307,7 +312,10 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
                 return (T) switch (e) {
                     case EPHEMERAL -> MessageFlag.EPHEMERAL;
                     case SUPPRESS_NOTIFICATIONS -> MessageFlag.SILENT;
-                    default -> MessageFlag.UNKNOWN;
+                    default -> {
+                        log.debug("unsupported Discord4J value '{}', converting to UNKNOWN", e);
+                        yield MessageFlag.UNKNOWN;
+                    }
                 };
             } else if (type == PermissionType.class) {
                 if (!(value instanceof Permission e)) break conversion_attempt;
@@ -411,7 +419,10 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
     
     public static DiscordLocale convertLocale(@NotNull String locale) {
         return DiscordLocale.fromLocale(Locale.forLanguageTag(locale))
-                .orElse(DiscordLocale.UNKNOWN);
+                .orElseGet(() -> {
+                    log.debug("unsupported Discord4J locale '{}', converting to UNKNOWN", locale);
+                    return DiscordLocale.UNKNOWN;
+                });
     }
     
     public static String convertLocale(@NotNull DiscordLocale locale) {

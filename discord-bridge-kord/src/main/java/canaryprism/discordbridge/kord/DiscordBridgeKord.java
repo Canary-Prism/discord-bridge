@@ -67,6 +67,7 @@ import kotlinx.coroutines.flow.FlowKt;
 import kotlinx.serialization.json.JsonElementKt;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -79,6 +80,8 @@ import static java.util.Map.entry;
 /// The JDA implementation of [DiscordBridge]
 public class DiscordBridgeKord implements DiscordBridge {
     
+    private static final Logger log = LoggerFactory.getLogger(DiscordBridgeKord.class);
+    
     @Override
     public boolean canLoadApi(@NotNull Object o) {
         return o instanceof Kord;
@@ -86,11 +89,12 @@ public class DiscordBridgeKord implements DiscordBridge {
     
     @Override
     public @NotNull DiscordApi loadApi(@NotNull Object api) {
+        log.trace("loading '{}'", api);
         try {
             return new DiscordApiImpl(this, ((Kord) api));
         } catch (ClassCastException e) {
             throw new UnsupportedImplementationException(
-                    String.format("discord-bridge-javacord implementation can't load object %s", api));
+                    String.format("%s implementation can't load object %s", this, api));
         }
     }
     

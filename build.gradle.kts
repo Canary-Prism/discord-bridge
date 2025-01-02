@@ -13,7 +13,7 @@ allprojects {
     plugins.apply("com.vanniktech.maven.publish")
 
     group = "io.github.canary-prism"
-    version = "3.2.2"
+    version = "4.0.0"
 
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
@@ -75,6 +75,7 @@ allprojects {
     }
 
     dependencies {
+        implementation(platform("org.slf4j:slf4j-bom:2.0.16"))
         testImplementation(platform("org.junit:junit-bom:5.10.0"))
         testImplementation("org.junit.jupiter:junit-jupiter")
         compileOnly("org.jetbrains:annotations:24.0.0")

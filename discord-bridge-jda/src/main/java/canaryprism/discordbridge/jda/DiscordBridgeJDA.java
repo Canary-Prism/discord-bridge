@@ -30,8 +30,8 @@ import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.jda.channel.ChannelImpl;
-import canaryprism.discordbridge.jda.channel.ServerChannelImpl;
 import canaryprism.discordbridge.jda.channel.MessageChannelImpl;
+import canaryprism.discordbridge.jda.channel.ServerChannelImpl;
 import canaryprism.discordbridge.jda.entity.user.UserImpl;
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteEventImpl;
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandInvokeEventImpl;
@@ -63,6 +63,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -72,6 +74,8 @@ import java.util.stream.Stream;
 /// The JDA implementation of [DiscordBridge]
 public final class DiscordBridgeJDA implements DiscordBridge {
     
+    private static final Logger log = LoggerFactory.getLogger(DiscordBridgeJDA.class);
+    
     @Override
     public boolean canLoadApi(@NotNull Object o) {
         return o instanceof JDA;
@@ -79,11 +83,12 @@ public final class DiscordBridgeJDA implements DiscordBridge {
     
     @Override
     public @NotNull DiscordApi loadApi(@NotNull Object api) {
+        log.trace("loading '{}'", api);
         try {
             return new DiscordApiImpl(this, ((JDA) api));
         } catch (ClassCastException e) {
             throw new UnsupportedImplementationException(
-                    String.format("discord-bridge-javacord implementation can't load object %s", api));
+                    String.format("%s implementation can't load object %s", this, api));
         }
     }
     
@@ -290,7 +295,10 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                 return (T) switch (e) {
                     case EPHEMERAL -> canaryprism.discordbridge.api.message.MessageFlag.EPHEMERAL;
                     case NOTIFICATIONS_SUPPRESSED -> canaryprism.discordbridge.api.message.MessageFlag.SILENT;
-                    default -> canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN;
+                    default -> {
+                        log.debug("unsupported JDA value '{}', converting to UNKNOWN", e);
+                        yield canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN;
+                    }
                 };
             } else if (type == PermissionType.class) {
                 if (!(value instanceof Permission e)) break conversion_attempt;
@@ -394,7 +402,10 @@ public final class DiscordBridgeJDA implements DiscordBridge {
     
     public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {
         return canaryprism.discordbridge.api.misc.DiscordLocale.fromLocale(Locale.forLanguageTag(locale.getLocale()))
-                .orElse(canaryprism.discordbridge.api.misc.DiscordLocale.UNKNOWN);
+                .orElseGet(() -> {
+                    log.debug("unsupported JDA locale '{}', converting to UNKNOWN", locale);
+                    return canaryprism.discordbridge.api.misc.DiscordLocale.UNKNOWN;
+                });
     }
     
     public static DiscordLocale convertLocale(@NotNull canaryprism.discordbridge.api.misc.DiscordLocale locale) {
