@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.0.0
+- added slf4j logging
+- fixed unchanged copied names in some implementations
+- made implementing `DiscordBridge::getImplementationType` mandatory
+
 ## v3.2.2
 - fixed bug where `discord-bridge-discord4j` and `discord-bridge-kord` didn't bring enough runtime dependencies to minimally load
 
