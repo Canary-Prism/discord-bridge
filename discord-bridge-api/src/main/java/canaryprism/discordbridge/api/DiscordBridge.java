@@ -21,9 +21,9 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public interface DiscordBridge {
     /// Tests if an implementation of [DiscordBridge] can load this object as its implementation's api object
     /// and present it as a [DiscordApi] object
     ///
-    /// if this returns `true` then [#load(java.lang.Object)] **MUST NOT FAIL**
+    /// if this returns `true` then [#load(Object)] **MUST NOT FAIL**
     ///
     /// @param o the object to test, not null
     /// @return whether this object can be loaded
@@ -51,7 +51,7 @@ public interface DiscordBridge {
     
     /// Loads the provided object to a [DiscordApi] instance
     ///
-    /// if the object was tested with [#canLoadApi(java.lang.Object)] and returned `true` this **MUST NOT FAIL**
+    /// if the object was tested with [#canLoadApi(Object)] and returned `true` this **MUST NOT FAIL**
     ///
     /// otherwise a failure should result in a [UnsupportedImplementationException] being thrown
     ///
@@ -130,7 +130,7 @@ public interface DiscordBridge {
 
     private static Logger logger() {
         class LoggerHolder {
-            static final Logger logger = LogManager.getLogger(DiscordBridge.class);
+            static final Logger logger = LoggerFactory.getLogger(DiscordBridge.class);
         }
         return LoggerHolder.logger;
     }
@@ -154,7 +154,7 @@ public interface DiscordBridge {
                     try {
                         return e.get().canLoadApi(o);
                     } catch (Throwable t) {
-                        logger().debug("'{}' threw '{}' trying to call DiscordBridge::canLoadApi, assuming can't load", e, t);
+                        logger().debug("'{}' threw exception trying to call DiscordBridge::canLoadApi, assuming can't load", e, t);
                         return false;
                     }
                 });
@@ -188,11 +188,11 @@ public interface DiscordBridge {
     /// Attempts to load the provided object and wrap it to a [DiscordApi] object,
     /// using any [DiscordBridge] implementation that can load the object
     ///
-    /// this differs from [#load(java.lang.Object)] in that
+    /// this differs from [#load(Object)] in that
     /// in the unlikely situation that multiple [DiscordBridge] implementations can load the provided object
     /// a [IllegalStateException] is thrown instead
     ///
-    /// unlike [#load(java.lang.Object)] this also must load every implementation available to be exact,
+    /// unlike [#load(Object)] this also must load every implementation available to be exact,
     /// instead of short-circuiting when it finds any suitable implementation
     ///
     /// @param api the api to load, not null

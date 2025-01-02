@@ -6,5 +6,5 @@ plugins {
 description = "The api of discord-bridge"
 
 dependencies {
-    implementation("org.apache.logging.log4j:log4j-api")
+    implementation("org.slf4j:slf4j-api")
 }
