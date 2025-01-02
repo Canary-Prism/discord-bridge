@@ -90,7 +90,7 @@ public class DiscordBridgeKord implements DiscordBridge {
             return new DiscordApiImpl(this, ((Kord) api));
         } catch (ClassCastException e) {
             throw new UnsupportedImplementationException(
-                    String.format("discord-bridge-javacord implementation can't load object %s", api));
+                    String.format("%s implementation can't load object %s", this, api));
         }
     }
     

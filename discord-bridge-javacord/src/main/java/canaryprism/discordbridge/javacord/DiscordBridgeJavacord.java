@@ -70,7 +70,7 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
             return new DiscordApiImpl(this, ((org.javacord.api.DiscordApi) api));
         } catch (ClassCastException e) {
             throw new UnsupportedImplementationException(
-                    String.format("discord-bridge-javacord implementation can't load object %s", api));
+                    String.format("%s implementation can't load object %s", this, api));
         }
     }
     

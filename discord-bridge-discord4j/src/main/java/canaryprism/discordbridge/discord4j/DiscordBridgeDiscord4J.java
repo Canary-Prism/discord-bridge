@@ -76,7 +76,7 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
             return new DiscordApiImpl(this, ((GatewayDiscordClient) api));
         } catch (ClassCastException e) {
             throw new UnsupportedImplementationException(
-                    String.format("discord-bridge-discord4j implementation can't load object %s", api));
+                    String.format("%s implementation can't load object %s", this, api));
         }
     }
     
