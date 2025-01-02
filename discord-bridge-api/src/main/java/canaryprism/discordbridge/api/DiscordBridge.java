@@ -21,6 +21,8 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
@@ -125,9 +127,20 @@ public interface DiscordBridge {
     /// @return the String representation of this DiscordBridge
     @NotNull String toString();
     
+
+    private static Logger logger() {
+        class LoggerHolder {
+            static final Logger logger = LogManager.getLogger(DiscordBridge.class);
+        }
+        return LoggerHolder.logger;
+    }
+    
     
     private static @NotNull ServiceLoader<DiscordBridge> getServiceLoader() {
         class Holder {
+            static {
+                logger().debug("loading DiscordBridge service providers");
+            }
             static final ServiceLoader<DiscordBridge> LOADER = ServiceLoader.load(DiscordBridge.class);
         }
         return Holder.LOADER;
@@ -137,9 +150,11 @@ public interface DiscordBridge {
         return getServiceLoader()
                 .stream()
                 .filter((e) -> {
+                    logger().trace("checking if '{}' can load '{}'", e, o);
                     try {
                         return e.get().canLoadApi(o);
                     } catch (Throwable t) {
+                        logger().debug("'{}' threw '{}' trying to call DiscordBridge::canLoadApi, assuming can't load", e, t);
                         return false;
                     }
                 });
@@ -155,6 +170,7 @@ public interface DiscordBridge {
     /// @throws UnsupportedImplementationException if no implementations of [DiscordBridge] could load the object
     /// @throws NullPointerException if `api` is null
     static @NotNull DiscordApi load(@NotNull Object api) {
+        logger().trace("attempting to load '{}'", api);
         Objects.requireNonNull(api, "api can't be null");
         
         if (api instanceof DiscordApi discord_api)
@@ -185,6 +201,7 @@ public interface DiscordBridge {
     /// @throws NullPointerException if `api` is null
     /// @throws IllegalStateException if multiple [DiscordBridge] implementations can load the provided object
     static @NotNull DiscordApi loadExact(@NotNull Object api) {
+        logger().trace("attempting to load '{}' exactly", api);
         Objects.requireNonNull(api, "api can't be null");
         var providers = getCanLoad(api).collect(Collectors.toSet());
         if (providers.size() > 1)
