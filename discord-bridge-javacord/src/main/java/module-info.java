@@ -19,6 +19,7 @@ module canaryprism.discordbridge.javacord {
     requires static org.jetbrains.annotations;
     requires canaryprism.discordbridge.api;
     requires org.javacord.api;
+    requires org.slf4j;
     
     provides canaryprism.discordbridge.api.DiscordBridge
             with canaryprism.discordbridge.javacord.DiscordBridgeJavacord;

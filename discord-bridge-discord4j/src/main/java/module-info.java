@@ -25,6 +25,7 @@ module canaryprism.discordbridge.discord4j {
     requires reactor.core;
     requires org.reactivestreams;
     requires canaryprism.commons.event;
+    requires org.slf4j;
     
     provides canaryprism.discordbridge.api.DiscordBridge
             with canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;

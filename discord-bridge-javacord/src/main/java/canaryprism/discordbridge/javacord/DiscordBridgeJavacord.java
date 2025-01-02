@@ -50,6 +50,8 @@ import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.interaction.*;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -59,6 +61,8 @@ import java.util.stream.Stream;
 /// The Javacord implementation of [DiscordBridge]
 public final class DiscordBridgeJavacord implements DiscordBridge {
     
+    private static final Logger log = LoggerFactory.getLogger(DiscordBridgeJavacord.class);
+    
     @Override
     public boolean canLoadApi(@NotNull Object o) {
         return o instanceof org.javacord.api.DiscordApi;
@@ -66,6 +70,7 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
     
     @Override
     public @NotNull DiscordApi loadApi(@NotNull Object api) {
+        log.trace("loading '{}'", api);
         try {
             return new DiscordApiImpl(this, ((org.javacord.api.DiscordApi) api));
         } catch (ClassCastException e) {
@@ -310,7 +315,11 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
                 return (T) switch (e) {
                     case EPHEMERAL -> canaryprism.discordbridge.api.message.MessageFlag.EPHEMERAL;
                     case SUPPRESS_NOTIFICATIONS -> canaryprism.discordbridge.api.message.MessageFlag.SILENT;
-                    default -> canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN;
+                    case UNKNOWN -> canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN;
+                    default -> {
+                        log.debug("unsupported Javacord value '{}', converting to UNKNOWN", e);
+                        yield canaryprism.discordbridge.api.message.MessageFlag.UNKNOWN;
+                    }
                 };
             } else if (type == canaryprism.discordbridge.api.server.permission.PermissionType.class) {
                 if (!(value instanceof PermissionType e)) break conversion_attempt;
@@ -400,7 +409,10 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
     
     public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {
         return canaryprism.discordbridge.api.misc.DiscordLocale.fromLocale(Locale.forLanguageTag(locale.getLocaleCode()))
-                .orElse(canaryprism.discordbridge.api.misc.DiscordLocale.UNKNOWN);
+                .orElseGet(() -> {
+                    log.debug("unsupported Javacord locale '{}', converting to UNKNOWN", locale);
+                    return canaryprism.discordbridge.api.misc.DiscordLocale.UNKNOWN;
+                });
     }
     
     public static DiscordLocale convertLocale(@NotNull canaryprism.discordbridge.api.misc.DiscordLocale locale) {

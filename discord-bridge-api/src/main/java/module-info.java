@@ -19,6 +19,8 @@
  */
 module canaryprism.discordbridge.api {
     requires static org.jetbrains.annotations;
+    requires org.slf4j;
+    
     exports canaryprism.discordbridge.api;
     exports canaryprism.discordbridge.api.interaction;
     exports canaryprism.discordbridge.api.interaction.response;
