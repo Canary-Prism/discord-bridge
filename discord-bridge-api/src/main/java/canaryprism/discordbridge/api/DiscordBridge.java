@@ -94,10 +94,6 @@ public interface DiscordBridge {
     
     /// Gets the internal implementation type of the given [DiscordBridgeApi] type
     ///
-    /// This is an optional operation **FOR NOW**, it will become abstract in the next major update
-    /// (because default methods that do nothing annoy me);
-    /// if not overridden unconditionally returns an empty optional
-    ///
     /// For any interface extending DiscordBridgeApi, its implementation's [DiscordBridgeApi#getImplementation()] method
     /// must return a value assignable to the returned type
     ///
@@ -116,9 +112,7 @@ public interface DiscordBridge {
     ///
     /// @param type the DiscordBridgeApi class to get the implementation type of
     /// @return the implementation type
-    default @NotNull Optional<? extends Class<?>> getImplementationType(@NotNull Class<? extends DiscordBridgeApi> type) {
-        return Optional.empty();
-    }
+    @NotNull Optional<? extends Class<?>> getImplementationType(@NotNull Class<? extends DiscordBridgeApi> type);
     
     /// Gets the String representation of this DiscordBridge
     ///
