@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.1.3
+- fixed `discord-bridge-javacord` depending on `log4j-to-slf4j` which breaks a lot of things
+
 ## v4.1.2
 - fixed `discord-bridge-jda` converting SlashCommandOptionData not working
 
