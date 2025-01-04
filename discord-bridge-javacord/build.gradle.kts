@@ -14,7 +14,5 @@ dependencies {
 
     implementation("org.slf4j:slf4j-api")
 
-    implementation("org.apache.logging.log4j:log4j-to-slf4j:2.24.3")
-
     testImplementation(project(":discord-bridge-api"))
 }
