@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.1.2
+- fixed `discord-bridge-jda` converting SlashCommandOptionData not working
+
 ## v4.1.1
 - fixed `discord-bridge-jda` not working at all bc of duplicate map keys
 
