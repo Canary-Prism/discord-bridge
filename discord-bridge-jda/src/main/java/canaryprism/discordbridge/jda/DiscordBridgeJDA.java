@@ -505,22 +505,27 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                                 .map((e) -> Map.entry(
                                         convertLocale(e.getKey()), e.getValue()))
                                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                        .addChoices(data.getChoices()
-                                .stream()
-                                .map(this::convertData)
-                                .toList())
                         .setRequired(data.isRequired())
-                        .setAutoComplete(data.isAutocompletable())
-                        .setChannelTypes(data.getChannelTypeBounds()
-                                .stream()
-                                .map(this::getImplementationValue)
-                                .map(ChannelType.class::cast)
-                                .collect(Collectors.toUnmodifiableSet()));
+                        .setAutoComplete(data.isAutocompletable());
                 
                 data.getIntegerBoundsMin().ifPresent(builder::setMinValue);
                 data.getIntegerBoundsMax().ifPresent(builder::setMaxValue);
                 data.getNumberBoundsMin().ifPresent(builder::setMinValue);
                 data.getNumberBoundsMax().ifPresent(builder::setMaxValue);
+                
+                if (!data.getChoices().isEmpty())
+                    builder.addChoices(data.getChoices()
+                            .stream()
+                            .map(this::convertData)
+                            .toList());
+                
+                if (!data.getChannelTypeBounds().isEmpty())
+                    builder.setChannelTypes(data.getChannelTypeBounds()
+                            .stream()
+                            .map(this::getImplementationValue)
+                            .map(ChannelType.class::cast)
+                            .collect(Collectors.toUnmodifiableSet()));
+                
                 data.getStringLengthBoundsMin().map(Long::intValue).ifPresent(builder::setMinLength);
                 data.getStringLengthBoundsMax().map(Long::intValue).ifPresent(builder::setMaxLength);
                 
