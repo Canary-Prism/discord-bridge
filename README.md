@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     // this depends on discord-bridge-api and all the provided implementations in this repository by default
-    implementation("io.github.canary-prism:discord-bridge:4.0.0") {
+    implementation("io.github.canary-prism:discord-bridge:4.1.0") {
         // you can optionally exclude unneeded implementations
         exclude(module = "discord-bridge-javacord") // change this to the module you want to disable if you want
     }
@@ -38,7 +38,7 @@ dependencies {
 <dependency>
   <groupId>io.github.canary-prism</groupId>
   <artifactId>discord-bridge</artifactId>
-  <version>4.0.0</version>
+  <version>4.1.0</version>
 </dependency>
 ```
 
@@ -99,3 +99,7 @@ they also define a `getBridge()` method which can be used to get the specific Di
 
 some of the enums in the api implement `PartialSupport`, which means that implementations are free to only support part of, or indeed none of the values in the enum  
 users should make sure to check that any given enum value of a PartialSupport enum is actually supported by any given implementation using either `PartialSupport::isSupported` or `DiscordBridge::getSupportedValues`
+
+### Logging
+
+this library uses slf4j for logging,,, mostly out of convenience because most of the other libraries use slf4j

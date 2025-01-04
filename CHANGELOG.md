@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.1.0
+- added `log4j-to-slf4j` to `discord-bridge-javacord` so logging api stays consistently slf4j
+
 ## v4.0.0
 - added slf4j logging
 - fixed unchanged copied names in some implementations
