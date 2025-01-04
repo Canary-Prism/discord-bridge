@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.1.1
+- fixed `discord-bridge-jda` not working at all bc of duplicate map keys
+
 ## v4.1.0
 - added `log4j-to-slf4j` to `discord-bridge-javacord` so logging api stays consistently slf4j
 
