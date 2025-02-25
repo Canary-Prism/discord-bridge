@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.1.4
+- fixed SlashCommandData not allowing options with both `SUBCOMMAND` and `SUBCOMMAND_GROUP` options
+
 ## v4.1.3
 - fixed `discord-bridge-javacord` depending on `log4j-to-slf4j` which breaks a lot of things
 
