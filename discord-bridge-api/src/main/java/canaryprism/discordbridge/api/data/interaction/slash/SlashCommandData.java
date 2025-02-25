@@ -288,10 +288,8 @@ public final class SlashCommandData implements CommandData {
     }
     
     static boolean isIncompatibleTypes(@NotNull SlashCommandOptionType left, @NotNull SlashCommandOptionType right) {
-        return (left != SlashCommandOptionType.SUBCOMMAND_GROUP || right != SlashCommandOptionType.SUBCOMMAND_GROUP)
-                && (left != SlashCommandOptionType.SUBCOMMAND || right != SlashCommandOptionType.SUBCOMMAND)
-                && (left == SlashCommandOptionType.SUBCOMMAND_GROUP || left == SlashCommandOptionType.SUBCOMMAND
-                || right == SlashCommandOptionType.SUBCOMMAND_GROUP || right == SlashCommandOptionType.SUBCOMMAND);
+        return (left == SlashCommandOptionType.SUBCOMMAND || left == SlashCommandOptionType.SUBCOMMAND_GROUP)
+                ^ (right == SlashCommandOptionType.SUBCOMMAND || right == SlashCommandOptionType.SUBCOMMAND_GROUP);
     }
     
     /// invoked by this's options to check if it can set required flag
