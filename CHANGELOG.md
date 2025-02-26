@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.0.0
+- added `InstallationType` enum
+- upgraded JDA to version 5.3.0
+- fixed various bugs with how SlashCommandData handled ContextTypes
+- implemented ContextTypes and Installation types for supported implementations (Discord4J and JDA), implementations that don't support them have been updated to throw UnsupportedOperationException
+- added some missing documentation here and there
+- made convertInternalObject throw UnsupportedValueException if value is of PartialSupport type instead of IllegalArgumentException
+
 ## v4.1.4
 - fixed SlashCommandData not allowing options with both `SUBCOMMAND` and `SUBCOMMAND_GROUP` options
 
