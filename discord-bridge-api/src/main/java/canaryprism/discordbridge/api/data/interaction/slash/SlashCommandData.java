@@ -390,6 +390,9 @@ public final class SlashCommandData implements CommandData {
         return this;
     }
     
+    /// Gets the contexts this slash command data is allowed to be invoked in
+    ///
+    /// @return the allowed contexts of this slash command
     public @NotNull Optional<EnumSet<ContextType>> getAllowedContexts() {
         return Optional.ofNullable(allowed_contexts)
                 .map(EnumSet::copyOf);
