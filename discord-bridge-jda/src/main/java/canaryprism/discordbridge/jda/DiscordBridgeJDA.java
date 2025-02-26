@@ -268,6 +268,9 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                 case USER_INSTALL -> IntegrationType.USER_INSTALL;
             };
         
+        if (value instanceof PartialSupport partial_support)
+            throw new UnsupportedValueException(partial_support);
+        
         throw new IllegalArgumentException(String.format("Unreachable; Unknown Value %s", value));
     }
     

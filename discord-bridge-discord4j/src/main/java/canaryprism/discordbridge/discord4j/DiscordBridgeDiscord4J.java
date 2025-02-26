@@ -285,6 +285,9 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
                 case USER_INSTALL -> 1;
             };
         
+        if (value instanceof PartialSupport partial_support)
+            throw new UnsupportedValueException(partial_support);
+        
         throw new IllegalArgumentException(String.format("Unreachable; Unknown Value %s", value));
         
     }

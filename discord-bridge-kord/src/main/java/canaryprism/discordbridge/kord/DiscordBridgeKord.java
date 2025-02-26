@@ -290,6 +290,9 @@ public class DiscordBridgeKord implements DiscordBridge {
                 case VIEW_MONETIZATION_ANALYTICS -> Permission.ViewCreatorMonetizationAnalytics.INSTANCE;
             };
         
+        if (value instanceof PartialSupport partial_support)
+            throw new UnsupportedValueException(partial_support);
+        
         throw new IllegalArgumentException(String.format("Unreachable; Unknown Value %s", value));
         
     }
