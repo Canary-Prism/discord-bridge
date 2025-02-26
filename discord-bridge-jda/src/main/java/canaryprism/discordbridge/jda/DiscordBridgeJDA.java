@@ -526,7 +526,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                             .map(ChannelType.class::cast)
                             .collect(Collectors.toUnmodifiableSet()));
                 
-                data.getStringLengthBoundsMin().map(Long::intValue).ifPresent(builder::setMinLength);
+                data.getStringLengthBoundsMin().filter((e) -> e != 0).map(Long::intValue).ifPresent(builder::setMinLength);
                 data.getStringLengthBoundsMax().map(Long::intValue).ifPresent(builder::setMaxLength);
                 
                 yield builder;
