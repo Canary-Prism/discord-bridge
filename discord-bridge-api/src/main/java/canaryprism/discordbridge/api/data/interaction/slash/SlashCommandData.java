@@ -409,7 +409,7 @@ public final class SlashCommandData implements CommandData {
             else
                 this.allowed_contexts = EnumSet.copyOf(((Set<ContextType>) allowed_contexts));
         } else {
-            this.required_permissions = null;
+            this.allowed_contexts = null;
         }
         
         return this;
