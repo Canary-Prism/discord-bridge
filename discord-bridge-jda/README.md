@@ -2,7 +2,11 @@
 
 the [JDA](https://jda.wiki/) implementation module for Discord Bridge
 
-this implementation does not support Interaction Contexts, you must utilise the deprecated `enabledInDMs` property
+~~this implementation does not support Interaction Contexts, you must utilise the deprecated `enabledInDMs` property~~
+as of at most version 5.3.0 JDA does support contexts now :D yippeeeeeeeeeee
+
+actually discovering that it does now while playing around with JDA (bc Javacord is dead :c) is the reason i found out
+about this and made this update ehehe
 
 JDA is the library with as of writing this the most up to date support of the discord api  
 but i honestly don't really like the api design

@@ -2,7 +2,11 @@
 
 the [Discord4J](https://docs.discord4j.com/) implementation module for Discord Bridge
 
-this implementation does not support Interaction Contexts, you must utilise the deprecated `enabledInDMs` property
+~~this implementation does not support Interaction Contexts, you must utilise the deprecated `enabledInDMs` property~~
+oops it actually does i was wrong sowwyy :3
+
+however its ContextType and InstallationTypes are handled just by ints? like just the raw ordinals from the api, so that's 
+like really ugly for no real reason
 
 Discord4J's reactor system is cool and all but unfortunately the api uses CompletableFutures so a lot of the interactions
 using reactive patterns had to be gutted
