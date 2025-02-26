@@ -1,5 +1,10 @@
 # Changelog
 
+## v6.0.0
+- finished adding ContextTypes and InstallationTypes to the rest of the library
+- added `getServer()` method to `Command` (mandatory)
+- made default impls `isGlobalCommand()` and `isServerCommand()` that check the presence of `getServer()`
+
 ## v5.0.0
 - added `InstallationType` enum
 - upgraded JDA to version 5.3.0
