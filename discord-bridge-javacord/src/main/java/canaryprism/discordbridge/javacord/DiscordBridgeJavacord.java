@@ -432,6 +432,8 @@ public final class DiscordBridgeJavacord implements DiscordBridge {
         
         if (data.getAllowedContexts().isPresent())
             throw new UnsupportedOperationException(String.format("%s does not support contexts", this));
+        if (data.getAllowedInstallationTypes().isPresent())
+            throw new UnsupportedOperationException(String.format("%s does not support installation types", this));
         
         if (data.isDefaultDisabled())
             builder.setDefaultDisabled();

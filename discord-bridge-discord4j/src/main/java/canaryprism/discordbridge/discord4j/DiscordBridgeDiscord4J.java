@@ -28,6 +28,8 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
+import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.message.MessageFlag;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
@@ -269,6 +271,19 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
                 
                 case VIEW_MONETIZATION_ANALYTICS -> Permission.VIEW_CREATOR_MONETIZATION_ANALYTICS;
             };
+        else if (value instanceof ContextType type)
+            return switch (type) {
+                case UNKNOWN -> throw new UnsupportedValueException(type);
+                case SERVER -> 0;
+                case BOT_DM -> 1;
+                case OTHER_DM -> 2;
+            };
+        else if (value instanceof InstallationType type)
+            return switch (type) {
+                case UNKNOWN -> throw new UnsupportedValueException(type);
+                case SERVER_INSTALL -> 0;
+                case USER_INSTALL -> 1;
+            };
         
         throw new IllegalArgumentException(String.format("Unreachable; Unknown Value %s", value));
         
@@ -313,7 +328,7 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
                     case EPHEMERAL -> MessageFlag.EPHEMERAL;
                     case SUPPRESS_NOTIFICATIONS -> MessageFlag.SILENT;
                     default -> {
-                        log.debug("unsupported Discord4J value '{}', converting to UNKNOWN", e);
+                        log.debug("unsupported Discord4J value '{}', converting to MessageFlag.UNKNOWN", e);
                         yield MessageFlag.UNKNOWN;
                     }
                 };
@@ -367,6 +382,29 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
                     case USE_SOUNDBOARD -> PermissionType.USE_SOUNDBOARD;
                     case USE_EXTERNAL_SOUNDS -> PermissionType.USE_EXTERNAL_SOUNDBOARD;
                     case SEND_VOICE_MESSAGES -> PermissionType.SEND_VOICE_MESSAGES;
+                };
+            } else if (type == ContextType.class) {
+                if (!(value instanceof Integer e)) break conversion_attempt;
+                return (T) switch (e) {
+                    case 0 -> ContextType.SERVER;
+                    case 1 -> ContextType.BOT_DM;
+                    case 2 -> ContextType.OTHER_DM;
+                    default -> {
+                        log.debug("unsupported Discord4J value '{}', converting to ContextType.UNKNOWN", e);
+                        
+                        yield ContextType.UNKNOWN;
+                    }
+                };
+            } else if (type == InstallationType.class) {
+                if (!(value instanceof Integer e)) break conversion_attempt;
+                return (T) switch (e) {
+                    case 0 -> InstallationType.SERVER_INSTALL;
+                    case 1 -> InstallationType.USER_INSTALL;
+                    default -> {
+                        log.debug("unsupported Discord4J value '{}', converting to InstallationType.UNKNOWN", e);
+                        
+                        yield InstallationType.UNKNOWN;
+                    }
                 };
             }
         }
@@ -466,13 +504,22 @@ public final class DiscordBridgeDiscord4J implements DiscordBridge {
                                         .reduce(0L, (a, b) -> a | b)
                                 )
                                 .map(String::valueOf)
-                );
+                )
+                .nsfw(data.isNSFW());
         
-        if (data.getAllowedContexts().isPresent())
-            throw new UnsupportedOperationException(String.format("%s does not support contexts", this));
+        data.getAllowedContexts()
+                .map((e) -> e.stream()
+                        .map(this::getImplementationValue)
+                        .map(Integer.class::cast)
+                        .toList())
+                .ifPresent(builder::contexts);
         
-        if (data.isNSFW())
-            throw new IllegalArgumentException(String.format("%s doesn't support nsfw commands", this));
+        data.getAllowedInstallationTypes()
+                .map((e) -> e.stream()
+                        .map(this::getImplementationValue)
+                        .map(Integer.class::cast)
+                        .toList())
+                .ifPresent(builder::integrationTypes);
         
         return builder.build();
     }

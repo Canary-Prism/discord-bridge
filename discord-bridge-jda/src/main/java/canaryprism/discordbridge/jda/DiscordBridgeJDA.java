@@ -27,6 +27,8 @@ import canaryprism.discordbridge.api.enums.PartialSupport;
 import canaryprism.discordbridge.api.enums.TypeValue;
 import canaryprism.discordbridge.api.exceptions.UnsupportedImplementationException;
 import canaryprism.discordbridge.api.exceptions.UnsupportedValueException;
+import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.jda.channel.ChannelImpl;
@@ -56,6 +58,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.IntegrationType;
+import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -250,6 +254,19 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                 case ADMINISTRATOR -> Permission.ADMINISTRATOR;
                 case VIEW_MONETIZATION_ANALYTICS -> Permission.VIEW_CREATOR_MONETIZATION_ANALYTICS;
             };
+        else if (value instanceof ContextType type)
+            return switch (type) {
+                case UNKNOWN -> InteractionContextType.UNKNOWN;
+                case SERVER -> InteractionContextType.GUILD;
+                case BOT_DM -> InteractionContextType.BOT_DM;
+                case OTHER_DM -> InteractionContextType.PRIVATE_CHANNEL;
+            };
+        else if (value instanceof InstallationType type)
+            return switch (type) {
+                case UNKNOWN -> IntegrationType.UNKNOWN;
+                case SERVER_INSTALL -> IntegrationType.GUILD_INSTALL;
+                case USER_INSTALL -> IntegrationType.USER_INSTALL;
+            };
         
         throw new IllegalArgumentException(String.format("Unreachable; Unknown Value %s", value));
     }
@@ -313,8 +330,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                     case MANAGE_WEBHOOKS -> PermissionType.MANAGE_WEBHOOKS;
                     case MANAGE_GUILD_EXPRESSIONS -> PermissionType.MANAGE_EXPRESSIONS;
                     case MANAGE_EVENTS -> PermissionType.MANAGE_EVENTS;
-                    //noinspection deprecation
-                    case USE_EMBEDDED_ACTIVITIES, VOICE_START_ACTIVITIES -> PermissionType.START_EMBEDDED_ACTIVITIES;
+                    case USE_EMBEDDED_ACTIVITIES -> PermissionType.START_EMBEDDED_ACTIVITIES;
                     case VIEW_CREATOR_MONETIZATION_ANALYTICS -> PermissionType.VIEW_MONETIZATION_ANALYTICS;
                     case CREATE_GUILD_EXPRESSIONS -> PermissionType.CREATE_EXPRESSIONS;
                     case CREATE_SCHEDULED_EVENTS -> PermissionType.CREATE_EVENTS;
@@ -357,6 +373,21 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                     case ADMINISTRATOR -> PermissionType.ADMINISTRATOR;
                     case UNKNOWN -> PermissionType.UNKNOWN;
                 };
+            } else if (type == ContextType.class) {
+                if (!(value instanceof InteractionContextType e)) break conversion_attempt;
+                return (T) switch (e) {
+                    case UNKNOWN -> ContextType.UNKNOWN;
+                    case GUILD -> ContextType.SERVER;
+                    case BOT_DM -> ContextType.BOT_DM;
+                    case PRIVATE_CHANNEL -> ContextType.OTHER_DM;
+                };
+            } else if (type == InstallationType.class) {
+                if (!(value instanceof IntegrationType e)) break conversion_attempt;
+                return (T) switch (e) {
+                    case UNKNOWN -> InstallationType.UNKNOWN;
+                    case GUILD_INSTALL -> InstallationType.SERVER_INSTALL;
+                    case USER_INSTALL -> InstallationType.USER_INSTALL;
+                };
             }
         }
         
@@ -398,7 +429,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
     
     @Override
     public @NotNull String toString() {
-        return "DiscordBridge JDA 5.0.1 Implementation";
+        return "DiscordBridge JDA 5.3.0 Implementation";
     }
     
     public static canaryprism.discordbridge.api.misc.DiscordLocale convertLocale(@NotNull DiscordLocale locale) {
@@ -413,6 +444,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
         return DiscordLocale.from(locale.locale);
     }
     
+    @SuppressWarnings("deprecation")
     public @NotNull net.dv8tion.jda.api.interactions.commands.build.SlashCommandData convertData(@NotNull SlashCommandData data) {
         var builder = Commands.slash(data.getName(), data.getDescription())
                 .setNameLocalizations(data.getNameLocalizations()
@@ -435,8 +467,19 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                 .setGuildOnly(!data.isEnabledInDMs())
                 .setNSFW(data.isNSFW());
         
-        if (data.getAllowedContexts().isPresent())
-            throw new UnsupportedOperationException(String.format("%s does not support contexts", this));
+        data.getAllowedContexts()
+                .map((e) -> e.stream()
+                        .map(this::getImplementationValue)
+                        .map(InteractionContextType.class::cast)
+                        .toList())
+                .ifPresent(builder::setContexts);
+        
+        data.getAllowedInstallationTypes()
+                .map((e) -> e.stream()
+                        .map(this::getImplementationValue)
+                        .map(IntegrationType.class::cast)
+                        .toList())
+                .ifPresent(builder::setIntegrationTypes);
         
         if (data.isDefaultDisabled())
             builder.setDefaultPermissions(DefaultMemberPermissions.DISABLED);

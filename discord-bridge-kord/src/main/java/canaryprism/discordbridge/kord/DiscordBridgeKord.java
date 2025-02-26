@@ -460,6 +460,12 @@ public class DiscordBridgeKord implements DiscordBridge {
     }
     
     public @NotNull ApplicationCommandCreateRequest convertData(@NotNull SlashCommandData data) {
+        if (data.getAllowedContexts().isPresent()) {
+            throw new UnsupportedOperationException(String.format("%s does not support contexts", this));
+        }
+        if (data.getAllowedInstallationTypes().isPresent()) {
+            throw new UnsupportedOperationException(String.format("%s does not support installation types", this));
+        }
         return new ApplicationCommandCreateRequest(
                 data.getName(),
                 dev.kord.common.entity.optional.Optional.Companion.invoke(data.getNameLocalizations()
