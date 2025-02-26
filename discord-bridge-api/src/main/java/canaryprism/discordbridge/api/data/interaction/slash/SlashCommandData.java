@@ -18,6 +18,7 @@ package canaryprism.discordbridge.api.data.interaction.slash;
 
 import canaryprism.discordbridge.api.data.interaction.CommandData;
 import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
@@ -57,6 +58,7 @@ public final class SlashCommandData implements CommandData {
     private volatile @Nullable EnumSet<PermissionType> required_permissions = null;
     private volatile boolean enabled_in_DMs = true;
     private volatile @Nullable EnumSet<ContextType> allowed_contexts = null;
+    private volatile @Nullable EnumSet<InstallationType> allowed_installation_types = null;
     private volatile boolean nsfw = false;
     
     /// Constructs a new SlashCommandData instance with the given name and description
@@ -400,17 +402,56 @@ public final class SlashCommandData implements CommandData {
     
     /// Sets the contexts this slash command data is allowed to be invoked in
     ///
+    /// Must not be empty
+    ///
     /// Should be used instead of [#setEnabledInDMs(boolean)] which is deprecated
     ///
     /// @param allowed_contexts contexts where this slash command data may be used
     /// @return this
+    /// @implNote If you don't specify this here the discord docs states that it will default to allowing
+    ///           all contexts, however implementations may abstract over this and provide their own default
+    ///           value, meaning this is undefined behaviour
     @SuppressWarnings({ "unchecked", "OverlyStrongTypeCast" })
     public @NotNull SlashCommandData setAllowedContexts(@Nullable Set<? extends ContextType> allowed_contexts) {
         if (allowed_contexts != null) {
             if (allowed_contexts.isEmpty())
-                this.allowed_contexts = EnumSet.noneOf(ContextType.class);
+                throw new IllegalArgumentException("allowed contexts must not be empty; set it to null to allow default behaviour");
             else
                 this.allowed_contexts = EnumSet.copyOf(((Set<ContextType>) allowed_contexts));
+        } else {
+            this.allowed_contexts = null;
+        }
+        
+        return this;
+    }
+    
+    /// Gets the installation types this slash command data is allowed to be invoked for
+    ///
+    /// @return the allowed installation types of this slash command
+    public @NotNull Optional<EnumSet<InstallationType>> getAllowedInstallationTypes() {
+        return Optional.ofNullable(allowed_installation_types);
+    }
+    
+    /// Sets the installation types this slash command data is allowed to be invoked for
+    ///
+    /// Must not be empty
+    ///
+    /// The installation type is where the bot belongs to and so what form of the bot you're interacting with.
+    /// For example, if a bot is installed on a server, and this is set to [InstallationType#USER_INSTALL], you may not invoke this command
+    /// even if its [#setAllowedContexts(java.util.Set)] is set to *allow* the [ContextType#SERVER] context
+    ///
+    /// @param allowed_installation_types installation types where this slash command data may be used
+    /// @return this
+    /// @implNote If you don't specify this here the discord docs states that it will default to allowing
+    ///           all contexts, however implementations may abstract over this and provide their own default
+    ///           value, meaning this is undefined behaviour
+    @SuppressWarnings({ "OverlyStrongTypeCast", "unchecked" })
+    public @NotNull SlashCommandData setAllowedInstallationTypes(@Nullable Set<? extends InstallationType> allowed_installation_types) {
+        if (allowed_installation_types != null) {
+            if (allowed_installation_types.isEmpty())
+                throw new IllegalArgumentException("allowed installation types must not be empty; set it to null to allow default behaviour");
+            else
+                this.allowed_installation_types = EnumSet.copyOf(((Set<InstallationType>) allowed_installation_types));
         } else {
             this.allowed_contexts = null;
         }

@@ -18,11 +18,12 @@ package canaryprism.discordbridge.api.enums;
 
 import canaryprism.discordbridge.api.channel.ChannelType;
 import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOptionType;
 import canaryprism.discordbridge.api.message.MessageFlag;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 
 /// Marker interface for enums belonging to the discord-bridge api
-public sealed interface DiscordBridgeEnum permits ChannelType, PartialSupport, TypeValue, ContextType, SlashCommandOptionType, MessageFlag, DiscordLocale, PermissionType {
+public sealed interface DiscordBridgeEnum permits ChannelType, PartialSupport, TypeValue, ContextType, InstallationType, SlashCommandOptionType, MessageFlag, DiscordLocale, PermissionType {
 }
