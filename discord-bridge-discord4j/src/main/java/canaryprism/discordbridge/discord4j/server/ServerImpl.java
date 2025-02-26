@@ -24,7 +24,7 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
 import canaryprism.discordbridge.discord4j.interaction.slash.SlashCommandImpl;
-import discord4j.core.DiscordClient;
+import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.entity.Guild;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public record ServerImpl(DiscordBridgeDiscord4J bridge, Guild server, DiscordClient client, CompletableFuture<Long> app_id) implements Server {
+public record ServerImpl(DiscordBridgeDiscord4J bridge, Guild server, GatewayDiscordClient client, CompletableFuture<Long> app_id) implements Server {
     
     @Override
     public @NotNull String getName() {
@@ -42,7 +42,8 @@ public record ServerImpl(DiscordBridgeDiscord4J bridge, Guild server, DiscordCli
     
     @Override
     public @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull SlashCommand>> getServerSlashCommands() {
-        return client.getApplicationService()
+        return client.rest()
+                .getApplicationService()
                 .getGuildApplicationCommands(app_id.join(), server.getId().asLong())
                 .filter((e) -> e.type().toOptional().map((type) -> type == 1).orElse(false))
                 .map((e) -> new SlashCommandImpl(bridge, e, client))
@@ -52,7 +53,8 @@ public record ServerImpl(DiscordBridgeDiscord4J bridge, Guild server, DiscordCli
     
     @Override
     public @NotNull CompletableFuture<? extends @NotNull @Unmodifiable Set<? extends @NotNull Command>> bulkUpdateServerCommands(Set<? extends @NotNull CommandData> commands) {
-        return client.getApplicationService()
+        return client.rest()
+                .getApplicationService()
                 .bulkOverwriteGuildApplicationCommand(
                         app_id.join(),
                         server.getId().asLong(),

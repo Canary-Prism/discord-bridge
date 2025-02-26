@@ -60,8 +60,7 @@ public record SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInp
                         .map((e) -> new ServerImpl(
                                 bridge,
                                 e,
-                                event.getClient()
-                                        .rest(),
+                                event.getClient(),
                                 event.getClient()
                                         .rest()
                                         .getApplicationId()

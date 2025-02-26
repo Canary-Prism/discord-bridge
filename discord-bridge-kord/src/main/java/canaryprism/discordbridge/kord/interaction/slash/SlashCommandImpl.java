@@ -18,11 +18,14 @@ package canaryprism.discordbridge.kord.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
+import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.kord.DiscordBridgeKord;
+import canaryprism.discordbridge.kord.server.ServerImpl;
 import dev.kord.common.Locale;
 import dev.kord.common.entity.ApplicationCommandOption;
 import dev.kord.common.entity.DiscordApplicationCommand;
@@ -30,6 +33,8 @@ import dev.kord.common.entity.Permissions;
 import dev.kord.common.entity.Snowflake;
 import dev.kord.common.entity.optional.Optional.Value;
 import dev.kord.core.Kord;
+import dev.kord.core.entity.Guild;
+import kotlin.ResultKt;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
@@ -125,6 +130,37 @@ public record SlashCommandImpl(DiscordBridgeKord bridge, DiscordApplicationComma
     @Override
     public @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts() {
         throw new UnsupportedOperationException(String.format("%s does not support contexts", bridge));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends @Unmodifiable Set<? extends InstallationType>> getInstallationTypes() {
+        throw new UnsupportedOperationException(String.format("%s does not support install types", bridge));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Server> getServer() {
+        return Optional.ofNullable(command.getGuildId().getValue())
+                .map((e) -> {
+                    var future = new CompletableFuture<ServerImpl>();
+                    kord.getGuild(e, kord.getResources().getDefaultStrategy(), new Continuation<>() {
+                                @Override
+                                public @NotNull CoroutineContext getContext() {
+                                    return EmptyCoroutineContext.INSTANCE;
+                                }
+                                
+                                @Override
+                                public void resumeWith(@NotNull Object o) {
+                                    try {
+                                        ResultKt.throwOnFailure(o);
+                                        future.complete(new ServerImpl(bridge, ((Guild) o), kord));
+                                    } catch (Throwable t) {
+                                        future.completeExceptionally(t);
+                                    }
+                                    
+                                }
+                            });
+                    return future.join();
+                });
     }
     
     @Override

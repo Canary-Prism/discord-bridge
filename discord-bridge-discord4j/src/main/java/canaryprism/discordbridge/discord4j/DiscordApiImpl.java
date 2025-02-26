@@ -59,7 +59,7 @@ public class DiscordApiImpl implements DiscordApi {
                 .getApplicationId()
                 .toFuture();
         this.guilds = api.getGuilds()
-                .map((e) -> new ServerImpl(bridge, e, api.rest(), app_id))
+                .map((e) -> new ServerImpl(bridge, e, api, app_id))
                 .collect(Collectors.toUnmodifiableSet())
                 .toFuture();
         
@@ -88,7 +88,7 @@ public class DiscordApiImpl implements DiscordApi {
                 .getApplicationService()
                 .getGlobalApplicationCommands(app_id.join())
                 .filter((e) -> e.type().toOptional().map((type) -> type == 1).orElse(false))
-                .map((e) -> new SlashCommandImpl(bridge, e, api.rest()))
+                .map((e) -> new SlashCommandImpl(bridge, e, api))
                 .collect(Collectors.toUnmodifiableSet())
                 .toFuture();
     }
@@ -103,7 +103,7 @@ public class DiscordApiImpl implements DiscordApi {
                                 .map(SlashCommandData.class::cast)
                                 .map(bridge::convertData)
                                 .toList())
-                .map((e) -> new SlashCommandImpl(bridge, e, api.rest()))
+                .map((e) -> new SlashCommandImpl(bridge, e, api))
                 .collect(Collectors.toUnmodifiableSet())
                 .toFuture();
     }

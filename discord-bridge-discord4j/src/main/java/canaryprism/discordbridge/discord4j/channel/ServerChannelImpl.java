@@ -36,8 +36,7 @@ public class ServerChannelImpl<T extends GuildChannel> extends ChannelImpl<T> im
                 .map((e) -> new ServerImpl(
                         bridge,
                         e,
-                        channel.getClient()
-                                .rest(),
+                        channel.getClient(),
                         channel.getClient()
                                 .rest()
                                 .getApplicationId()

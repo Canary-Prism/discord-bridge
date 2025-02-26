@@ -18,11 +18,14 @@ package canaryprism.discordbridge.javacord.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
+import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
+import canaryprism.discordbridge.javacord.server.ServerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -67,6 +70,17 @@ public record SlashCommandImpl(DiscordBridge bridge, org.javacord.api.interactio
     @Override
     public @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts() {
         throw new UnsupportedOperationException(String.format("%s does not support contexts", bridge));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends @Unmodifiable Set<? extends InstallationType>> getInstallationTypes() {
+        throw new UnsupportedOperationException(String.format("%s does not support install types", bridge));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Server> getServer() {
+        return command.getServer()
+                .map((e) -> new ServerImpl((DiscordBridgeJavacord) bridge, e));
     }
     
     @Override

@@ -19,6 +19,7 @@ package canaryprism.discordbridge.api.interaction;
 import canaryprism.discordbridge.api.entity.DiscordEntity;
 import canaryprism.discordbridge.api.misc.LocalizedDescribable;
 import canaryprism.discordbridge.api.misc.LocalizedNameable;
+import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -68,10 +69,26 @@ public interface Command extends DiscordEntity, LocalizedNameable, LocalizedDesc
     /// @return contexts where this command may be used
     @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts();
     
+    /// [InstallationType]s where the command is installed in
+    ///
+    /// Not applicable to and therefore empty for Server Commands since by definition they can only be installed by [InstallationType#SERVER_INSTALL]
+    ///
+    /// @return installation types where the command is installed in
+    @NotNull Optional<? extends @Unmodifiable Set<? extends InstallationType>> getInstallationTypes();
+    
+    /// Gets the server where this command is registered in, if present
+    ///
+    /// This will only be present if this command [#isServerCommand()], empty otherwise
+    ///
+    /// @return the server this command is registered in, if a server command
+    @NotNull Optional<? extends Server> getServer();
+    
     /// Gets whether this command is a global command or not
     ///
     /// @return whether this command is a global command
-    boolean isGlobalCommand();
+    default boolean isGlobalCommand() {
+        return getServer().isEmpty();
+    }
     
     /// Gets whether this command is a server command or not
     ///
@@ -80,7 +97,9 @@ public interface Command extends DiscordEntity, LocalizedNameable, LocalizedDesc
     /// if `true` this means [#isEnabledInDMs()] must return `false`
     ///
     /// @return whether this command is a server command
-    boolean isServerCommand();
+    default boolean isServerCommand() {
+        return getServer().isPresent();
+    }
     
     /// Gets whether this command is NSFW or not
     ///

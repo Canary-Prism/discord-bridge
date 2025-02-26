@@ -18,12 +18,16 @@ package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
+import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
+import canaryprism.discordbridge.jda.server.ServerImpl;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.internal.interactions.command.CommandImpl;
@@ -82,32 +86,48 @@ public record SlashCommandImpl(DiscordBridge bridge, Command command) implements
     
     @Override
     public @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts() {
-        throw new UnsupportedOperationException(String.format("%s does not support contexts", bridge));
+        if (isServerCommand())
+            return Optional.empty();
+        
+        return Optional.of(command.getContexts()
+                .stream()
+                .map((e) -> bridge.convertInternalObject(ContextType.class, e))
+                .collect(Collectors.toUnmodifiableSet()));
     }
     
     @Override
-    public boolean isGlobalCommand() {
+    public @NotNull Optional<? extends @Unmodifiable Set<? extends InstallationType>> getInstallationTypes() {
+        if (isServerCommand())
+            return Optional.empty();
+        
+        return Optional.of(command.getIntegrationTypes()
+                .stream()
+                .map((e) -> bridge.convertInternalObject(InstallationType.class, e))
+                .collect(Collectors.toUnmodifiableSet()));
+
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Server> getServer() {
         class FieldHolder {
             static final Field guild_field;
             static {
                 try {
-                     guild_field = CommandImpl.class.getDeclaredField("guild");
-                     guild_field.trySetAccessible();
+                    guild_field = CommandImpl.class.getDeclaredField("guild");
+                    guild_field.trySetAccessible();
                 } catch (NoSuchFieldException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
         try {
-            return FieldHolder.guild_field.get(command) == null;
+            var guild = (Guild) FieldHolder.guild_field.get(command);
+            
+            return Optional.ofNullable(guild)
+                    .map((e) -> new ServerImpl((DiscordBridgeJDA) bridge, e));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-    }
-    
-    @Override
-    public boolean isServerCommand() {
-        return !isGlobalCommand();
     }
     
     @Override

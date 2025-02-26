@@ -94,7 +94,7 @@ public record SlashCommandAutocompleteInteractionImpl(DiscordBridgeDiscord4J bri
         return event.getInteraction()
                 .getGuild()
                 .blockOptional()
-                .map((e) -> new ServerImpl(bridge, e, e.getClient().rest(), e.getClient().rest().getApplicationId().toFuture()));
+                .map((e) -> new ServerImpl(bridge, e, e.getClient(), e.getClient().rest().getApplicationId().toFuture()));
     }
     
     @Override

@@ -18,12 +18,17 @@ package canaryprism.discordbridge.discord4j.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.ContextType;
+import canaryprism.discordbridge.api.interaction.InstallationType;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandOption;
 import canaryprism.discordbridge.api.misc.DiscordLocale;
+import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.api.server.permission.PermissionType;
 import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
-import discord4j.core.DiscordClient;
+import canaryprism.discordbridge.discord4j.server.ServerImpl;
+import discord4j.common.util.Snowflake;
+import discord4j.core.GatewayDiscordClient;
+import discord4j.core.object.entity.ApplicationInfo;
 import discord4j.discordjson.json.ApplicationCommandData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -36,7 +41,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public record SlashCommandImpl(DiscordBridgeDiscord4J bridge, ApplicationCommandData data, DiscordClient client) implements SlashCommand {
+public record SlashCommandImpl(DiscordBridgeDiscord4J bridge, ApplicationCommandData data, GatewayDiscordClient client) implements SlashCommand {
     
     @Override
     public @NotNull String getName() {
@@ -116,6 +121,7 @@ public record SlashCommandImpl(DiscordBridgeDiscord4J bridge, ApplicationCommand
                 .map(bridge::parsePermissionBitFlag);
     }
     
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isEnabledInDMs() {
         return !data.dmPermission()
@@ -125,7 +131,38 @@ public record SlashCommandImpl(DiscordBridgeDiscord4J bridge, ApplicationCommand
     
     @Override
     public @NotNull Optional<? extends @Unmodifiable Set<? extends ContextType>> getAllowedContexts() {
-        throw new UnsupportedOperationException(String.format("%s does not support contexts", bridge));
+        if (isServerCommand())
+            return Optional.empty();
+        
+        return Optional.of(data.contexts()
+                .stream()
+                .map((e) -> bridge.convertInternalObject(ContextType.class, e))
+                .collect(Collectors.toUnmodifiableSet()));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends @Unmodifiable Set<? extends InstallationType>> getInstallationTypes() {
+        if (isServerCommand())
+            return Optional.empty();
+        
+        return Optional.of(data.integrationTypes()
+                .stream()
+                .map((e) -> bridge.convertInternalObject(InstallationType.class, e))
+                .collect(Collectors.toUnmodifiableSet()));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Server> getServer() {
+        return data.guildId()
+                .toOptional()
+                .map(Snowflake::of)
+                .map(client::getGuildById)
+                .map((e) ->
+                        new ServerImpl(bridge, e.block(), client,
+                                client.getApplicationInfo()
+                                        .map(ApplicationInfo::getId)
+                                        .map(Snowflake::asLong)
+                                        .toFuture()));
     }
     
     @Override
@@ -146,13 +183,15 @@ public record SlashCommandImpl(DiscordBridgeDiscord4J bridge, ApplicationCommand
     @Override
     public CompletableFuture<Void> delete() {
         if (isGlobalCommand())
-            return client.getApplicationService()
+            return client.rest()
+                    .getApplicationService()
                     .deleteGlobalApplicationCommand(
                             data.applicationId().asLong(),
                             data.id().asLong())
                     .toFuture();
         else
-            return client.getApplicationService()
+            return client.rest()
+                    .getApplicationService()
                     .deleteGuildApplicationCommand(
                             data.applicationId().asLong(),
                             data.guildId().get().asLong(),
