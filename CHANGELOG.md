@@ -1,5 +1,8 @@
 # Changelog
 
+## v6.0.1
+- made discord-bridge-jda's SlashCommandInteractionImpl::getServerCommandServerId cache the result which should make it block less
+
 ## v6.0.0
 - finished adding ContextTypes and InstallationTypes to the rest of the library
 - added `getServer()` method to `Command` (mandatory)
