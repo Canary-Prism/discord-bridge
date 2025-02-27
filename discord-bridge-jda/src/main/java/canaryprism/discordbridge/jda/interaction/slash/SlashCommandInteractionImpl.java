@@ -41,9 +41,7 @@ import net.dv8tion.jda.internal.interactions.command.CommandImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class SlashCommandInteractionImpl implements SlashCommandInteraction {
@@ -54,9 +52,19 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     public SlashCommandInteractionImpl(DiscordBridgeJDA bridge, CommandInteractionPayload interaction) {
         this.bridge = bridge;
         this.interaction = interaction;
-        this.future_command = interaction.getJDA()
-                        .retrieveCommandById(interaction.getCommandId())
-                        .submit();
+        
+        var id = interaction.getCommandIdLong();
+        
+        if (command_cache.containsKey(id))
+            this.future_command = CompletableFuture.completedFuture(command_cache.get(id));
+        else
+            this.future_command = interaction.getJDA()
+                    .retrieveCommandById(interaction.getCommandId())
+                    .submit()
+                    .thenApply((e) -> {
+                        command_cache.put(id, e);
+                        return e;
+                    });
     }
     
     @Override
@@ -73,6 +81,8 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     public @NotNull String getCommandName() {
         return interaction.getName();
     }
+    
+    private static final Map<Long, Command> command_cache = Collections.synchronizedMap(new HashMap<>());
     
     @Override
     public @NotNull Optional<Long> getServerCommandServerId() {
