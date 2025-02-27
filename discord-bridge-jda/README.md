@@ -16,3 +16,6 @@ obviously you can always just wrap it by `Optional.ofNullable()` but it's always
 and inventing your own data type to deal with async requests and chaining and callbacks is a bit unnecessary
 when CompletableFuture already exists innit?
 
+a couple of methods in this implementation actually block despite returning Optionals as specified in discord-bridge-api,
+this makes JDA probably the slowest implementation if you're using slavacord which uses a lot of the data in order to lookup
+the method it should invoke
