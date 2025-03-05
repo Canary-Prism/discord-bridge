@@ -56,7 +56,7 @@ import net.dv8tion.jda.api.entities.Message.MessageFlag;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
-import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.IntegrationType;
 import net.dv8tion.jda.api.interactions.InteractionContextType;
@@ -145,7 +145,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                 case NUMBER -> Double.class;
                 case BOOLEAN -> Boolean.class;
                 case USER -> User.class;
-                case CHANNEL -> GuildChannelUnion.class;
+                case CHANNEL -> GuildChannel.class;
                 case ROLE -> Role.class;
                 case MENTIONABLE -> IMentionable.class;
                 case ATTACHMENT -> Message.Attachment.class;
