@@ -1,5 +1,8 @@
 # Changelog
 
+## v6.0.2
+- fixed bug where JDA didn't convert subcommands and subcommand groups properly
+
 ## v6.0.1
 - made discord-bridge-jda's SlashCommandInteractionImpl::getServerCommandServerId cache the result which should make it block less
 
