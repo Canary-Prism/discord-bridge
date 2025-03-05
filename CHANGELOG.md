@@ -1,5 +1,8 @@
 # Changelog
 
+## v6.0.3
+- fixed inconsistency with discord-bridge-jda where `ServerChannel`'s implementation type is `GuildChannel` but the type representation of `SlashCommandOptionType.CHANNEL` was `GuildChannelUnion`
+
 ## v6.0.2
 - fixed bug where JDA didn't convert subcommands and subcommand groups properly
 
