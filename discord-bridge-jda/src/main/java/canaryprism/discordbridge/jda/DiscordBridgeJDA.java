@@ -462,13 +462,34 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                         .map((e) -> Map.entry(
                                 convertLocale(e.getKey()), e.getValue()))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                .addOptions(data.getOptions()
-                        .stream()
-                        .map(this::convertData)
-                        .map(OptionData.class::cast)
-                        .toList())
                 .setGuildOnly(!data.isEnabledInDMs())
                 .setNSFW(data.isNSFW());
+        
+        var options = new ArrayList<OptionData>();
+        var subcommands = new ArrayList<SubcommandData>();
+        var subcommand_groups = new ArrayList<SubcommandGroupData>();
+        
+        for (var e : data.getOptions()) {
+            var converted = convertData(e);
+            
+            if (converted instanceof OptionData option_data)
+                options.add(option_data);
+            
+            if (converted instanceof SubcommandData subcommand_data)
+                subcommands.add(subcommand_data);
+            
+            if (converted instanceof SubcommandGroupData subcommand_group_data)
+                subcommand_groups.add(subcommand_group_data);
+        }
+        
+        if (!options.isEmpty())
+            builder.addOptions(options);
+        
+        if (!subcommands.isEmpty())
+            builder.addSubcommands(subcommands);
+        
+        if (!subcommand_groups.isEmpty())
+            builder.addSubcommandGroups(subcommand_groups);
         
         data.getAllowedContexts()
                 .map((e) -> e.stream()
