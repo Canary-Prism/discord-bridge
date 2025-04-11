@@ -1,5 +1,8 @@
 # Changelog
 
+## v6.0.4
+- made discord-bridge-jda cache all slash commands it happens to receive from discord so it blocks even less
+
 ## v6.0.3
 - fixed inconsistency with discord-bridge-jda where `ServerChannel`'s implementation type is `GuildChannel` but the type representation of `SlashCommandOptionType.CHANNEL` was `GuildChannelUnion`
 
