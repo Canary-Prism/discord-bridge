@@ -25,6 +25,7 @@ import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.jda.DiscordApiImpl;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import canaryprism.discordbridge.jda.channel.ChannelDirector;
 import canaryprism.discordbridge.jda.entity.user.UserImpl;
@@ -54,8 +55,9 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
         this.interaction = interaction;
         
         var id = interaction.getCommandIdLong();
-        
-        if (command_cache.containsKey(id))
+        if (DiscordApiImpl.command_cache.containsKey(id))
+            this.future_command = CompletableFuture.completedFuture(DiscordApiImpl.command_cache.get(id));
+        else if (command_cache.containsKey(id))
             this.future_command = CompletableFuture.completedFuture(command_cache.get(id));
         else
             this.future_command = interaction.getJDA()

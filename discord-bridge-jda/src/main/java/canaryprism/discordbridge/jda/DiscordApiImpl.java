@@ -34,8 +34,12 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -64,12 +68,15 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
         });
     }
     
+    public static final Map<Long, Command> command_cache = Collections.synchronizedMap(new HashMap<>());
+    
     @Override
     public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands() {
         return jda.retrieveCommands()
                 .submit()
                 .thenApply((list) ->
                         list.stream()
+                                .peek((e) -> command_cache.put(e.getIdLong(), e))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
                 );
@@ -85,6 +92,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .submit()
                 .thenApply((list) ->
                         list.stream()
+                                .peek((e) -> command_cache.put(e.getIdLong(), e))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet()));
     }
