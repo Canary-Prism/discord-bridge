@@ -1,5 +1,8 @@
 # Changelog
 
+## v6.0.5
+- fixed a bug where discord-bridge-jda and discord-bridge-kord would include *all* application commands in DiscordApi and Server's `getApplicationCommands()` methods instead of only slash commands
+
 ## v6.0.4
 - made discord-bridge-jda cache all slash commands it happens to receive from discord so it blocks even less
 
