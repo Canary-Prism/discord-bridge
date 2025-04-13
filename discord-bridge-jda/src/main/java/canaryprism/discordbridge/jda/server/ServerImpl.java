@@ -39,6 +39,7 @@ public record ServerImpl(DiscordBridgeJDA bridge, Guild server) implements Serve
                 .submit()
                 .thenApply((list) ->
                         list.stream()
+                                .filter((e) -> e.getType() == net.dv8tion.jda.api.interactions.commands.Command.Type.SLASH)
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
                 );

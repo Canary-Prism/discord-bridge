@@ -30,6 +30,7 @@ import canaryprism.discordbridge.kord.event.interaction.SlashCommandAutocomplete
 import canaryprism.discordbridge.kord.event.interaction.SlashCommandInvokeEventImpl;
 import canaryprism.discordbridge.kord.interaction.slash.SlashCommandImpl;
 import canaryprism.discordbridge.kord.server.ServerImpl;
+import dev.kord.common.entity.ApplicationCommandType;
 import dev.kord.common.entity.DiscordApplicationCommand;
 import dev.kord.core.Kord;
 import dev.kord.core.event.interaction.AutoCompleteInteractionCreateEvent;
@@ -83,6 +84,7 @@ public record DiscordApiImpl(DiscordBridgeKord bridge, Kord kord, EventListenerL
                         @SuppressWarnings("unchecked") var list = ((List<DiscordApplicationCommand>) o);
                         
                         future.complete(list.stream()
+                                .filter((e) -> e.getType().getValue() == ApplicationCommandType.ChatInput.INSTANCE)
                                 .map((e) -> new SlashCommandImpl(bridge, e, kord))
                                 .collect(Collectors.toUnmodifiableSet()));
                     }

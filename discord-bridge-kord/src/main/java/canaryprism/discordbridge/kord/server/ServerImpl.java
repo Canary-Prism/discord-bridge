@@ -24,6 +24,7 @@ import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.kord.DiscordBridgeKord;
 import canaryprism.discordbridge.kord.interaction.slash.SlashCommandImpl;
+import dev.kord.common.entity.ApplicationCommandType;
 import dev.kord.common.entity.DiscordApplicationCommand;
 import dev.kord.core.Kord;
 import dev.kord.core.entity.Guild;
@@ -56,6 +57,7 @@ public record ServerImpl(DiscordBridgeKord bridge, Guild server, Kord kord) impl
                         @SuppressWarnings("unchecked") var list = ((List<DiscordApplicationCommand>) o);
                         
                         future.complete(list.stream()
+                                .filter((e) -> e.getType().getValue() == ApplicationCommandType.ChatInput.INSTANCE)
                                 .map((e) -> new SlashCommandImpl(bridge, e, kord))
                                 .collect(Collectors.toUnmodifiableSet()));
                     }

@@ -76,6 +76,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .submit()
                 .thenApply((list) ->
                         list.stream()
+                                .filter((e) -> e.getType() == Command.Type.SLASH)
                                 .peek((e) -> command_cache.put(e.getIdLong(), e))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
