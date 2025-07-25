@@ -49,18 +49,10 @@ public class SlashCommandAutocompleteInteractionImpl implements SlashCommandAuto
         this.interaction = interaction;
         
         var id = interaction.getCommandIdLong();
-        if (DiscordApiImpl.command_cache.containsKey(id))
-            this.future_command = CompletableFuture.completedFuture(DiscordApiImpl.command_cache.get(id));
-        else if (command_cache.containsKey(id))
-            this.future_command = CompletableFuture.completedFuture(command_cache.get(id));
-        else
-            this.future_command = interaction.getJDA()
-                    .retrieveCommandById(interaction.getCommandId())
-                    .submit()
-                    .thenApply((e) -> {
-                        command_cache.put(id, e);
-                        return e;
-                    });
+        this.future_command = DiscordApiImpl.command_cache
+                .get(id, (ignored) -> interaction.getJDA()
+                        .retrieveCommandById(interaction.getCommandIdLong())
+                        .complete());
     }
     
     @Override
@@ -77,8 +69,6 @@ public class SlashCommandAutocompleteInteractionImpl implements SlashCommandAuto
     public @NotNull String getCommandName() {
         return interaction.getName();
     }
-    
-    private static final Map<Long, Command> command_cache = Collections.synchronizedMap(new HashMap<>());
     
     @Override
     public @NotNull Optional<Long> getServerCommandServerId() {
