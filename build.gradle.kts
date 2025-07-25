@@ -1,8 +1,6 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
     `java-library`
-    id("com.vanniktech.maven.publish") version "0.30.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
 description = "A Unified api for Discord api wrappers"
@@ -13,10 +11,10 @@ allprojects {
     plugins.apply("com.vanniktech.maven.publish")
 
     group = "io.github.canary-prism"
-    version = "6.0.5"
+    version = "7.0.0"
 
     mavenPublishing {
-        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+        publishToMavenCentral(true)
 
         signAllPublications()
 
