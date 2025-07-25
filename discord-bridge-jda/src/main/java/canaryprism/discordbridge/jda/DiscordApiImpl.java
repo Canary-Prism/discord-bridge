@@ -30,6 +30,8 @@ import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteE
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandInvokeEventImpl;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
 import canaryprism.discordbridge.jda.server.ServerImpl;
+import com.github.benmanes.caffeine.cache.AsyncCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -37,9 +39,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -68,7 +67,9 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
         });
     }
     
-    public static final Map<Long, Command> command_cache = Collections.synchronizedMap(new HashMap<>());
+    public static final AsyncCache<Long, Command> command_cache = Caffeine.newBuilder()
+            .maximumSize(2048)
+            .buildAsync();
     
     @Override
     public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands() {
@@ -77,7 +78,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .thenApply((list) ->
                         list.stream()
                                 .filter((e) -> e.getType() == Command.Type.SLASH)
-                                .peek((e) -> command_cache.put(e.getIdLong(), e))
+                                .peek((e) -> command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
                 );
@@ -93,7 +94,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .submit()
                 .thenApply((list) ->
                         list.stream()
-                                .peek((e) -> command_cache.put(e.getIdLong(), e))
+                                .peek((e) -> command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet()));
     }

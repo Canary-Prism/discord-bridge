@@ -22,6 +22,7 @@ import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandData;
 import canaryprism.discordbridge.api.interaction.Command;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommand;
 import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.jda.DiscordApiImpl;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
 import net.dv8tion.jda.api.entities.Guild;
@@ -40,6 +41,7 @@ public record ServerImpl(DiscordBridgeJDA bridge, Guild server) implements Serve
                 .thenApply((list) ->
                         list.stream()
                                 .filter((e) -> e.getType() == net.dv8tion.jda.api.interactions.commands.Command.Type.SLASH)
+                                .peek((e) -> DiscordApiImpl.command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
                 );
@@ -55,6 +57,7 @@ public record ServerImpl(DiscordBridgeJDA bridge, Guild server) implements Serve
                 .submit()
                 .thenApply((list) ->
                         list.stream()
+                                .peek((e) -> DiscordApiImpl.command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet()));
     }
