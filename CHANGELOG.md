@@ -1,5 +1,8 @@
 # Changelog
 
+## v7.0.1
+- improved command caching for discord-bridge-jda
+
 ## v7.0.0
 - rewrote `SlashCommandInteraction` and `SlashCommandAutocompleteInteraction` so that it's like idk structured better it used to be that `SlashCommandAutocompleteInteraction` extended `SlashCommandInteraction` which didn't make much sense since that meant you could call the response methods on them even tho it obviously wouldn't actually work so now it's split and there's like some new classes like
 - added `SlashCommandInvokeInteraction`
