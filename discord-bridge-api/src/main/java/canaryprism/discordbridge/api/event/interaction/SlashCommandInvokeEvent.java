@@ -16,16 +16,16 @@
 
 package canaryprism.discordbridge.api.event.interaction;
 
-import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandInvokeInteraction;
 import org.jetbrains.annotations.NotNull;
 
 /// An event for a user running a Slash Command
 public interface SlashCommandInvokeEvent extends CommandEvent {
     
-    /// Gets the [SlashCommandInteraction] of this event
+    /// Gets the [SlashCommandInvokeInteraction] of this event
     ///
     /// @return the SlashCommandInteraction of this event
-    default @NotNull SlashCommandInteraction getSlashCommandInteraction() {
-        return ((SlashCommandInteraction) getInteraction());
+    default @NotNull SlashCommandInvokeInteraction getSlashCommandInteraction() {
+        return ((SlashCommandInvokeInteraction) getInteraction());
     }
 }

@@ -22,7 +22,7 @@ import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
-import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandInvokeInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.javacord.DiscordBridgeJavacord;
@@ -39,12 +39,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class SlashCommandInteractionImpl implements SlashCommandInteraction {
+public class SlashCommandInvokeInteractionImpl implements SlashCommandInvokeInteraction {
     
     public final DiscordBridgeJavacord bridge;
     public final org.javacord.api.interaction.SlashCommandInteraction interaction;
     
-    public SlashCommandInteractionImpl(DiscordBridgeJavacord bridge, org.javacord.api.interaction.SlashCommandInteraction interaction) {
+    public SlashCommandInvokeInteractionImpl(DiscordBridgeJavacord bridge, org.javacord.api.interaction.SlashCommandInteraction interaction) {
         this.bridge = bridge;
         this.interaction = interaction;
     }
@@ -120,7 +120,7 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     
     @Override
     public boolean equals(Object o) {
-        return (o instanceof SlashCommandInteractionImpl that)
+        return (o instanceof SlashCommandInvokeInteractionImpl that)
                 && Objects.equals(bridge, that.bridge) && Objects.equals(interaction, that.interaction);
     }
     

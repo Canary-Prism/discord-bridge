@@ -43,7 +43,7 @@ import canaryprism.discordbridge.jda.interaction.response.ImmediateResponderImpl
 import canaryprism.discordbridge.jda.interaction.response.ResponseUpdaterImpl;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandAutocompleteInteractionImpl;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
-import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInteractionImpl;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInvokeInteractionImpl;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandOptionChoiceImpl;
 import canaryprism.discordbridge.jda.message.AttachmentImpl;
 import canaryprism.discordbridge.jda.server.ServerImpl;
@@ -412,7 +412,7 @@ public final class DiscordBridgeJDA implements DiscordBridge {
                             FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,
                             SlashCommandAutocompleteInteractionImpl.class,
                             SlashCommandImpl.class,
-                            SlashCommandInteractionImpl.class,
+                            SlashCommandInvokeInteractionImpl.class,
                             // SlashCommandInteractionOptionImpl.class, N/A since there is no single internal type equivalent
                             SlashCommandOptionChoiceImpl.class,
                             // SlashCommandOptionImpl.class, N/A since there is no single internal type equivalent

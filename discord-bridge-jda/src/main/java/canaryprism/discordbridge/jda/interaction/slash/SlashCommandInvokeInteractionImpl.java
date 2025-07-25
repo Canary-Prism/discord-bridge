@@ -22,8 +22,8 @@ import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
-import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandInvokeInteraction;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.jda.DiscordApiImpl;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
@@ -37,7 +37,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.CommandInteractionPayload;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.internal.interactions.command.CommandImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,12 +45,12 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class SlashCommandInteractionImpl implements SlashCommandInteraction {
+public class SlashCommandInvokeInteractionImpl implements SlashCommandInvokeInteraction {
     public final DiscordBridgeJDA bridge;
-    public final CommandInteractionPayload interaction;
+    public final SlashCommandInteraction interaction;
     public final CompletableFuture<Command> future_command;
     
-    public SlashCommandInteractionImpl(DiscordBridgeJDA bridge, CommandInteractionPayload interaction) {
+    public SlashCommandInvokeInteractionImpl(DiscordBridgeJDA bridge, SlashCommandInteraction interaction) {
         this.bridge = bridge;
         this.interaction = interaction;
         
@@ -152,9 +152,7 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     
     @Override
     public @NotNull Optional<? extends MessageChannel> getChannel() {
-        return (interaction instanceof net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction e) ?
-                Optional.of(ChannelDirector.wrapChannel(bridge, e.getChannel()))
-                : Optional.empty();
+        return Optional.of(ChannelDirector.wrapChannel(bridge, interaction.getChannel()));
     }
     
     @Override
@@ -198,7 +196,7 @@ public class SlashCommandInteractionImpl implements SlashCommandInteraction {
     
     @Override
     public boolean equals(Object o) {
-        return (o instanceof SlashCommandInteractionImpl that)
+        return (o instanceof SlashCommandInvokeInteractionImpl that)
                 && Objects.equals(bridge, that.bridge) && Objects.equals(interaction, that.interaction) && Objects.equals(future_command, that.future_command);
     }
     

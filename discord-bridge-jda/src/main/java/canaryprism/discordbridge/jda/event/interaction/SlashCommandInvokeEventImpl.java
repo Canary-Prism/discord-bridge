@@ -20,7 +20,7 @@ import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.event.interaction.SlashCommandInvokeEvent;
 import canaryprism.discordbridge.api.interaction.Interaction;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
-import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInteractionImpl;
+import canaryprism.discordbridge.jda.interaction.slash.SlashCommandInvokeInteractionImpl;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public record SlashCommandInvokeEventImpl(DiscordBridge bridge, SlashCommandInte
     
     @Override
     public @NotNull Interaction getInteraction() {
-        return new SlashCommandInteractionImpl(((DiscordBridgeJDA) bridge), event.getInteraction());
+        return new SlashCommandInvokeInteractionImpl(((DiscordBridgeJDA) bridge), event.getInteraction());
     }
     
     @Override

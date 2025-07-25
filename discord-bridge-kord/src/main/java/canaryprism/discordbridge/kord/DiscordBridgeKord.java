@@ -430,7 +430,7 @@ public class DiscordBridgeKord implements DiscordBridge {
                             FollowupResponderImpl.class, ImmediateResponderImpl.class, ResponseUpdaterImpl.class,
                             SlashCommandAutocompleteInteractionImpl.class,
                             SlashCommandImpl.class,
-                            SlashCommandInteractionImpl.class,
+                            SlashCommandInvokeInteractionImpl.class,
                             // SlashCommandInteractionOptionImpl.class,
                             SlashCommandOptionChoiceImpl.class,
                             SlashCommandOptionImpl.class,

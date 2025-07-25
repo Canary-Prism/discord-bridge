@@ -20,7 +20,7 @@ import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.event.interaction.SlashCommandInvokeEvent;
 import canaryprism.discordbridge.api.interaction.Interaction;
 import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
-import canaryprism.discordbridge.discord4j.interaction.slash.SlashCommandInteractionImpl;
+import canaryprism.discordbridge.discord4j.interaction.slash.SlashCommandInvokeInteractionImpl;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public record SlashCommandInvokeEventImpl(DiscordBridgeDiscord4J bridge, ChatInp
     
     @Override
     public @NotNull Interaction getInteraction() {
-        return new SlashCommandInteractionImpl(bridge, event);
+        return new SlashCommandInvokeInteractionImpl(bridge, event);
     }
     
     @Override

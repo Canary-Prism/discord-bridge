@@ -22,7 +22,7 @@ import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
-import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandInvokeInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.discord4j.DiscordBridgeDiscord4J;
@@ -45,9 +45,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public record SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event, Interaction interaction, ApplicationCommandInteraction command_interaction, Mono<ServerImpl> server, Mono<? extends MessageChannel> channel) implements SlashCommandInteraction {
+public record SlashCommandInvokeInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event, Interaction interaction, ApplicationCommandInteraction command_interaction, Mono<ServerImpl> server, Mono<? extends MessageChannel> channel) implements SlashCommandInvokeInteraction {
     
-    public SlashCommandInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event) {
+    public SlashCommandInvokeInteractionImpl(DiscordBridgeDiscord4J bridge, ChatInputInteractionEvent event) {
         this(
                 bridge,
                 event,

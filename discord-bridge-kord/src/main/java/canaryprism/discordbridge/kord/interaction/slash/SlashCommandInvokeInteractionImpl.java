@@ -22,7 +22,7 @@ import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
 import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
 import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
-import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandInvokeInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
 import canaryprism.discordbridge.kord.DiscordBridgeKord;
@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public record SlashCommandInteractionImpl(DiscordBridgeKord bridge, ChatInputCommandInteraction interaction) implements SlashCommandInteraction {
+public record SlashCommandInvokeInteractionImpl(DiscordBridgeKord bridge, ChatInputCommandInteraction interaction) implements SlashCommandInvokeInteraction {
     
     @Override
     public long getApplicationId() {

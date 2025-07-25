@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class SlashCommandAutocompleteInteractionImpl extends SlashCommandInteractionImpl implements SlashCommandAutocompleteInteraction {
+public class SlashCommandAutocompleteInteractionImpl extends SlashCommandInvokeInteractionImpl implements SlashCommandAutocompleteInteraction {
     
     public SlashCommandAutocompleteInteractionImpl(DiscordBridgeJavacord bridge, AutocompleteInteraction interaction) {
         super(bridge, interaction);

@@ -20,9 +20,6 @@ import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.channel.MessageChannel;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
 import canaryprism.discordbridge.api.entity.user.User;
-import canaryprism.discordbridge.api.interaction.response.FollowupResponder;
-import canaryprism.discordbridge.api.interaction.response.ImmediateResponder;
-import canaryprism.discordbridge.api.interaction.response.ResponseUpdater;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandAutocompleteInteraction;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
 import canaryprism.discordbridge.api.server.Server;
@@ -91,21 +88,6 @@ public record SlashCommandAutocompleteInteractionImpl(DiscordBridgeKord bridge, 
     @Override
     public @NotNull Optional<Long> getServerCommandServerId() {
         throw new UnsupportedOperationException("server command server id inaccessible from autocomplete interaction");
-    }
-    
-    @Override
-    public @NotNull ImmediateResponder createImmediateResponder() {
-        throw new UnsupportedOperationException("can't respond to autocompletes");
-    }
-    
-    @Override
-    public @NotNull CompletableFuture<? extends @NotNull ResponseUpdater> respondLater(boolean ephemeral) {
-        throw new UnsupportedOperationException("can't respond to autocompletes");
-    }
-    
-    @Override
-    public @NotNull FollowupResponder createFollowupResponder() {
-        throw new UnsupportedOperationException("can't respond to autocompletes");
     }
     
     @Override

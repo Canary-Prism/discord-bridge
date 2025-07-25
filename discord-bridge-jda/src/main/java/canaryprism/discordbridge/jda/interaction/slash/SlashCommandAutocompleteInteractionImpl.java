@@ -16,30 +16,168 @@
 
 package canaryprism.discordbridge.jda.interaction.slash;
 
+import canaryprism.discordbridge.api.DiscordBridge;
+import canaryprism.discordbridge.api.channel.MessageChannel;
 import canaryprism.discordbridge.api.data.interaction.slash.SlashCommandOptionChoiceData;
+import canaryprism.discordbridge.api.entity.user.User;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandAutocompleteInteraction;
+import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
+import canaryprism.discordbridge.api.server.Server;
+import canaryprism.discordbridge.jda.DiscordApiImpl;
 import canaryprism.discordbridge.jda.DiscordBridgeJDA;
+import canaryprism.discordbridge.jda.channel.ChannelDirector;
+import canaryprism.discordbridge.jda.entity.user.UserImpl;
+import canaryprism.discordbridge.jda.server.ServerImpl;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.CommandAutoCompleteInteraction;
+import net.dv8tion.jda.internal.interactions.command.CommandImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class SlashCommandAutocompleteInteractionImpl extends SlashCommandInteractionImpl implements SlashCommandAutocompleteInteraction {
+public class SlashCommandAutocompleteInteractionImpl implements SlashCommandAutocompleteInteraction {
     
-    @SuppressWarnings("TypeMayBeWeakened")
+    public final DiscordBridgeJDA bridge;
+    public final CommandAutoCompleteInteraction interaction;
+    public final CompletableFuture<Command> future_command;
+    
     public SlashCommandAutocompleteInteractionImpl(DiscordBridgeJDA bridge, CommandAutoCompleteInteraction interaction) {
-        super(bridge, interaction);
+        this.bridge = bridge;
+        this.interaction = interaction;
+        
+        var id = interaction.getCommandIdLong();
+        if (DiscordApiImpl.command_cache.containsKey(id))
+            this.future_command = CompletableFuture.completedFuture(DiscordApiImpl.command_cache.get(id));
+        else if (command_cache.containsKey(id))
+            this.future_command = CompletableFuture.completedFuture(command_cache.get(id));
+        else
+            this.future_command = interaction.getJDA()
+                    .retrieveCommandById(interaction.getCommandId())
+                    .submit()
+                    .thenApply((e) -> {
+                        command_cache.put(id, e);
+                        return e;
+                    });
     }
     
-    @SuppressWarnings("OverlyStrongTypeCast")
+    @Override
+    public long getApplicationId() {
+        return future_command.join().getApplicationIdLong();
+    }
+    
+    @Override
+    public long getCommandId() {
+        return interaction.getCommandIdLong();
+    }
+    
+    @Override
+    public @NotNull String getCommandName() {
+        return interaction.getName();
+    }
+    
+    private static final Map<Long, Command> command_cache = Collections.synchronizedMap(new HashMap<>());
+    
+    @Override
+    public @NotNull Optional<Long> getServerCommandServerId() {
+        class FieldHolder {
+            static final Field guild_field;
+            static {
+                try {
+                    guild_field = CommandImpl.class.getDeclaredField("guild");
+                    guild_field.trySetAccessible();
+                } catch (NoSuchFieldException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        try {
+            var server = ((Guild) FieldHolder.guild_field.get(future_command.join()));
+            
+            return Optional.ofNullable(server)
+                    .map(Guild::getIdLong);
+            
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
+    @Override
+    public @NotNull User getUser() {
+        return new UserImpl(bridge, interaction.getUser());
+    }
+    
+    @Override
+    public @NotNull Optional<? extends Server> getServer() {
+        return Optional.ofNullable(interaction.getGuild())
+                .map((e) -> new ServerImpl(bridge, e));
+    }
+    
+    @Override
+    public @NotNull Optional<? extends MessageChannel> getChannel() {
+        return Optional.of(ChannelDirector.wrapChannel(bridge, interaction.getChannel()));
+    }
+    
+    @Override
+    public @NotNull List<? extends @NotNull SlashCommandInteractionOption> getOptions() {
+        return Optional.<List<? extends @NotNull SlashCommandInteractionOption>>empty()
+                .or(this::getSubcommandGroup)
+                .or(this::getSubcommand)
+                .orElse(interaction.getOptions()
+                        .stream()
+                        .map((e) -> new SlashCommandInteractionOptionOptionMappingImpl(bridge, interaction, e))
+                        .toList()
+                );
+    }
+    
+    private @NotNull Optional<List<SlashCommandInteractionOptionSubcommandGroupImpl>> getSubcommandGroup() {
+        return Optional.ofNullable(interaction.getSubcommandGroup())
+                .map((e) -> List.of(new SlashCommandInteractionOptionSubcommandGroupImpl(bridge, e,
+                        getSubcommand().orElse(List.of())))
+                );
+    }
+    
+    private @NotNull Optional<List<SlashCommandInteractionOptionSubcommandImpl>> getSubcommand() {
+        return Optional.ofNullable(interaction.getSubcommandName())
+                .map((name) -> List.of(new SlashCommandInteractionOptionSubcommandImpl(bridge, name,
+                        interaction.getOptions()
+                                .stream()
+                                .map((e) -> new SlashCommandInteractionOptionOptionMappingImpl(bridge, interaction, e))
+                                .toList()))
+                );
+    }
+    
     @Override
     public @NotNull CompletableFuture<?> suggest(@NotNull List<? extends @NotNull SlashCommandOptionChoiceData> choices) {
-        return ((CommandAutoCompleteInteraction) interaction)
+        return interaction
                 .replyChoices(choices.stream()
                         .map(bridge::convertData)
                         .toList())
                 .submit();
+    }
+    
+    @Override
+    public @NotNull Object getImplementation() {
+        return interaction;
+    }
+    
+    @Override
+    public @NotNull DiscordBridge getBridge() {
+        return bridge;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof SlashCommandAutocompleteInteractionImpl that)
+                && Objects.equals(bridge, that.bridge) && Objects.equals(interaction, that.interaction) && Objects.equals(future_command, that.future_command);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(bridge, interaction, future_command);
     }
 }
 
