@@ -1,5 +1,8 @@
 # Changelog
 
+## v7.0.2
+- improved command and command option caching for discord-bridge-jda
+
 ## v7.0.1
 - improved command caching for discord-bridge-jda
 
