@@ -41,7 +41,7 @@ public record ServerImpl(DiscordBridgeJDA bridge, Guild server) implements Serve
                 .thenApply((list) ->
                         list.stream()
                                 .filter((e) -> e.getType() == net.dv8tion.jda.api.interactions.commands.Command.Type.SLASH)
-                                .peek((e) -> DiscordApiImpl.command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
+                                .peek((e) -> DiscordApiImpl.command_cache.put(new DiscordApiImpl.CommandCacheEntry(server.getJDA(), e.getIdLong()), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
                 );
@@ -57,7 +57,7 @@ public record ServerImpl(DiscordBridgeJDA bridge, Guild server) implements Serve
                 .submit()
                 .thenApply((list) ->
                         list.stream()
-                                .peek((e) -> DiscordApiImpl.command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
+                                .peek((e) -> DiscordApiImpl.command_cache.put(new DiscordApiImpl.CommandCacheEntry(server.getJDA(), e.getIdLong()), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet()));
     }

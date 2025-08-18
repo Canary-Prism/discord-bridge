@@ -18,6 +18,7 @@ package canaryprism.discordbridge.jda.interaction.slash;
 
 import canaryprism.discordbridge.api.DiscordBridge;
 import canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOption;
+import canaryprism.discordbridge.jda.DiscordApiImpl;
 import canaryprism.discordbridge.jda.channel.ChannelDirector;
 import canaryprism.discordbridge.jda.entity.user.UserImpl;
 import canaryprism.discordbridge.jda.message.AttachmentImpl;
@@ -37,15 +38,8 @@ public record SlashCommandInteractionOptionOptionMappingImpl(DiscordBridge bridg
     
     public SlashCommandInteractionOptionOptionMappingImpl(DiscordBridge bridge, CommandInteractionPayload interaction, OptionMapping mapping) {
         this(bridge, interaction, mapping,
-                interaction.getJDA()
-                        .retrieveCommandById(interaction.getCommandId())
-                        .submit()
-                        .thenApply((command) -> command.getOptions()
-                                .stream()
-                                .filter((option) -> option.getName().equals(mapping.getName()))
-                                .map((option) -> new SlashCommandOptionOptionImpl(bridge, option))
-                                .findAny()
-                                .orElseThrow()));
+                DiscordApiImpl.command_option_cache.get(new DiscordApiImpl.OptionCacheEntry(interaction.getJDA(), interaction.getCommandIdLong(), mapping.getName()))
+                        .thenApply((e) -> new SlashCommandOptionOptionImpl(bridge, e)));
     }
     
     @Override

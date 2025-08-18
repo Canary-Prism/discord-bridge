@@ -56,9 +56,7 @@ public class SlashCommandInvokeInteractionImpl implements SlashCommandInvokeInte
         
         var id = interaction.getCommandIdLong();
         this.future_command = DiscordApiImpl.command_cache
-                .get(id, (ignored) -> interaction.getJDA()
-                        .retrieveCommandById(interaction.getCommandIdLong())
-                        .complete());
+                .get(new DiscordApiImpl.CommandCacheEntry(interaction.getJDA(), id));
     }
     
     @Override

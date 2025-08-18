@@ -35,7 +35,9 @@ import net.dv8tion.jda.internal.interactions.command.CommandImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class SlashCommandAutocompleteInteractionImpl implements SlashCommandAutocompleteInteraction {
@@ -50,9 +52,7 @@ public class SlashCommandAutocompleteInteractionImpl implements SlashCommandAuto
         
         var id = interaction.getCommandIdLong();
         this.future_command = DiscordApiImpl.command_cache
-                .get(id, (ignored) -> interaction.getJDA()
-                        .retrieveCommandById(interaction.getCommandIdLong())
-                        .complete());
+                .get(new DiscordApiImpl.CommandCacheEntry(interaction.getJDA(), id));
     }
     
     @Override

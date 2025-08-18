@@ -30,7 +30,7 @@ import canaryprism.discordbridge.jda.event.interaction.SlashCommandAutocompleteE
 import canaryprism.discordbridge.jda.event.interaction.SlashCommandInvokeEventImpl;
 import canaryprism.discordbridge.jda.interaction.slash.SlashCommandImpl;
 import canaryprism.discordbridge.jda.server.ServerImpl;
-import com.github.benmanes.caffeine.cache.AsyncCache;
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -38,12 +38,16 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList<ApiAttachableListener> listener_list) implements DiscordApi {
+    
+    private static final Logger log = LoggerFactory.getLogger(DiscordApiImpl.class);
     
     public DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda) {
         this(bridge, jda, new EventListenerList<>());
@@ -67,9 +71,35 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
         });
     }
     
-    public static final AsyncCache<Long, Command> command_cache = Caffeine.newBuilder()
+    public record CommandCacheEntry(JDA jda, long id) {}
+    
+    public static final AsyncLoadingCache<CommandCacheEntry, Command> command_cache = Caffeine.newBuilder()
+            .evictionListener((key, value, cause) -> log.debug("""
+                    command {} removed unexpectedly from discord-bridge-jda command cache with cause '{}'
+                    this cache is used to quickly retrieve data required for canaryprism.discordbridge.api.interaction.slash.SlashCommandInteraction
+                    the next interaction created for this command will block for a rest request and likely cause slowdowns
+                    """, value, cause))
             .maximumSize(2048)
-            .buildAsync();
+            .buildAsync((e) -> e.jda
+                    .retrieveCommandById(e.id)
+                    .complete());
+    
+    public record OptionCacheEntry(JDA jda, long command_id, String name) {}
+    
+    public static final AsyncLoadingCache<OptionCacheEntry, Command.Option> command_option_cache = Caffeine.newBuilder()
+            .maximumSize(2048)
+            .evictionListener((key, value, cause) -> log.debug("""
+                    command option {} removed unexpectedly from discord-bridge-jda command cache with cause '{}'
+                    this cache is used to quickly retrieve data required for canaryprism.discordbridge.api.interaction.slash.SlashCommandInteractionOptionOptionMappingImpl
+                    the next interaction created for this command will block for a rest request and likely cause slowdowns
+                    """, value, cause))
+            .buildAsync((e) -> command_cache.get(new CommandCacheEntry(e.jda, e.command_id))
+                    .join()
+                    .getOptions()
+                    .stream()
+                    .filter((option) -> option.getName().equals(e.name))
+                    .findAny()
+                    .orElseThrow());
     
     @Override
     public @NotNull CompletableFuture<? extends @NotNull Set<? extends @NotNull SlashCommand>> getGlobalSlashCommands() {
@@ -78,7 +108,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .thenApply((list) ->
                         list.stream()
                                 .filter((e) -> e.getType() == Command.Type.SLASH)
-                                .peek((e) -> command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
+                                .peek((e) -> command_cache.put(new CommandCacheEntry(jda, e.getIdLong()), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet())
                 );
@@ -94,7 +124,7 @@ public record DiscordApiImpl(DiscordBridgeJDA bridge, JDA jda, EventListenerList
                 .submit()
                 .thenApply((list) ->
                         list.stream()
-                                .peek((e) -> command_cache.put(e.getIdLong(), CompletableFuture.completedFuture(e)))
+                                .peek((e) -> command_cache.put(new CommandCacheEntry(jda, e.getIdLong()), CompletableFuture.completedFuture(e)))
                                 .map((e) -> new SlashCommandImpl(bridge, e))
                                 .collect(Collectors.toUnmodifiableSet()));
     }
