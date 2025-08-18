@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/discord-bridge-api" />
             <option value="$PROJECT_DIR$/discord-bridge-discord4j" />
+            <option value="$PROJECT_DIR$/discord-bridge-identity" />
             <option value="$PROJECT_DIR$/discord-bridge-javacord" />
             <option value="$PROJECT_DIR$/discord-bridge-jda" />
             <option value="$PROJECT_DIR$/discord-bridge-kord" />
